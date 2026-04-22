@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roadmap: World-class Philosopher & Strategist</title>
+<style>
+  :root {
+    --bg: #f9f8f6;
+    --surface: #ffffff;
+    --surface2: #f2f0ec;
+    --border: rgba(0,0,0,0.1);
+    --border2: rgba(0,0,0,0.18);
+    --text: #1a1a18;
+    --text2: #5a5a56;
+    --text3: #9a9a94;
+    --radius: 10px;
+    --radius-lg: 14px;
+
+    --p1: #3C3489; --p1-light: #EEEDFE; --p1-mid: #AFA9EC; --p1-border: #AFA9EC;
+    --p2: #0C447C; --p2-light: #E6F1FB; --p2-mid: #85B7EB; --p2-border: #85B7EB;
+    --p3: #085041; --p3-light: #E1F5EE; --p3-mid: #5DCAA5; --p3-border: #5DCAA5;
+    --p4: #633806; --p4-light: #FAEEDA; --p4-mid: #EF9F27; --p4-border: #EF9F27;
+    --p5: #4A1B0C; --p5-light: #FAECE7; --p5-mid: #F0997B; --p5-border: #F0997B;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #181816; --surface: #222220; --surface2: #2c2c2a;
+      --border: rgba(255,255,255,0.1); --border2: rgba(255,255,255,0.18);
+      --text: #e8e6e0; --text2: #a0a09a; --text3: #666660;
+      --p1-light: #26215C; --p2-light: #042C53; --p3-light: #04342C;
+      --p4-light: #412402; --p5-light: #4A1B0C;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; padding: 2rem 1rem;
+    line-height: 1.6;
+  }
+  .container { max-width: 860px; margin: 0 auto; }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 3rem; padding: 0 1rem; }
+  .header h1 { font-size: clamp(22px, 4vw, 32px); font-weight: 600; letter-spacing: -.02em; margin-bottom: 10px; }
+  .header p { font-size: 15px; color: var(--text2); max-width: 540px; margin: 0 auto 1.5rem; }
+  .header-meta { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .meta-pill { font-size: 12px; padding: 4px 12px; border-radius: 20px; border: 0.5px solid var(--border2); color: var(--text2); background: var(--surface); }
+
+  /* Progress bar */
+  .progress-track { display: flex; gap: 6px; margin-bottom: 2rem; }
+  .progress-seg { flex: 1; height: 4px; border-radius: 2px; transition: background .3s; }
+
+  /* Phase tabs */
+  .phase-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .phase-tab {
+    font-size: 12px; font-weight: 500; padding: 6px 14px; border-radius: 20px;
+    border: 0.5px solid var(--border); background: var(--surface2); color: var(--text2);
+    cursor: pointer; transition: all .15s;
+  }
+  .phase-tab:hover { border-color: var(--border2); color: var(--text); }
+  .phase-tab.active { color: #fff; border-color: transparent; }
+
+  /* Phase panel */
+  .phase-panel { display: none; border-radius: var(--radius-lg); overflow: hidden; border: 0.5px solid var(--border); }
+  .phase-panel.visible { display: block; }
+
+  .phase-hero { padding: 1.25rem 1.5rem; }
+  .phase-num { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; opacity: .8; }
+  .phase-title { font-size: 18px; font-weight: 600; margin: 4px 0 10px; }
+  .phase-transform {
+    font-size: 13px; line-height: 1.6; font-style: italic;
+    padding: 8px 12px; border-radius: var(--radius); background: rgba(255,255,255,.14);
+  }
+
+  /* Section tabs */
+  .section-tabs { display: flex; border-bottom: 0.5px solid var(--border); }
+  .sec-tab {
+    flex: 1; padding: 10px 6px; font-size: 12px; font-weight: 500; text-align: center;
+    background: var(--surface2); color: var(--text2); border: none;
+    border-right: 0.5px solid var(--border); cursor: pointer; transition: all .15s;
+  }
+  .sec-tab:last-child { border-right: none; }
+  .sec-tab:hover { background: var(--surface); color: var(--text); }
+  .sec-tab.active { background: var(--surface); color: var(--text); font-weight: 600; }
+
+  .sec-body { padding: 1.25rem 1.5rem; background: var(--surface); }
+
+  /* Items */
+  .item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .item:last-child { margin-bottom: 0; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+  .item-title { font-size: 13px; font-weight: 500; color: var(--text); }
+  .item-sub { font-size: 12px; color: var(--text2); margin-top: 2px; line-height: 1.55; }
+
+  /* Resource rows */
+  .res-row { display: flex; gap: 12px; align-items: flex-start; padding: 11px 0; border-bottom: 0.5px solid var(--border); }
+  .res-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .res-num { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; color: #fff; margin-top: 1px; }
+  .res-title { font-size: 13px; font-weight: 500; color: var(--text); }
+  .res-how { font-size: 12px; color: var(--text2); margin-top: 3px; line-height: 1.55; }
+  .res-why { font-size: 12px; margin-top: 3px; font-style: italic; }
+  .tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 10px; border: 0.5px solid; margin: 3px 3px 0 0; }
+
+  /* Practice blocks */
+  .practice-block { border-left: 2px solid; padding: 8px 0 8px 14px; margin-bottom: 14px; }
+  .practice-block:last-child { margin-bottom: 0; }
+  .pb-freq { font-size: 11px; font-weight: 600; margin-bottom: 3px; }
+  .pb-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+  .pb-step { font-size: 12px; color: var(--text2); line-height: 1.6; margin-bottom: 3px; display: flex; gap: 6px; }
+  .pb-step::before { content: '—'; color: var(--border2); flex-shrink: 0; }
+  .pb-ex { font-size: 12px; color: var(--text); background: var(--surface2); border-radius: var(--radius); padding: 8px 10px; margin-top: 8px; line-height: 1.6; }
+
+  /* Milestones */
+  .timeline { position: relative; padding-left: 22px; }
+  .timeline::before { content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 0.5px; background: var(--border2); }
+  .tl-item { position: relative; margin-bottom: 18px; }
+  .tl-item:last-child { margin-bottom: 0; }
+  .tl-dot { position: absolute; left: -19px; top: 4px; width: 9px; height: 9px; border-radius: 50%; border: 2px solid; }
+  .tl-title { font-size: 13px; font-weight: 500; color: var(--text); }
+  .tl-desc { font-size: 12px; color: var(--text2); margin-top: 3px; line-height: 1.55; }
+  .tl-gate { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 10px; display: inline-block; margin-top: 6px; border: 0.5px solid; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 3rem; font-size: 12px; color: var(--text3); }
+  .footer a { color: var(--text2); text-decoration: none; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .sec-tab { font-size: 11px; padding: 9px 3px; }
+    .phase-hero { padding: 1rem; }
+    .sec-body { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>Roadmap: World-class Philosopher & Strategist</h1>
+    <p>5 phases — mỗi phase là một transformation không thể đảo ngược. Từ tư duy rời rạc đến kiến trúc tư tưởng có hệ thống.</p>
+    <div class="header-meta">
+      <span class="meta-pill">5 phases · ~42+ tháng</span>
+      <span class="meta-pill">Irreversible transformation</span>
+      <span class="meta-pill">Top 1–5% target</span>
+    </div>
+  </div>
+
+  <div class="progress-track" id="progress-track"></div>
+  <div class="phase-tabs" id="phase-tabs"></div>
+  <div id="panels"></div>
+
+  <div class="footer">
+    <p>Built for deliberate mastery — not information accumulation.</p>
+  </div>
+
+</div>
+<script>
+const phases = [
+  {
+    num: 1, label: "Nền móng", duration: "0–6 tháng",
+    color: "#3C3489", light: "var(--p1-light)", mid: "#AFA9EC",
+    title: "Nền móng: Học cách suy nghĩ",
+    transform: "Từ người có ý kiến → người có lý luận chặt chẽ. Bạn sẽ không còn chấp nhận một luận điểm chỉ vì nó nghe hay.",
+    concepts: [
+      { t: "Logic hình thức & fallacies", s: "Hiểu cấu trúc luận điểm hợp lệ. Nhận ra 30+ cognitive biases và logical fallacies trong real-time." },
+      { t: "Epistemology cơ bản", s: "Tri thức là gì? Bằng chứng tốt là gì? Sự khác nhau giữa biết và tin." },
+      { t: "First-principles thinking", s: "Phá vỡ mọi vấn đề xuống tận gốc, xây lại từ axiom. Kỹ thuật của Descartes, Feynman, Musk." },
+      { t: "Tư duy xác suất", s: "Từ bỏ tư duy nhị phân. Mọi niềm tin là phân phối xác suất — calibrate, update, không cố chấp." },
+    ],
+    resources: [
+      { t: "A Rulebook for Arguments — Weston", h: "Đọc hết trong tuần 1. Siêu ngắn ~100 trang. Dùng như reference khi viết bất kỳ argument nào.", w: "Nền tảng kỹ thuật nhất, dense nhất." },
+      { t: "LessWrong Sequences — Yudkowsky", h: "Bắt đầu với 'Map and Territory', rồi 'How to Actually Change Your Mind'. 1–2 essays/ngày.", w: "Epistemology hiện đại tốt nhất — viết bởi người thực hành, không học thuật." },
+      { t: "Thinking, Fast and Slow — Kahneman", h: "Đọc Part 1 (System 1/2) và Part 3 (Overconfidence) trước. Annotate ví dụ thực tế.", w: "Foundation cho probabilistic thinking và bias awareness." },
+      { t: "The Art of Thinking Clearly — Dobelli", h: "1 chapter/ngày (2–3 trang). Sau mỗi chapter: ghi 1 ví dụ từ tuần trước.", w: "99 biases với ví dụ cụ thể. Reference book dùng suốt đời." },
+      { t: "Predictably Irrational — Ariely", h: "Đọc sau tháng 2. Nhẹ hơn Kahneman, nhiều case studies thực tế hơn.", w: "Bridge giữa behavioral economics và strategic thinking." },
+    ],
+    practice: [
+      { freq: "Hàng ngày · 15 phút sáng", t: "Argument mapping", steps: ["Lấy 1 claim từ bất cứ đâu bạn đọc hôm đó.", "Viết ra: Premise là gì? Inference có hợp lệ không? Conclusion follow không?", "Hỏi: 'Nếu premise sai thì conclusion còn đứng không?'"], ex: '"Remote work tăng productivity." → Premise: [nghiên cứu X]. Nhưng sample là ai? Selection bias không? Conclusion chỉ đúng trong điều kiện nào?' },
+      { freq: "Hàng tuần · Chủ nhật · 30 phút", t: "Steel-man journal", steps: ["Chọn 1 quan điểm bạn phản đối trong tuần.", "Viết version tốt nhất của quan điểm đó — đủ tốt để người ủng hộ nói 'đúng, đây là điều tôi muốn nói.'", "Sau đó mới phản bác — chỉ nhắm vào version tốt nhất đó."], ex: 'Bạn nghĩ "Web3 là scam" → Steel-man: "Web3 giải quyết coordination problems mà centralized systems không thể — trustless settlement, permissionless access..." → Giờ phản bác bằng evidence.' },
+      { freq: "Hàng tháng · 45 phút", t: "Belief tracking & calibration", steps: ["Ghi 10 beliefs quan trọng với confidence level: 'Tôi tin X với 75%'.", "Review mỗi tháng — beliefs nào thay đổi? Tại sao? Evidence nào làm bạn update?", "Track: bạn update vì evidence mới hay vì social pressure?"], ex: '"AI sẽ replace software engineers trong 5 năm — 40% confident." Tháng sau: đọc thêm về AI limitations → update xuống 25% vì evidence cụ thể.' },
+      { freq: "Luôn luôn · Real-time", t: "5 Whys Socratic drill", steps: ["Khi ai đó claim điều gì — hỏi 'tại sao?' trong đầu 5 lần trước khi accept hay reject.", "Thường đến lần 3–4, claim bắt đầu collapse hoặc reveal hidden assumption.", "Sẽ trở thành automatic sau 30–60 ngày."], ex: '"Startup này nên raise VC." → Tại sao? "Để scale." → Tại sao scale là tốt? "Vì competition." → Tại sao competition nguy hiểm? → Reveal assumption thực sự.' },
+    ],
+    milestones: [
+      { t: "Tháng 1 — Logic foundation", d: "Có thể identify valid vs invalid argument trong bất kỳ text nào. Biết tên 20 fallacies phổ biến.", g: "Đọc 1 op-ed bất kỳ, liệt kê mọi logical error trong 5 phút" },
+      { t: "Tháng 2 — Bias awareness activated", d: "Catch biases trong real-time conversations. Nhận ra khi chính mình bị confirmation bias, anchoring trong decisions hàng ngày.", g: "Ghi lại 5 lần trong tuần bạn catch chính mình bị cognitive bias và corrected" },
+      { t: "Tháng 3 — First-principles breakthrough", d: "Lấy 1 vấn đề thực trong công việc đang giải quyết bằng convention. Break down xuống axiom. Rebuild từ đầu.", g: "Solution mới phải khác ít nhất 30% so với conventional approach với lý do rõ ràng" },
+      { t: "Tháng 4–5 — Probabilistic upgrade", d: "Không còn nói 'tôi nghĩ X' — thay bằng 'tôi assign 70% probability cho X vì evidence Y và Z.'", g: "Có ít nhất 20 predictions được tracked với %. Review calibration." },
+      { t: "Tháng 6 — Phase completion", d: "Viết 1 essay phản bác quan điểm của chính bạn. Người đọc phải thấy thuyết phục.", g: "1 người khác đọc cả 2 essay và confirm cả 2 đều thuyết phục — không phải straw-man rõ ràng" },
+    ]
+  },
+  {
+    num: 2, label: "Mental models", duration: "6–12 tháng",
+    color: "#0C447C", light: "var(--p2-light)", mid: "#85B7EB",
+    title: "Thư viện mental models & cross-domain thinking",
+    transform: "Từ người suy nghĩ trong 1 domain → người nhìn thấy cùng 1 pattern xuất hiện trong mọi lĩnh vực. Đây là điểm tách biệt giữa Senior Engineer và Staff/Principal.",
+    concepts: [
+      { t: "Systems thinking", s: "Feedback loops, leverage points, unintended consequences. Donella Meadows framework." },
+      { t: "Latticework of mental models", s: "Munger's approach: 100+ models từ physics, biology, economics, psychology — dùng song song." },
+      { t: "Inversion", s: "Muốn thành công, trước tiên liệt kê mọi cách để thất bại. Eliminate failure modes." },
+      { t: "Second & third-order effects", s: "Hệ quả của hệ quả. Mọi quyết định lớn đều có unexpected consequences — train nhìn thấy chúng." },
+      { t: "Map vs territory", s: "Mọi model đều sai, một số model có ích. Biết khi nào map không còn đại diện territory." },
+    ],
+    resources: [
+      { t: "Thinking in Systems — Donella Meadows", h: "Đọc chapter 1–3, làm bài tập vẽ causal loop diagram sau mỗi chapter. Đây là quyển duy nhất cần đọc kỹ từng trang.", w: "Framework rõ nhất để thấy tại sao systems behave counterintuitively." },
+      { t: "Farnam Street — Mental Models series", h: "1–2 bài/ngày, 15 phút mỗi sáng. Đọc theo category: Physics → Biology → Economics.", w: "Curated tốt nhất trên internet với real-world examples. fs.blog/mental-models" },
+      { t: "Poor Charlie's Almanack — Munger", h: "Đọc 'The Psychology of Human Misjudgment' speech trước (~50 trang). Sau đó theo interest.", w: "Latticework concept — đây là framework của frameworks." },
+      { t: "The Model Thinker — Scott Page", h: "Đọc introduction và models bạn chưa biết. Không cần hiểu hết math, hiểu intuition.", w: "24 formal models với mathematical rigor — precise về conditions khi nào apply." },
+      { t: "The Fifth Discipline — Peter Senge", h: "Đọc Part II (Mental Models) và Part III (Systems Thinking) trước. Phần còn lại tùy chọn.", w: "Bridge giữa systems thinking và organizational behavior — apply trực tiếp vào leadership." },
+    ],
+    practice: [
+      { freq: "Hàng ngày · 10 phút tối", t: "Model của ngày", steps: ["Identify 1 mental model đang operate trong situation bạn encounter.", "Ghi vào PKM: tên model, tại sao apply ở đây, model nào khác có thể explain khác đi.", "Review sau 3 tháng — models nào dùng nhiều nhất? Models nào chỉ ghi mà không dùng?"], ex: 'Meeting về performance: team build nhiều features nhưng slow. Model: Goodhart\'s Law — "When a measure becomes a target, it ceases to be a good measure." Chuyển conversation sang outcome metrics.' },
+      { freq: "Hàng tuần · Chủ nhật · 30–45 phút", t: "Cross-domain mapping journal", steps: ["Chọn 1 vấn đề đang face trong tuần — technical, team, career.", "Hỏi: 'Pattern này tồn tại ở đâu trong 3 domain khác?' Tìm đủ 3 trước khi viết solution.", "Extract principles chung từ 3 analogs. Apply vào vấn đề gốc."], ex: 'Vấn đề: monolith hard to change. Biology: specialization → fragility → modularity. City: single-use zones → mixed-use. Military: centralized command → mission tactics. Principle: loose coupling + clear interfaces = resilience.' },
+      { freq: "Hàng tháng · 60 phút", t: "Systems map cho vấn đề thực", steps: ["Chọn 1 vấn đề phức tạp: team dynamics, career, product strategy.", "Vẽ causal loop diagram: variables, reinforcing loops, balancing loops.", "Tìm leverage points — nơi can thiệp nhỏ gây thay đổi lớn."], ex: 'Team velocity giảm dù hire thêm. Causal loop: thêm người → overhead → slow decisions → frustration → churn → hire thêm. Leverage point: decision-making structure, không phải hire rate.' },
+    ],
+    milestones: [
+      { t: "Tháng 7 — Systems thinking foundation", d: "Đọc xong Meadows. Có thể vẽ causal loop diagram cho bất kỳ system nào trong 15 phút.", g: "Vẽ systems map cho 1 vấn đề team — reveal ít nhất 2 leverage points mà discussion trước không thấy" },
+      { t: "Tháng 9 — 25 models trong thư viện", d: "25 models được document trong PKM với ví dụ cross-domain. Có thể explain và apply trong 60 giây.", g: "Random pick bất kỳ model — explain cho người không biết và apply vào tình huống thực trong 2 phút" },
+      { t: "Tháng 10 — Cross-domain pattern recognition", d: "Khi gặp vấn đề mới, tự nhiên search for analogs trong domains khác trước khi search solutions trong cùng domain.", g: "Giải quyết 1 vấn đề engineering bằng framework từ biology hoặc military — được team acknowledge là insight mới" },
+      { t: "Tháng 12 — Phase completion", d: "50 models trong PKM. Giải thích bất kỳ vấn đề phức tạp nào bằng ít nhất 3 model lenses và synthesize thành 1 coherent view.", g: "Viết 1 analysis về vấn đề thực dùng ít nhất 5 models từ 3 domains khác nhau — coherent, không forced" },
+    ]
+  },
+  {
+    num: 3, label: "Triết học thực chiến", duration: "12–24 tháng",
+    color: "#085041", light: "var(--p3-light)", mid: "#5DCAA5",
+    title: "Triết học thực chiến: Đọc nguồn gốc",
+    transform: "Từ người dùng ideas của người khác → người hiểu genealogy của ideas. Bạn sẽ biết ý tưởng đến từ đâu, tại sao nó thắng, và tại sao nó có thể sai.",
+    concepts: [
+      { t: "Stoicism thực hành", s: "Không phải khắc kỷ thụ động — Marcus Aurelius, Epictetus. Amor fati, dichotomy of control, memento mori." },
+      { t: "Pragmatism (William James, Dewey)", s: "Truth là cái work. Triết học Mỹ phù hợp nhất với action-oriented mindset." },
+      { t: "Nietzsche: Will to power & amor fati", s: "Không phải nihilism — mà là value creation. Übermensch là metaphor cho tự-vượt." },
+      { t: "Epistemology nâng cao", s: "Popper's falsification, Kuhn's paradigm shifts. Khoa học thực sự hoạt động như thế nào." },
+      { t: "Ethics của quyết định", s: "Utilitarianism vs deontology vs virtue ethics — không chọn 1, học khi nào dùng cái nào." },
+    ],
+    resources: [
+      { t: "Meditations — Marcus Aurelius", h: "Đọc 1 đoạn/ngày, reflect 5 phút. Không rush — đây là practice, không phải reading exercise.", w: "Stoicism thực hành nhất còn lại từ thế giới cổ đại." },
+      { t: "Thus Spoke Zarathustra — Nietzsche", h: "Đọc bản dịch Walter Kaufmann. Không đọc secondary sources trước khi đọc primary.", w: "Framework cho value creation và self-overcoming — core của personal philosophy." },
+      { t: "The Logic of Scientific Discovery — Popper", h: "Tập trung vào Part I và II — falsification concept. Phần còn lại technical.", w: "Bắt buộc cho ai dùng data để ra quyết định." },
+      { t: "Structure of Scientific Revolutions — Kuhn", h: "Không dài (~200 trang). Đọc hết — mỗi chapter reveal layer mới.", w: "Hiểu cách lĩnh vực thay đổi — áp dụng cho tech, business, career." },
+      { t: "Sophie's World — Jostein Gaarder", h: "Đọc trước như survey. Dùng làm map để navigate lịch sử triết học.", w: "Best introduction to history of philosophy — narrative format, không khô khan." },
+    ],
+    practice: [
+      { freq: "Hàng ngày · 15–20 phút", t: "Đọc primary sources + philosophical journal", steps: ["Sau mỗi chapter: (1) Claim chính là gì? (2) Bằng chứng là gì?", "(3) Tôi đồng ý/không đồng ý ở điểm nào và tại sao?", "(4) Ứng dụng cụ thể trong cuộc sống tôi hiện tại?"], ex: 'Sau đọc Meditations Book V.8: Marcus nói về không complain về external circumstances. Apply: meeting bị cancel (out of control) → focus vào cách dùng time freed up (in control).' },
+      { freq: "Hàng tuần · 45 phút", t: "Philosopher dialogue writing", steps: ["Chọn 2 triết gia có quan điểm mâu thuẫn.", "Viết dialogue giữa họ về 1 vấn đề hiện đại — AI ethics, career choices, political systems.", "Cả 2 phải argue ở strongest version của họ."], ex: 'Nietzsche vs Mill về AI regulation. Nietzsche: restricting AI is ressentiment của weak against strong will. Mill: harm principle — liberty ends where another\'s harm begins. Synthesis?' },
+      { freq: "30 ngày liên tiếp", t: "Apply stoicism 30 ngày", steps: ["Morning: journal về điều gì trong ngày nằm ngoài control của tôi.", "Evening: đánh giá — tôi wasted energy trên gì nằm ngoài control?", "Week 4: ghi lại cách practice đã thay đổi reactions của bạn."], ex: 'Ngày 1: "Code review bị reject, peer sẽ nghĩ gì" → nằm ngoài control. Ngày 15: tự nhiên refocus vào "code của mình có thực sự tốt không?" thay vì lo peer judgment.' },
+    ],
+    milestones: [
+      { t: "Tháng 14 — Primary source fluency", d: "Đọc xong 3 primary sources. Có thể discuss ideas của họ với nuance, không chỉ surface.", g: "Viết essay 2000 chữ về 1 triết gia — phải critique, extend, và connect với 2 domain khác" },
+      { t: "Tháng 18 — Personal philosophy drafted", d: "Có 1 document rõ ràng: giá trị cốt lõi, epistemology cá nhân, ethics framework.", g: "Document đủ rõ để người khác đọc và predict cách bạn sẽ quyết định trong dilemma mới" },
+      { t: "Tháng 24 — Phase completion", d: "Đọc 6 primary sources hoàn chỉnh. Có thể debate bất kỳ ai về ideas của 3 triết gia.", g: "Debate live (hoặc written) với người có nền triết học — họ phải acknowledge depth của bạn" },
+    ]
+  },
+  {
+    num: 4, label: "Chiến lược gia", duration: "24–42 tháng",
+    color: "#633806", light: "var(--p4-light)", mid: "#EF9F27",
+    title: "Chiến lược gia thực chiến: Tư duy cấp độ cao nhất",
+    transform: "Từ người phân tích tốt → người thiết kế game. Bạn bắt đầu thấy strategic landscape — ai đang chơi gì, leverage ở đâu, và cách thắng mà không cần đánh trực tiếp.",
+    concepts: [
+      { t: "Grand strategy", s: "Clausewitz, Sun Tzu, Thucydides Trap. Strategy là allocation of limited resources toward unlimited ends." },
+      { t: "Game theory thực hành", s: "Nash equilibrium, prisoner's dilemma, commitment devices. Intuition về incentive, không phải toán." },
+      { t: "Power dynamics", s: "48 Laws of Power, Machiavelli, Kissinger. Hiểu cách power thực sự hoạt động — không romantic hóa." },
+      { t: "Competitive advantage", s: "7 Powers (Hamilton Helmer), Porter's 5 Forces, Moats. Tại sao business X thắng trong dài hạn?" },
+      { t: "Decision-making under uncertainty", s: "Superforecasting, base rates, reference class forecasting. Bet tốt hơn với less information." },
+    ],
+    resources: [
+      { t: "Good Strategy Bad Strategy — Rumelt", h: "Đọc Part 1 và 2 kỹ. Đây là định nghĩa lại strategy — distinguish kernel từ fluff.", w: "Tốt nhất trong genre. Sau khi đọc, mọi strategy deck bạn thấy sẽ đều khác." },
+      { t: "7 Powers — Hamilton Helmer", h: "Ngắn (~200 trang). Đọc hết, áp dụng framework vào 3 companies bạn biết.", w: "Framework chuẩn xác nhất cho competitive strategy — dùng ở top VCs và strategy teams." },
+      { t: "Superforecasting — Tetlock & Gardner", h: "Đọc Part 1 và 2. Sau đó join Good Judgment Project để practice.", w: "Calibrated uncertainty — kỹ năng ít được dạy nhưng highest leverage cho decisions." },
+      { t: "The Art of War — Sun Tzu", h: "Đọc bản dịch có commentary của Samuel Griffith. Không đọc trần.", w: "Đọc như abstract strategy framework, không như military manual." },
+      { t: "Acquired Podcast — long episodes", h: "Amazon, LVMH, Berkshire, TSMC, Costco. Sau mỗi ep: identify kernel of strategy.", w: "Best-in-class business history — strategy được show, không được told." },
+    ],
+    practice: [
+      { freq: "Hàng tháng · 90 phút", t: "Strategy case study analysis", steps: ["Chọn 1 company/movement/war. Apply Rumelt's kernel framework.", "Diagnosis: situation thực sự là gì? (Không phải symptom)", "Guiding policy: approach giải quyết diagnosis, và tại sao?", "Coherent actions: mỗi action reinforce nhau như thế nào?"], ex: 'Netflix 2011 Qwikster disaster. Diagnosis: overextended into 2 businesses simultaneously. Policy sai: split instead of focus. Better policy: kill DVD fast, double down on streaming — accept short-term pain.' },
+      { freq: "Hàng tuần · 15 phút", t: "Forecasting journal", steps: ["Đưa ra 5 predictions với % confidence — về tech, business, career, world.", "Ghi lý do — không chỉ ghi prediction mà ghi reasoning chain.", "Review sau 3 tháng. Calibration score: bạn 70% confident thì win ~70% không?"], ex: '"OpenAI sẽ release GPT-5 trong Q1 2025 — 65% confident vì: release cadence ~12 months, compute available, competitive pressure từ Anthropic." [Track và review]' },
+      { freq: "Mỗi quyết định lớn", t: "Scenario planning", steps: ["Viết 3 scenarios: base (60%), bear (25%), bull (15%).", "Cho mỗi scenario: pre-set triggers — 'nếu tôi thấy X, tôi sẽ làm Y.'", "Review triggers quarterly — đã hit nào chưa?"], ex: 'Career decision: Base: promoted in 12 months. Bear: company restructure, look for new job. Bull: poached by top company. Triggers: Bear → update LinkedIn now. Bull → negotiate equity hard.' },
+    ],
+    milestones: [
+      { t: "Tháng 27 — Strategy analysis capability", d: "Có thể identify kernel of strategy của bất kỳ company nào và predict next moves.", g: "Phân tích strategy của 1 company thực — predict 3 moves tiếp theo — verify sau 6 tháng" },
+      { t: "Tháng 33 — Calibration achievement", d: "Brier score < 0.15 trên 50 predictions — tốt hơn 80% population.", g: "Publish forecasting track record publicly — be accountable to predictions" },
+      { t: "Tháng 42 — Phase completion", d: "Viết strategic plan cho tổ chức mình đang ở. Được senior leadership acknowledge.", g: "Plan được used as actual input vào decision-making, không chỉ được đọc và ignored" },
+    ]
+  },
+  {
+    num: 5, label: "Synthesis", duration: "42+ tháng",
+    color: "#4A1B0C", light: "var(--p5-light)", mid: "#F0997B",
+    title: "Synthesis: Xây dựng original thought",
+    transform: "Từ người học từ người khác → người mà người khác học từ bạn. Bạn không còn consume ideas — bạn produce ideas mà thế giới chưa có.",
+    concepts: [
+      { t: "Originality vs novelty", s: "Originality không phải nói điều chưa ai nói — mà là kết hợp existing ideas reveal something true và unexpected." },
+      { t: "Dialectical thinking", s: "Thesis → Antithesis → Synthesis. Không chọn phe — tìm higher-order truth bao gồm cả hai." },
+      { t: "Philosophical writing", s: "Clarity là test của tư duy. Nếu không viết rõ được, bạn chưa thực sự hiểu." },
+      { t: "Rhetoric có đạo đức", s: "Aristotle: ethos, pathos, logos. Thuyết phục bằng truth, không manipulation." },
+      { t: "Legacy thinking", s: "Từ 10-year horizon → 100-year horizon. Decisions của ai đang ảnh hưởng thế giới ngày nay?" },
+    ],
+    resources: [
+      { t: "On Writing Well — Zinsser", h: "Đọc Part 1 và 2 kỹ. Áp dụng ngay vào bất cứ thứ gì bạn viết trong tuần đó.", w: "Clarity trong writing = clarity trong thinking. Không thể tách rời." },
+      { t: "The Rhetoric — Aristotle", h: "Đọc Book I và II. Book III optional. Annotate examples từ speeches và essays bạn admire.", w: "2500 năm vẫn là nền tảng của persuasion — vì nó describe human nature, không technique." },
+      { t: "Antifragile — Nassim Taleb", h: "Đọc Part 1–3. Sau đó đọc Skin in the Game. Taleb's oeuvre là example của original philosophy.", w: "Học cách develop và defend original worldview từ người đang làm nó." },
+      { t: "3 thinkers bạn muốn dialogue với", h: "Chọn 3 người đang alive hoặc đã mất mà bạn muốn argue với. Đọc everything họ viết.", w: "Intellectual community — ngay cả trong đầu bạn." },
+      { t: "Substack / Medium — publish essays", h: "Start writing publicly — 1 essay/tháng minimum. Không cần perfect, cần honest.", w: "Writing publicly là test của thinking — vague ideas collapse khi exposed to readers." },
+    ],
+    practice: [
+      { freq: "Hàng tháng · Ongoing", t: "Public writing", steps: ["Publish ít nhất 1 essay/tháng về ideas bạn đang develop.", "Không cần polish — cần honest thinking và clear argument.", "Engage với comments và criticism — đó là real feedback loop."], ex: 'Bắt đầu với: "Tại sao tôi nghĩ X model sai — và framework tôi dùng thay thế." Không cần revolutionary — cần genuine.' },
+      { freq: "Ongoing · 12 tháng để hoàn thiện", t: "Develop 1 original framework", steps: ["Đặt tên cho framework, define terms cẩn thận.", "Test against examples — cố gắng falsify nó trước khi defend nó.", "Refine với feedback từ 3–5 người tư duy nghiêm túc."], ex: 'Ví dụ: "Frequency matching theory for hiring" (từ physics resonance model) → đặt tên, define variables, test against hiring data, write up.' },
+      { freq: "Hàng quý", t: "Teach to learn", steps: ["Mỗi quý: dạy 1 concept complex cho audience không chuyên — talk, blog, workshop.", "Nếu họ không hiểu, đó là lỗi của explanation, không phải comprehension của audience.", "Đo bằng: audience có thể explain lại cho người khác không?"], ex: '"Explain systems thinking cho non-technical founders trong 30 phút" — sau khi force yourself to teach, your own understanding permanently deepens.' },
+    ],
+    milestones: [
+      { t: "Tháng 48 — Public ideas with reach", d: "1 essay được share hoặc cite bởi người bạn không biết.", g: "Ideas của bạn sống ngoài network của bạn — không phải chỉ được politely acknowledged" },
+      { t: "Tháng 54 — Original framework", d: "Có 1 framework không tồn tại trước đó. Ít nhất 3 người dùng nó để solve problem của họ.", g: "Framework có name và được referenced bởi người khác — không phải chỉ bạn tự dùng" },
+      { t: "Ongoing — Reputation finds you", d: "Được invite speak, teach, hoặc consult về ideas của bạn.", g: "Inbound opportunities từ ideas — reputation tự đến tìm bạn, không ngược lại" },
+    ]
+  }
+];
+
+const sectionLabels = { concepts: "Concepts", resources: "Resources", practice: "Thực hành", milestones: "Milestones" };
+let activePhase = 0;
+let activeSections = [0, 0, 0, 0, 0];
+
+function renderItems(items, mid) {
+  return items.map(i => `
+    <div class="item">
+      <div class="dot" style="background:${mid}"></div>
+      <div>
+        <div class="item-title">${i.t}</div>
+        ${i.s ? `<div class="item-sub">${i.s}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function renderResources(items, color, mid) {
+  return items.map((r, idx) => `
+    <div class="res-row">
+      <div class="res-num" style="background:${color}">${idx+1}</div>
+      <div>
+        <div class="res-title">${r.t}</div>
+        <div class="res-how">${r.h}</div>
+        <div class="res-why" style="color:${color}">${r.w}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderPractice(items, color, mid) {
+  return items.map(p => `
+    <div class="practice-block" style="border-color:${mid}">
+      <div class="pb-freq" style="color:${color}">${p.freq}</div>
+      <div class="pb-title">${p.t}</div>
+      ${p.steps.map(s => `<div class="pb-step">${s}</div>`).join('')}
+      ${p.ex ? `<div class="pb-ex">${p.ex}</div>` : ''}
+    </div>`).join('');
+}
+
+function renderMilestones(items, color, mid) {
+  return `<div class="timeline">${items.map(m => `
+    <div class="tl-item">
+      <div class="tl-dot" style="background:${mid};border-color:${color}"></div>
+      <div class="tl-title">${m.t}</div>
+      <div class="tl-desc">${m.d}</div>
+      <div class="tl-gate" style="background:${mid}22;color:${color};border-color:${mid}">Gate: ${m.g}</div>
+    </div>`).join('')}</div>`;
+}
+
+function renderAll() {
+  // Progress
+  const pb = document.getElementById('progress-track');
+  pb.innerHTML = phases.map((p, i) =>
+    `<div class="progress-seg" style="background:${i <= activePhase ? p.mid : 'var(--border)'}"></div>`
+  ).join('');
+
+  // Tabs
+  const tabs = document.getElementById('phase-tabs');
+  tabs.innerHTML = phases.map((p, i) => `
+    <button class="phase-tab ${i === activePhase ? 'active' : ''}"
+      style="${i === activePhase ? `background:${p.color};` : ''}"
+      onclick="setPhase(${i})">${p.num}. ${p.label}</button>`
+  ).join('');
+
+  // Panels
+  const panelsEl = document.getElementById('panels');
+  panelsEl.innerHTML = phases.map((p, i) => {
+    const sKeys = ['concepts', 'resources', 'practice', 'milestones'];
+    const sec = activeSections[i];
+    let content = '';
+    if (sec === 0) content = renderItems(p.concepts, p.mid);
+    else if (sec === 1) content = renderResources(p.resources, p.color, p.mid);
+    else if (sec === 2) content = renderPractice(p.practice, p.color, p.mid);
+    else if (sec === 3) content = renderMilestones(p.milestones, p.color, p.mid);
+
+    return `
+      <div class="phase-panel ${i === activePhase ? 'visible' : ''}" id="panel-${i}">
+        <div class="phase-hero" style="background:${p.color};color:#fff">
+          <div class="phase-num">Phase ${p.num} · ${p.duration}</div>
+          <div class="phase-title">${p.title}</div>
+          <div class="phase-transform">"${p.transform}"</div>
+        </div>
+        <div class="section-tabs">
+          ${sKeys.map((k, j) => `
+            <button class="sec-tab ${j === sec ? 'active' : ''}"
+              onclick="setSection(${i}, ${j})">${sectionLabels[k]}</button>`
+          ).join('')}
+        </div>
+        <div class="sec-body">${content}</div>
+      </div>`;
+  }).join('');
+}
+
+function setPhase(i) { activePhase = i; renderAll(); }
+function setSection(phase, sec) { activeSections[phase] = sec; renderAll(); }
+
+renderAll();
+</script>
+</body>
+</html>
