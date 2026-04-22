@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top 0.1% Communicator Roadmap</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: #0d0d0d; color: #e8e0d0; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #111008; }
+    ::-webkit-scrollbar-thumb { background: #3a3020; border-radius: 3px; }
+    button { font-family: inherit; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const phases = [
+      {
+        id: 0,
+        number: "00",
+        title: "FOUNDATION",
+        subtitle: "Xây lại từ gốc rễ",
+        duration: "Tháng 1–2",
+        color: "#C8A96E",
+        bg: "#1a1510",
+        tagline: "Không thể xây nhà trên cát. Hầu hết người dừng ở đây vì họ nghĩ mình đã qua giai đoạn này.",
+        transformation: "Từ 'người nói' → 'người tư duy bằng ngôn ngữ'",
+        irreversible: "Sau phase này, bạn sẽ không còn có thể nghe ai nói chuyện mà không phân tích cấu trúc tư duy của họ.",
+        coreSkills: [
+          {
+            name: "Mental Model Clarity",
+            desc: "Trước khi nói, bạn phải biết mình đang nghĩ gì — thực sự. Không phải cảm giác. Là cấu trúc.",
+            drill: "Mỗi tối: viết 1 ý tưởng bằng sơ đồ (không dùng câu văn). Sau đó mới chuyển thành câu.",
+          },
+          {
+            name: "First Principles Communication",
+            desc: "Mọi thông điệp đều có thể decompose thành: WHAT → WHY → SO WHAT → NOW WHAT.",
+            drill: "Lấy 1 email/slack bạn đã viết hôm nay. Identify xem nó đang làm gì trong 4 tầng đó.",
+          },
+          {
+            name: "Audience Modeling",
+            desc: "Communication không phải là bạn nói gì — mà là họ nhận được gì. Đây là sự khác biệt mà 95% người không hiểu.",
+            drill: "Trước mỗi cuộc hội thoại: viết 3 dòng về người kia — họ muốn gì, sợ gì, biết gì.",
+          },
+        ],
+        resources: [
+          { title: "The Pyramid Principle", author: "Barbara Minto", type: "Book", priority: "🔴 Core" },
+          { title: "Thinking Fast and Slow", author: "Kahneman", type: "Book", priority: "🔴 Core" },
+          { title: "Writing to Think", author: "Leslie Lamport", type: "Essay", priority: "🟡 High" },
+          { title: "Minto Method YouTube Series", author: "Various", type: "Video", priority: "🟡 High" },
+        ],
+        milestones: [
+          "Có thể giải thích bất kỳ khái niệm kỹ thuật nào trong 60 giây cho người không chuyên",
+          "Viết được một 1-page memo rõ ràng theo Pyramid Principle",
+          "Xác định được 'communication intent' trước mọi cuộc hội thoại quan trọng",
+        ],
+        weeklyPractice: "5h/tuần: 2h viết, 2h đọc, 1h reflection journal",
+      },
+      {
+        id: 1,
+        number: "01",
+        title: "DEPTH & EMPATHY",
+        subtitle: "Đọc người — không phải đọc sách",
+        duration: "Tháng 3–5",
+        color: "#7EC8A4",
+        bg: "#0f1a15",
+        tagline: "Người giỏi nhất không phải người nói nhiều nhất. Họ là người làm người khác cảm thấy được hiểu sâu nhất.",
+        transformation: "Từ 'người truyền đạt' → 'người tạo ra sự kết nối thực sự'",
+        irreversible: "Sau phase này, bạn sẽ nhận ra rằng hầu hết conflict không phải về nội dung — mà về cảm giác không được nghe.",
+        coreSkills: [
+          {
+            name: "Active Listening at Depth",
+            desc: "3 tầng nghe: Lời nói → Cảm xúc ẩn → Mental model của người đó. Top communicator nghe tầng 3.",
+            drill: "1 tuần: trong mọi cuộc trò chuyện, KHÔNG đưa ra giải pháp cho đến khi người kia nói xong hoàn toàn. Ghi lại những gì bạn nghe được ở tầng 2 và 3.",
+          },
+          {
+            name: "Calibrated Empathy",
+            desc: "Không phải đồng cảm cảm tính — là hiểu chính xác người kia đang ở đâu trong không gian nhận thức-cảm xúc.",
+            drill: "Sau mỗi 1-on-1 quan trọng: viết lại quan điểm của người kia mạnh hơn cả cách họ trình bày. Nếu không làm được, bạn chưa thực sự nghe.",
+          },
+          {
+            name: "Adaptive Register",
+            desc: "Nói với CEO khác với engineer, khác với đồng nghiệp, khác với người mới. Không phải giả tạo — là precision.",
+            drill: "Chọn 1 ý tưởng. Viết 4 phiên bản cho 4 đối tượng khác nhau. So sánh. Identify pattern.",
+          },
+        ],
+        resources: [
+          { title: "Never Split the Difference", author: "Chris Voss", type: "Book", priority: "🔴 Core" },
+          { title: "Crucial Conversations", author: "Patterson et al.", type: "Book", priority: "🔴 Core" },
+          { title: "The Art of Communicating", author: "Thich Nhat Hanh", type: "Book", priority: "🟡 High" },
+          { title: "Nonviolent Communication", author: "Marshall Rosenberg", type: "Book", priority: "🟡 High" },
+        ],
+        milestones: [
+          "Steelman được quan điểm của người không đồng ý với mình trong 60 giây",
+          "Có thể điều hướng một cuộc tranh luận căng thẳng mà không làm mất quan hệ",
+          "3 người khác nhau nói rằng họ cảm thấy được hiểu rõ hơn sau khi nói chuyện với bạn",
+        ],
+        weeklyPractice: "6h/tuần: 2h deliberate 1-on-1 practice, 2h writing, 2h case study phân tích",
+      },
+      {
+        id: 2,
+        number: "02",
+        title: "STRUCTURE & INFLUENCE",
+        subtitle: "Kiến trúc ngôn ngữ",
+        duration: "Tháng 6–9",
+        color: "#7EB8E8",
+        bg: "#0f1520",
+        tagline: "Ý tưởng tốt chết vì trình bày tệ. Ý tưởng trung bình thắng vì cấu trúc xuất sắc. Đây là nơi power thực sự bắt đầu.",
+        transformation: "Từ 'người có ý tưởng hay' → 'người khiến ý tưởng trở thành hành động'",
+        irreversible: "Sau phase này, bạn sẽ không còn present ý tưởng theo cách tự nhiên nảy sinh — mà luôn theo kiến trúc đã được thiết kế.",
+        coreSkills: [
+          {
+            name: "Narrative Architecture",
+            desc: "Mọi communication có sức ảnh hưởng đều là một câu chuyện: Tension → Complication → Resolution. Không phải bullet point list.",
+            drill: "Viết lại 1 technical proposal bạn đang có theo Story Arc. Đọc cả hai bản cho người khác. Quan sát phản ứng.",
+          },
+          {
+            name: "Strategic Framing",
+            desc: "Cùng 1 sự thật, frame khác nhau → kết quả khác nhau hoàn toàn. Đây là công cụ của leadership.",
+            drill: "Chọn 1 bad news bạn cần deliver. Viết 3 frame khác nhau. Identify frame nào preserve relationship + move forward.",
+          },
+          {
+            name: "Written Influence",
+            desc: "Long-form writing (blog, technical posts, memos) là đòn bẩy lớn nhất của communicator hiện đại. 1 bài viết tốt = 1000 cuộc trò chuyện.",
+            drill: "Publish 1 bài viết kỹ thuật mỗi tháng. Không cần hoàn hảo — cần thực. Track engagement và feedback.",
+          },
+        ],
+        resources: [
+          { title: "Made to Stick", author: "Chip & Dan Heath", type: "Book", priority: "🔴 Core" },
+          { title: "On Writing Well", author: "William Zinsser", type: "Book", priority: "🔴 Core" },
+          { title: "Presentation Thinking & Design", author: "Takashi Mihashi", type: "Book", priority: "🟡 High" },
+          { title: "Paul Graham's Essays on Writing", author: "Paul Graham", type: "Essays", priority: "🔴 Core" },
+        ],
+        milestones: [
+          "Publish 3 bài viết kỹ thuật/lãnh đạo nhận được genuine engagement",
+          "Một proposal/ADR của bạn được approve dựa trên sức thuyết phục của văn bản",
+          "Có thể structure một complex argument trong 5 phút không cần chuẩn bị",
+        ],
+        weeklyPractice: "7h/tuần: 3h writing/publishing, 2h structure practice, 2h studying great communicators",
+      },
+      {
+        id: 3,
+        number: "03",
+        title: "PRESENCE & AUTHORITY",
+        subtitle: "Bạn là thông điệp",
+        duration: "Tháng 10–14",
+        color: "#C87EC8",
+        bg: "#1a0f1a",
+        tagline: "Ở cấp độ này, content không còn là thứ duy nhất. Cách bạn hiện diện trong không gian — cả physical lẫn digital — bắt đầu nói thay bạn.",
+        transformation: "Từ 'người communicate giỏi' → 'người có gravitational pull trong mọi room'",
+        irreversible: "Sau phase này, bạn sẽ nhận ra rằng silence đôi khi powerful hơn lời nói. Và biết khi nào dùng cái nào.",
+        coreSkills: [
+          {
+            name: "Executive Presence",
+            desc: "3 trụ cột: Gravitas (bạn có trọng lượng), Communication (rõ ràng + concise + assertive), Appearance (tín hiệu phi ngôn ngữ).",
+            drill: "Record lại 1 cuộc meeting/presentation. Xem lại không tắt tiếng. Identify 3 moment bạn mất authority và nguyên nhân.",
+          },
+          {
+            name: "High-Stakes Communication",
+            desc: "Board meetings, difficult feedback, crisis communication, negotiation. Bình tĩnh dưới áp lực là kỹ năng — không phải tính cách.",
+            drill: "Deliberately đặt mình vào các tình huống discomfort nhỏ hơn mỗi tuần. Debrief sau mỗi lần.",
+          },
+          {
+            name: "Cross-Cultural & Cross-Domain",
+            desc: "Top communicator nói được ngôn ngữ của business, engineering, policy, AND human — không phải chỉ một.",
+            drill: "1 tháng: đọc sâu về 1 domain không phải của mình. Thử giải thích nó cho người trong domain đó. Nghe phản hồi.",
+          },
+        ],
+        resources: [
+          { title: "Executive Presence", author: "Sylvia Ann Hewlett", type: "Book", priority: "🔴 Core" },
+          { title: "Influence: Science and Practice", author: "Robert Cialdini", type: "Book", priority: "🔴 Core" },
+          { title: "Talk Like TED", author: "Carmine Gallo", type: "Book", priority: "🟡 High" },
+          { title: "The Art of Explanation", author: "Lee LeFever", type: "Book", priority: "🟡 High" },
+        ],
+        milestones: [
+          "Lead được 1 high-stakes meeting với C-level executives không bị overwhelm",
+          "Deliver được difficult feedback mà relationship trở nên tốt hơn, không tệ hơn",
+          "Được nhận xét về 'presence' không chỉ nội dung bởi người ngoài tổ chức",
+        ],
+        weeklyPractice: "7h/tuần: 2h deliberate high-stakes practice, 3h writing/speaking, 2h cross-domain study",
+      },
+      {
+        id: 4,
+        number: "04",
+        title: "SYNTHESIS & LEGACY",
+        subtitle: "Tạo ra communicators khác",
+        duration: "Tháng 15–24",
+        color: "#E87E4A",
+        bg: "#1a1208",
+        tagline: "Top 0.1% không chỉ communicate giỏi — họ tạo ra ngôn ngữ mới, framework mới, và nâng cao khả năng communicate của người xung quanh.",
+        transformation: "Từ 'communicator xuất sắc' → 'người định hình cách người khác nghĩ và nói'",
+        irreversible: "Sau phase này, bạn không còn học communication. Bạn đang tạo ra nó.",
+        coreSkills: [
+          {
+            name: "Thought Leadership Writing",
+            desc: "Không phải viết về điều mọi người đã biết — mà đặt tên cho điều mọi người cảm thấy nhưng chưa diễn đạt được.",
+            drill: "Identify 1 insight từ công việc/cuộc sống mà bạn chưa thấy ai viết. Viết nó. Publish. Lặp lại.",
+          },
+          {
+            name: "Teaching & Multiplying",
+            desc: "Kỹ năng cao nhất là giải thích một thứ phức tạp đến mức người nghe nghĩ 'tôi cũng có thể làm được điều đó'.",
+            drill: "Mentor ít nhất 1 người junior về communication. Dạy bằng cách làm cùng, không chỉ nói.",
+          },
+          {
+            name: "Strategic Narrative at Scale",
+            desc: "Viết narrative cho team, công ty, hoặc cộng đồng. Đây là công cụ của người lãnh đạo thực sự.",
+            drill: "Viết 'founding story' hoặc 'vision memo' cho 1 project bạn đang lead. Xem nó có inspire người khác không.",
+          },
+        ],
+        resources: [
+          { title: "The Mom Test", author: "Rob Fitzpatrick", type: "Book", priority: "🟡 High" },
+          { title: "An Elegant Puzzle", author: "Will Larson", type: "Book", priority: "🔴 Core" },
+          { title: "Chip Huyen's Writing", author: "Chip Huyen", type: "Blog", priority: "🟡 High" },
+          { title: "Staff Engineer", author: "Will Larson", type: "Book", priority: "🔴 Core" },
+        ],
+        milestones: [
+          "Có 1 bài viết/framework được cite hoặc chia sẻ rộng rãi trong cộng đồng",
+          "Người bạn mentor có sự cải thiện communication đo được",
+          "Được mời speak hoặc contribute ở context lớn hơn current role",
+        ],
+        weeklyPractice: "8h/tuần: 3h writing/publishing, 2h mentoring, 3h strategic reading & thinking",
+      },
+    ];
+
+    const CORE_PRINCIPLES = [
+      {
+        icon: "◈",
+        title: "Transformation, không phải Information",
+        desc: "Mỗi phase phải thay đổi cách bạn nhìn thế giới — không chỉ thêm kỹ năng. Nếu sau 2 tháng bạn vẫn nhìn communication giống trước, bạn đang học sai.",
+      },
+      {
+        icon: "◈",
+        title: "Real reps > Perfect reps",
+        desc: "1 cuộc trò chuyện khó thực sự > 100 giờ đọc sách về communication. Deliberate practice phải có friction thật.",
+      },
+      {
+        icon: "◈",
+        title: "Output trước, depth sau",
+        desc: "Publish, speak, write — ngay cả khi chưa sẵn sàng. Feedback thực từ thế giới thực > feedback tưởng tượng trong đầu bạn.",
+      },
+      {
+        icon: "◈",
+        title: "Compounding qua domains",
+        desc: "Communication + Technical depth + Business acumen + Leadership = exponential, không phải additive. Đây là lý do top 0.1% cách xa top 1% rất nhiều.",
+      },
+    ];
+
+    function App() {
+      const [activePhase, setActivePhase] = useState(0);
+      const [activeTab, setActiveTab] = useState("skills");
+      const phase = phases[activePhase];
+
+      return (
+        <div style={{
+          fontFamily: "'Georgia', 'Times New Roman', serif",
+          background: "#0d0d0d",
+          minHeight: "100vh",
+          color: "#e8e0d0",
+          overflowX: "hidden",
+        }}>
+          {/* Header */}
+          <div style={{
+            borderBottom: "1px solid #2a2520",
+            padding: "48px 40px 36px",
+            background: "linear-gradient(180deg, #111008 0%, #0d0d0d 100%)",
+          }}>
+            <div style={{ maxWidth: 900, margin: "0 auto" }}>
+              <div style={{ fontSize: 11, letterSpacing: "0.3em", color: "#C8A96E", marginBottom: 16, textTransform: "uppercase" }}>
+                Roadmap · Communicator Mastery
+              </div>
+              <h1 style={{ fontSize: "clamp(28px, 5vw, 52px)", fontWeight: 400, margin: "0 0 12px", lineHeight: 1.1, letterSpacing: "-0.02em" }}>
+                Top 0.1% <span style={{ color: "#C8A96E", fontStyle: "italic" }}>Communicator</span>
+              </h1>
+              <p style={{ fontSize: 15, color: "#8a8070", maxWidth: 560, lineHeight: 1.7, margin: 0 }}>
+                Không phải diễn thuyết. Là hệ thống tư duy + truyền tải + ảnh hưởng —
+                tích hợp sâu qua 5 phases không thể đảo ngược.
+              </p>
+            </div>
+          </div>
+
+          {/* Core Principles */}
+          <div style={{ padding: "32px 40px", borderBottom: "1px solid #1e1a16" }}>
+            <div style={{ maxWidth: 900, margin: "0 auto" }}>
+              <div style={{ fontSize: 10, letterSpacing: "0.25em", color: "#5a5040", marginBottom: 20, textTransform: "uppercase" }}>
+                Nguyên tắc cốt lõi
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
+                {CORE_PRINCIPLES.map((p, i) => (
+                  <div key={i} style={{ background: "#111008", border: "1px solid #2a2520", borderRadius: 4, padding: "16px 18px" }}>
+                    <div style={{ color: "#C8A96E", marginBottom: 8, fontSize: 14 }}>{p.icon}</div>
+                    <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6, color: "#d8d0c0", letterSpacing: "0.02em" }}>{p.title}</div>
+                    <div style={{ fontSize: 12, color: "#7a7060", lineHeight: 1.6 }}>{p.desc}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Phase Timeline */}
+          <div style={{ padding: "28px 40px 0" }}>
+            <div style={{ maxWidth: 900, margin: "0 auto" }}>
+              <div style={{ fontSize: 10, letterSpacing: "0.25em", color: "#5a5040", marginBottom: 16, textTransform: "uppercase" }}>
+                5 Phases · 24 tháng
+              </div>
+              <div style={{ display: "flex", gap: 0, overflowX: "auto", paddingBottom: 8 }}>
+                {phases.map((p, i) => (
+                  <button
+                    key={i}
+                    onClick={() => { setActivePhase(i); setActiveTab("skills"); }}
+                    style={{
+                      flex: "1 0 140px",
+                      background: activePhase === i ? p.bg : "transparent",
+                      border: "1px solid",
+                      borderColor: activePhase === i ? p.color : "#2a2520",
+                      borderRadius: activePhase === i ? 4 : 2,
+                      padding: "14px 16px",
+                      cursor: "pointer",
+                      textAlign: "left",
+                      transition: "all 0.2s",
+                      marginRight: i < phases.length - 1 ? 6 : 0,
+                    }}
+                  >
+                    <div style={{ fontSize: 20, fontWeight: 700, color: activePhase === i ? p.color : "#3a3428", fontFamily: "monospace", marginBottom: 4 }}>
+                      {p.number}
+                    </div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: activePhase === i ? "#e8e0d0" : "#5a5040", letterSpacing: "0.08em", marginBottom: 3 }}>
+                      {p.title}
+                    </div>
+                    <div style={{ fontSize: 10, color: activePhase === i ? p.color : "#3a3028" }}>
+                      {p.duration}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Phase Detail */}
+          <div style={{ padding: "0 40px 60px" }}>
+            <div style={{ maxWidth: 900, margin: "0 auto" }}>
+
+              {/* Phase Header */}
+              <div style={{
+                background: phase.bg,
+                border: "1px solid",
+                borderColor: phase.color + "44",
+                borderRadius: 6,
+                padding: "32px 36px",
+                marginTop: 20,
+                position: "relative",
+                overflow: "hidden",
+              }}>
+                <div style={{
+                  position: "absolute", top: -20, right: -20,
+                  fontSize: 120, fontFamily: "monospace", fontWeight: 900,
+                  color: phase.color + "08", lineHeight: 1, userSelect: "none",
+                }}>
+                  {phase.number}
+                </div>
+                <div style={{ fontSize: 10, letterSpacing: "0.3em", color: phase.color, marginBottom: 8, textTransform: "uppercase" }}>
+                  Phase {phase.number} · {phase.duration}
+                </div>
+                <h2 style={{ fontSize: 28, fontWeight: 400, margin: "0 0 6px", color: "#e8e0d0" }}>{phase.title}</h2>
+                <div style={{ fontSize: 16, color: phase.color, fontStyle: "italic", marginBottom: 20 }}>{phase.subtitle}</div>
+                <p style={{ fontSize: 14, color: "#9a9080", lineHeight: 1.7, maxWidth: 600, margin: "0 0 20px" }}>{phase.tagline}</p>
+
+                <div style={{ background: phase.color + "15", border: "1px solid " + phase.color + "33", borderRadius: 4, padding: "12px 16px", marginBottom: 12 }}>
+                  <span style={{ fontSize: 10, color: phase.color, letterSpacing: "0.2em", textTransform: "uppercase" }}>TRANSFORMATION: </span>
+                  <span style={{ fontSize: 13, color: "#d0c8b8" }}>{phase.transformation}</span>
+                </div>
+
+                <div style={{ background: "#ffffff08", border: "1px solid #ffffff10", borderRadius: 4, padding: "12px 16px" }}>
+                  <span style={{ fontSize: 10, color: "#8a8070", letterSpacing: "0.2em", textTransform: "uppercase" }}>IRREVERSIBLE MARKER: </span>
+                  <span style={{ fontSize: 13, color: "#b0a898", fontStyle: "italic" }}>{phase.irreversible}</span>
+                </div>
+              </div>
+
+              {/* Tabs */}
+              <div style={{ display: "flex", gap: 4, marginTop: 16, borderBottom: "1px solid #1e1a16" }}>
+                {[
+                  { id: "skills", label: "Core Skills" },
+                  { id: "practice", label: "Practice" },
+                  { id: "resources", label: "Resources" },
+                  { id: "milestones", label: "Milestones" },
+                ].map(tab => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      borderBottom: activeTab === tab.id ? "2px solid " + phase.color : "2px solid transparent",
+                      padding: "10px 18px",
+                      cursor: "pointer",
+                      fontSize: 12,
+                      letterSpacing: "0.08em",
+                      color: activeTab === tab.id ? phase.color : "#5a5040",
+                      textTransform: "uppercase",
+                      marginBottom: -1,
+                      transition: "all 0.15s",
+                    }}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Tab Content */}
+              <div style={{ paddingTop: 24 }}>
+
+                {activeTab === "skills" && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                    {phase.coreSkills.map((skill, i) => (
+                      <div key={i} style={{
+                        background: "#111008",
+                        border: "1px solid #2a2520",
+                        borderLeft: "3px solid " + phase.color,
+                        borderRadius: 4,
+                        padding: "20px 24px",
+                      }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
+                          <div style={{ fontSize: 10, fontFamily: "monospace", color: phase.color, background: phase.color + "18", padding: "3px 8px", borderRadius: 2 }}>
+                            SKILL {String(i + 1).padStart(2, "0")}
+                          </div>
+                          <div style={{ fontSize: 15, fontWeight: 700, color: "#d8d0c0" }}>{skill.name}</div>
+                        </div>
+                        <p style={{ fontSize: 13, color: "#8a8070", lineHeight: 1.7, margin: "0 0 14px" }}>{skill.desc}</p>
+                        <div style={{ background: "#0d0a06", border: "1px dashed #2a2520", borderRadius: 4, padding: "12px 16px" }}>
+                          <div style={{ fontSize: 10, color: phase.color, letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 6 }}>▸ DRILL</div>
+                          <div style={{ fontSize: 13, color: "#b0a898", lineHeight: 1.65 }}>{skill.drill}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {activeTab === "practice" && (
+                  <div>
+                    <div style={{ background: "#111008", border: "1px solid " + phase.color + "33", borderRadius: 4, padding: "24px 28px", marginBottom: 20 }}>
+                      <div style={{ fontSize: 10, color: phase.color, letterSpacing: "0.25em", textTransform: "uppercase", marginBottom: 12 }}>Weekly Practice Load</div>
+                      <div style={{ fontSize: 20, color: "#e8e0d0", fontWeight: 700, marginBottom: 8 }}>{phase.weeklyPractice}</div>
+                      <p style={{ fontSize: 13, color: "#7a7060", lineHeight: 1.7, margin: 0 }}>
+                        Đây không phải passive learning. Mỗi giờ phải có output — viết, nói, hoặc nhận feedback.
+                      </p>
+                    </div>
+                    <div style={{ background: "#111008", border: "1px solid #2a2520", borderRadius: 4, padding: "20px 24px" }}>
+                      <div style={{ fontSize: 10, color: "#7a7060", letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 16 }}>Drills từ Core Skills</div>
+                      {phase.coreSkills.map((skill, i) => (
+                        <div key={i} style={{
+                          borderBottom: i < phase.coreSkills.length - 1 ? "1px solid #1e1a16" : "none",
+                          paddingBottom: i < phase.coreSkills.length - 1 ? 16 : 0,
+                          marginBottom: i < phase.coreSkills.length - 1 ? 16 : 0,
+                        }}>
+                          <div style={{ fontSize: 12, color: phase.color, marginBottom: 6, fontWeight: 700 }}>{skill.name}</div>
+                          <div style={{ fontSize: 13, color: "#9a9080", lineHeight: 1.65 }}>{skill.drill}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === "resources" && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                    {phase.resources.map((r, i) => (
+                      <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 16, background: "#111008", border: "1px solid #2a2520", borderRadius: 4, padding: "16px 20px" }}>
+                        <div style={{ fontSize: 10, background: "#1e1a16", color: "#6a6050", padding: "4px 8px", borderRadius: 2, letterSpacing: "0.1em", whiteSpace: "nowrap", marginTop: 1, minWidth: 48, textAlign: "center" }}>
+                          {r.type}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: 14, color: "#d0c8b8", marginBottom: 3 }}><em>{r.title}</em></div>
+                          <div style={{ fontSize: 12, color: "#6a6050" }}>{r.author}</div>
+                        </div>
+                        <div style={{ fontSize: 12 }}>{r.priority}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {activeTab === "milestones" && (
+                  <div>
+                    <p style={{ fontSize: 13, color: "#7a7060", lineHeight: 1.7, marginBottom: 24, fontStyle: "italic" }}>
+                      Milestone không phải là checkbox. Chúng là bằng chứng của transformation —
+                      phải được người khác xác nhận, không phải tự đánh giá.
+                    </p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                      {phase.milestones.map((m, i) => (
+                        <div key={i} style={{ display: "flex", gap: 16, alignItems: "flex-start", background: "#111008", border: "1px solid #2a2520", borderRadius: 4, padding: "18px 22px" }}>
+                          <div style={{
+                            width: 28, height: 28,
+                            border: "2px solid " + phase.color,
+                            borderRadius: "50%",
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            fontSize: 12, fontFamily: "monospace",
+                            color: phase.color, flexShrink: 0, marginTop: 1,
+                          }}>
+                            {i + 1}
+                          </div>
+                          <div style={{ fontSize: 14, color: "#c8c0b0", lineHeight: 1.65 }}>{m}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ marginTop: 24, background: phase.color + "10", border: "1px solid " + phase.color + "30", borderRadius: 4, padding: "16px 20px" }}>
+                      <div style={{ fontSize: 10, color: phase.color, letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 8 }}>Gate to next phase</div>
+                      <div style={{ fontSize: 13, color: "#b0a898", lineHeight: 1.65 }}>
+                        Chỉ move sang phase tiếp theo khi <strong style={{ color: phase.color }}>ít nhất 2/3 milestones</strong> được xác nhận bởi người ngoài. Self-assessment không đủ.
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div style={{ borderTop: "1px solid #1e1a16", padding: "24px 40px", background: "#080806" }}>
+            <div style={{ maxWidth: 900, margin: "0 auto" }}>
+              <div style={{ fontSize: 12, color: "#4a4030", lineHeight: 1.8, fontStyle: "italic" }}>
+                "The difference between good and great communicators isn't vocabulary or confidence.
+                It's the ability to hold the listener's reality in mind while expressing your own — simultaneously."
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>
