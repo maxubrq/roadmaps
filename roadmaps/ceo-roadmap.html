@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World-class CEO Roadmap — Top 1%–0.1%</title>
+<style>
+  :root {
+    --bg: #fafaf9;
+    --bg2: #f2f1ee;
+    --bg3: #e8e7e3;
+    --text: #1a1a18;
+    --text2: #5a5a55;
+    --text3: #9a9a92;
+    --border: rgba(0,0,0,0.10);
+    --border2: rgba(0,0,0,0.18);
+    --blue: #1a6fc4;
+    --blue-bg: #e8f1fb;
+    --teal: #0f7a5a;
+    --teal-bg: #e0f4ec;
+    --amber: #9a6010;
+    --amber-bg: #fdf0d8;
+    --purple: #5c50b8;
+    --purple-bg: #eeedfb;
+    --red: #c03030;
+    --red-bg: #fce8e8;
+    --info-bg: #e6f0fb;
+    --info-text: #1a5fa0;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a18;
+      --bg2: #242421;
+      --bg3: #2e2e2a;
+      --text: #e8e6e0;
+      --text2: #a8a89e;
+      --text3: #68685e;
+      --border: rgba(255,255,255,0.10);
+      --border2: rgba(255,255,255,0.20);
+      --blue: #5a9fd4;
+      --blue-bg: #0e2a42;
+      --teal: #2ab87a;
+      --teal-bg: #0a2e1e;
+      --amber: #d4960a;
+      --amber-bg: #2e1e04;
+      --purple: #9a94e0;
+      --purple-bg: #1e1a40;
+      --red: #e06060;
+      --red-bg: #2e0e0e;
+      --info-bg: #0e2038;
+      --info-text: #6ab0e8;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .page-wrap {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  /* HEADER */
+  .page-header { margin-bottom: 2rem; }
+  .page-meta { font-size: 11px; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .page-title { font-size: 26px; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .page-sub { font-size: 14px; color: var(--text2); margin-top: 6px; }
+
+  /* PHASE NAV */
+  .phase-nav {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-bottom: 1.75rem;
+    position: sticky; top: 0;
+    background: var(--bg);
+    padding: 0.75rem 0;
+    border-bottom: 0.5px solid var(--border);
+    z-index: 10;
+  }
+  .phase-btn {
+    padding: 7px 16px; font-size: 13px; font-weight: 500;
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    background: transparent; cursor: pointer;
+    color: var(--text2);
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .phase-btn:hover { background: var(--bg2); color: var(--text); }
+  .phase-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+  /* PHASE CARD */
+  .phase-card { display: none; }
+  .phase-card.visible { display: block; }
+  .phase-header {
+    padding: 1.25rem 1.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius) var(--radius) 0 0;
+    background: var(--bg2);
+    border-bottom: none;
+  }
+  .phase-label { font-size: 11px; color: var(--text3); letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 4px; }
+  .phase-name { font-size: 20px; font-weight: 600; color: var(--text); }
+  .phase-tagline { font-size: 13px; color: var(--text2); margin-top: 4px; }
+  .phase-badge {
+    display: inline-block; margin-top: 10px;
+    font-size: 12px; padding: 4px 12px;
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 20px; color: var(--text2);
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    border: 1px solid var(--border);
+    border-top: none; border-bottom: none;
+    background: var(--bg);
+    overflow-x: auto;
+  }
+  .tab {
+    padding: 11px 18px; font-size: 13px;
+    color: var(--text2); cursor: pointer;
+    border: none; background: transparent;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    font-family: inherit;
+    transition: all 0.12s;
+  }
+  .tab:hover { color: var(--text); background: var(--bg2); }
+  .tab.active { color: var(--text); font-weight: 500; border-bottom-color: var(--text); background: var(--bg); }
+
+  /* TAB CONTENT */
+  .tab-panel { display: none; }
+  .tab-panel.visible {
+    display: block;
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+    padding: 1.5rem;
+    background: var(--bg);
+  }
+
+  /* SECTION LABEL */
+  .s-label {
+    font-size: 11px; color: var(--text3);
+    letter-spacing: 0.07em; text-transform: uppercase;
+    margin-bottom: 12px; margin-top: 0;
+  }
+
+  /* ITEM ROWS */
+  .item-row { display: flex; gap: 12px; margin-bottom: 14px; align-items: flex-start; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
+  .dot-blue { background: var(--blue); }
+  .dot-teal { background: var(--teal); }
+  .dot-amber { background: var(--amber); }
+  .dot-purple { background: var(--purple); }
+  .dot-red { background: var(--red); }
+  .item-title { font-size: 14px; font-weight: 500; color: var(--text); }
+  .item-desc { font-size: 13px; color: var(--text2); margin-top: 3px; line-height: 1.55; }
+
+  /* TRANSFORMATION BOX */
+  .tf-box {
+    background: var(--bg2); border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem; margin-top: 1.25rem;
+    border: 1px solid var(--border);
+  }
+  .tf-before { font-size: 12px; color: var(--text3); margin-bottom: 6px; }
+  .tf-arrow { font-size: 18px; color: var(--text3); margin: 4px 0; }
+  .tf-after { font-size: 14px; font-weight: 500; color: var(--text); }
+
+  /* RESOURCE ITEMS */
+  .resource-item {
+    background: var(--bg2); border-radius: var(--radius-sm);
+    padding: 12px 14px; margin-bottom: 10px;
+    border: 1px solid var(--border);
+  }
+  .resource-title { font-size: 14px; font-weight: 500; color: var(--text); }
+  .resource-type { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .resource-note { font-size: 13px; color: var(--text2); margin-top: 6px; line-height: 1.5; }
+
+  /* PRACTICE ITEMS */
+  .practice-item {
+    border-left: 2px solid var(--border2);
+    padding: 4px 0 4px 14px; margin-bottom: 16px;
+  }
+  .practice-freq { font-size: 11px; color: var(--text3); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 3px; }
+  .practice-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .practice-desc { font-size: 13px; color: var(--text2); line-height: 1.55; }
+
+  /* MILESTONE ITEMS */
+  .milestone-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px; margin-bottom: 10px;
+  }
+  .milestone-title { font-size: 14px; font-weight: 500; color: var(--text); }
+  .milestone-proof { font-size: 13px; color: var(--text2); margin-top: 4px; line-height: 1.5; }
+  .milestone-tag {
+    display: inline-block; margin-top: 8px;
+    font-size: 11px; padding: 3px 10px;
+    background: var(--info-bg); color: var(--info-text);
+    border-radius: 20px;
+  }
+
+  /* OVERVIEW TABLE */
+  .overview-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+  .overview-table thead tr {
+    border-bottom: 1px solid var(--border2);
+  }
+  .overview-table thead th {
+    font-size: 11px; color: var(--text3);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    font-weight: 400; padding: 0 0 10px 0; text-align: left;
+  }
+  .overview-table tbody tr { border-bottom: 1px solid var(--border); }
+  .overview-table tbody tr:last-child { border-bottom: none; }
+  .overview-table td { padding: 14px 0; vertical-align: top; }
+  .overview-table td:first-child { width: 130px; }
+  .ov-num { font-size: 11px; color: var(--text3); }
+  .ov-name { font-size: 14px; font-weight: 500; color: var(--text); margin-top: 2px; }
+  .ov-dur { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .ov-focus { font-size: 13px; color: var(--text2); padding-right: 1rem; line-height: 1.5; }
+  .ov-key { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 540px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .page-wrap { padding: 1.5rem 1rem 3rem; }
+    .phase-nav { gap: 4px; }
+    .phase-btn { padding: 6px 12px; font-size: 12px; }
+    .tab { padding: 9px 12px; font-size: 12px; }
+    .tab-panel.visible { padding: 1.25rem 1rem; }
+    .phase-header { padding: 1rem; }
+  }
+
+  /* FOOTER */
+  .page-footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 12px; color: var(--text3); text-align: center; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="page-header">
+    <div class="page-meta">Personal Roadmap · World-class CEO · Top 1%–0.1%</div>
+    <div class="page-title">Từ Engineer đến CEO Đẳng cấp Thế giới</div>
+    <div class="page-sub">5 giai đoạn transformation · mỗi giai đoạn là một bước không thể lùi · 10–15 năm</div>
+  </div>
+
+  <nav class="phase-nav" aria-label="Phase navigation">
+    <button class="phase-btn active" onclick="showPhase('overview', this)">Tổng quan</button>
+    <button class="phase-btn" onclick="showPhase('p1', this)">Phase 1 · Foundations</button>
+    <button class="phase-btn" onclick="showPhase('p2', this)">Phase 2 · People</button>
+    <button class="phase-btn" onclick="showPhase('p3', this)">Phase 3 · Business</button>
+    <button class="phase-btn" onclick="showPhase('p4', this)">Phase 4 · Market</button>
+    <button class="phase-btn" onclick="showPhase('p5', this)">Phase 5 · World-class</button>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════ OVERVIEW -->
+  <div class="phase-card visible" id="card-overview">
+    <div class="phase-header">
+      <div class="phase-label">Toàn bộ hành trình</div>
+      <div class="phase-name">Kiến trúc 5 giai đoạn</div>
+      <div class="phase-tagline">Mỗi phase là một identity shift — không chỉ thêm kỹ năng</div>
+    </div>
+    <div style="border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);padding:1.5rem;background:var(--bg);">
+      <table class="overview-table">
+        <thead>
+          <tr>
+            <th>Giai đoạn</th>
+            <th>Mục tiêu transformation</th>
+            <th>Năng lực cốt lõi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="ov-num">Phase 1</div><div class="ov-name">Foundations of Self</div><div class="ov-dur">Năm 1–2</div></td>
+            <td class="ov-focus">Từ "người giỏi việc" → "người tạo ra kết quả" · Xây operating system cá nhân</td>
+            <td class="ov-key">Clarity · Written thinking · Delivering outcomes · Personal brand đầu tiên</td>
+          </tr>
+          <tr>
+            <td><div class="ov-num">Phase 2</div><div class="ov-name">People Multiplier</div><div class="ov-dur">Năm 2–4</div></td>
+            <td class="ov-focus">Từ "tự làm tốt" → "làm người khác tốt hơn" · Leverage qua người</td>
+            <td class="ov-key">Hiring · Delegation · Feedback · Organizational design</td>
+          </tr>
+          <tr>
+            <td><div class="ov-num">Phase 3</div><div class="ov-name">Business Architect</div><div class="ov-dur">Năm 4–7</div></td>
+            <td class="ov-focus">Từ "quản lý team" → "xây và vận hành doanh nghiệp" · P&amp;L ownership</td>
+            <td class="ov-key">Strategy · Finance · GTM · Capital allocation · Board dynamics</td>
+          </tr>
+          <tr>
+            <td><div class="ov-num">Phase 4</div><div class="ov-name">Market Shaper</div><div class="ov-dur">Năm 7–11</div></td>
+            <td class="ov-focus">Từ "chạy doanh nghiệp" → "định hình ngành" · External reputation</td>
+            <td class="ov-key">Industry positioning · Investor relations · M&amp;A · Public narrative</td>
+          </tr>
+          <tr>
+            <td><div class="ov-num">Phase 5</div><div class="ov-name">World-class CEO</div><div class="ov-dur">Năm 11–15+</div></td>
+            <td class="ov-focus">Từ "CEO giỏi" → "CEO đẳng cấp thế giới" · Legacy và institutional impact</td>
+            <td class="ov-key">Compounding reputation · Category creation · Generational thinking</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ PHASE 1 -->
+  <div class="phase-card" id="card-p1">
+    <div class="phase-header">
+      <div class="phase-label">Phase 1 · Năm 1–2</div>
+      <div class="phase-name">Foundations of Self</div>
+      <div class="phase-tagline">Xây hệ điều hành cá nhân — clarity, output, và dấu ấn đầu tiên</div>
+      <span class="phase-badge">Transformation: Từ "người giỏi" → "người tạo kết quả đo được"</span>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab active" onclick="showTab('p1','core',this)" role="tab">Năng lực cốt lõi</button>
+      <button class="tab" onclick="showTab('p1','practice',this)" role="tab">Bài tập & thực hành</button>
+      <button class="tab" onclick="showTab('p1','resources',this)" role="tab">Tài nguyên</button>
+      <button class="tab" onclick="showTab('p1','milestones',this)" role="tab">Milestones</button>
+    </div>
+    <div class="tab-panel visible" id="p1-core">
+      <p class="s-label">4 năng lực phải master</p>
+      <div class="item-row"><div class="dot dot-blue"></div><div><div class="item-title">Written thinking system (PKM)</div><div class="item-desc">Mọi suy nghĩ phức tạp đều được externalize ra text. Không viết = không thực sự suy nghĩ. Dùng Obsidian + Zettelkasten method từ ngày đầu.</div></div></div>
+      <div class="item-row"><div class="dot dot-blue"></div><div><div class="item-title">Outcome delivery — không phải activity</div><div class="item-desc">Đo bằng kết quả thực tế, không phải effort. Mỗi quý phải có 1 deliverable rõ ràng có thể trình bày với số cụ thể.</div></div></div>
+      <div class="item-row"><div class="dot dot-blue"></div><div><div class="item-title">Structured communication</div><div class="item-desc">MECE frameworks, pyramid principle — nói ít hơn, rõ hơn. CEOs được đánh giá qua clarity nhiều hơn breadth.</div></div></div>
+      <div class="item-row"><div class="dot dot-blue"></div><div><div class="item-title">Peer network đầu tiên</div><div class="item-desc">5–10 người giỏi hơn mình, biết mình tên. Không phải LinkedIn connection — là người có thể reference mình. Đây là capital không thể mua.</div></div></div>
+      <div class="tf-box">
+        <div class="tf-before">Trước: "Tôi làm được nhiều thứ"</div>
+        <div class="tf-arrow">↓</div>
+        <div class="tf-after">Sau: "Tôi tạo ra outcome X đo được bằng Y, được market ghi nhận"</div>
+      </div>
+    </div>
+    <div class="tab-panel" id="p1-practice">
+      <div class="practice-item">
+        <div class="practice-freq">Hàng ngày · 30 phút</div>
+        <div class="practice-title">Journaling có cấu trúc</div>
+        <div class="practice-desc">Viết: (1) Quyết định quan trọng nhất hôm nay là gì? (2) Tại sao mình quyết định thế? (3) Mình đã sai ở đâu tuần này? Mục tiêu: externalize tư duy, xây thói quen clarity.</div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-freq">Hàng tuần · 1 bài viết</div>
+        <div class="practice-title">Public writing — 1 bài/tuần</div>
+        <div class="practice-desc">Viết công khai về bất cứ thứ gì mình đang học/làm. LinkedIn, blog cá nhân, hoặc newsletter. Không cần perfect — cần consistent. Mục tiêu: xây reputation track record.</div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-freq">Hàng tháng · 2–4 buổi</div>
+        <div class="practice-title">Informational interviews với senior leaders</div>
+        <div class="practice-desc">Email cold outreach 5 người/tháng. Hỏi: "What decisions do you make that no one else can?" và "What did you wish you'd learned earlier?" Ghi chú và publish insights.</div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-freq">Hàng quý · 1 review lớn</div>
+        <div class="practice-title">Quarterly Outcome Review</div>
+        <div class="practice-desc">Viết 1-pager: (1) Outcome đã deliver được là gì? (2) Evidence cụ thể. (3) What did I learn that changed how I think? Không có outcome = chưa xong phase.</div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-freq">Năm 1 · 1 lần</div>
+        <div class="practice-title">Xây Personal Operating System (POS)</div>
+        <div class="practice-desc">Document hóa: values, decision filters, thói quen tốt nhất, năng lượng cao nhất vào khung giờ nào, khi nào mình tệ nhất. Đây là "firmware" để scale lên.</div>
+      </div>
+    </div>
+    <div class="tab-panel" id="p1-resources">
+      <div class="resource-item"><div class="resource-title">Good Strategy Bad Strategy — Rumelt</div><div class="resource-type">Sách · Đọc năm 1</div><div class="resource-note">Đọc để hiểu: strategy là gì thực sự (kernel), tại sao 90% "chiến lược" chỉ là goals. Đọc chương 1–5 trước.</div></div>
+      <div class="resource-item"><div class="resource-title">The Pyramid Principle — Minto</div><div class="resource-type">Sách · Đọc năm 1</div><div class="resource-note">Framework viết và nói cho executives. Thực hành bằng cách viết lại mọi email quan trọng theo pyramid structure.</div></div>
+      <div class="resource-item"><div class="resource-title">Thinking in Systems — Meadows</div><div class="resource-type">Sách · Đọc năm 1</div><div class="resource-note">Mental model nền tảng nhất cho mọi CEO. Loops, stocks, flows — hiểu tại sao interventions thường produce unexpected results.</div></div>
+      <div class="resource-item"><div class="resource-title">Obsidian + Zettelkasten method</div><div class="resource-type">Tool · Setup tuần 1</div><div class="resource-note">Không cần tool phức tạp. Quan trọng là habit: mỗi idea phải linked đến idea khác. Dùng liên tục từ ngày đầu.</div></div>
+      <div class="resource-item"><div class="resource-title">How to Write a Personal Strategy — Roger Martin (HBR)</div><div class="resource-type">Article · Free online</div><div class="resource-note">Ứng dụng strategy framework vào career planning. Bài tập: viết personal strategy 1-pager sau khi đọc.</div></div>
+      <div class="resource-item"><div class="resource-title">Acquired Podcast — toàn bộ</div><div class="resource-type">Podcast · Ongoing</div><div class="resource-note">Case studies sâu nhất về các công ty vĩ đại. Mỗi episode nghe như một MBA case. Đặc biệt: Apple, Berkshire, TSMC.</div></div>
+    </div>
+    <div class="tab-panel" id="p1-milestones">
+      <div class="milestone-item"><div class="milestone-title">Milestone 1 · Tháng 3</div><div class="milestone-proof">Personal Operating System được viết ra, đã dùng ít nhất 8 tuần, và đã điều chỉnh ít nhất 1 lần dựa trên data thực tế.</div><span class="milestone-tag">Irreversible: không thể "un-know" mình hoạt động thế nào</span></div>
+      <div class="milestone-item"><div class="milestone-title">Milestone 2 · Tháng 6</div><div class="milestone-proof">12 bài viết public được publish. Ít nhất 1 bài được 1 người giỏi hơn mình chia sẻ hoặc comment.</div><span class="milestone-tag">Irreversible: track record tồn tại trên internet</span></div>
+      <div class="milestone-item"><div class="milestone-title">Milestone 3 · Tháng 12</div><div class="milestone-proof">Deliver được 1 project có outcome rõ ràng (revenue, users, cost saved — số cụ thể). Viết được case study 2-trang về project đó.</div><span class="milestone-tag">Irreversible: proof of outcome delivery, không ai lấy đi được</span></div>
+      <div class="milestone-item"><div class="milestone-title">Milestone 4 · Tháng 18</div><div class="milestone-proof">5 người senior biết tên mình, đã gặp mặt, và có thể reference mình cho người khác. Không phải LinkedIn connection.</div><span class="milestone-tag">Irreversible: relationship capital đã tích lũy</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ PHASE 2 -->
+  <div class="phase-card" id="card-p2">
+    <div class="phase-header">
+      <div class="phase-label">Phase 2 · Năm 2–4</div>
+      <div class="phase-name">People Multiplier</div>
+      <div class="phase-tagline">Học cách leverage qua người khác — CEO làm gì qua người, không qua tay</div>
+      <span class="phase-badge">Transformation: Từ "tự làm tốt" → "làm 10 người khác tốt hơn"</span>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('p2','core',this)">Năng lực cốt lõi</button>
+      <button class="tab" onclick="showTab('p2','practice',this)">Bài tập & thực hành</button>
+      <button class="tab" onclick="showTab('p2','resources',this)">Tài nguyên</button>
+      <button class="tab" onclick="showTab('p2','milestones',this)">Milestones</button>
+    </div>
+    <div class="tab-panel visible" id="p2-core">
+      <p class="s-label">5 năng lực phải master</p>
+      <div class="item-row"><div class="dot dot-teal"></div><div><div class="item-title">Hiring — nhận ra người xuất sắc trước khi thị trường nhận ra</div><div class="item-desc">CEOs vĩ đại nói hiring là việc quan trọng nhất họ làm. Xây interview framework riêng. Phân biệt được A-player vs B-player.</div></div></div>
+      <div class="item-row"><div class="dot dot-teal"></div><div><div class="item-title">Delegation thực sự (không phải task assignment)</div><div class="item-desc">Giao authority, không chỉ giao việc. Outcome-based, không process-based. Mức độ trust quyết định leverage.</div></div></div>
+      <div class="item-row"><div class="dot dot-teal"></div><div><div class="item-title">Radical feedback culture</div><div class="item-desc">Cho và nhận feedback thực sự — không diplomatic bullshit. Kim Scott's framework: Care personally + Challenge directly.</div></div></div>
+      <div class="item-row"><div class="dot dot-teal"></div><div><div class="item-title">Organizational design cơ bản</div><div class="item-desc">Conway's Law, team topology, span of control. Hiểu structure tạo ra behavior — trước khi muốn thay đổi người.</div></div></div>
+      <div class="item-row"><div class="dot dot-teal"></div><div><div class="item-title">1:1 mastery và coaching</div><div class="item-desc">1:1 là công cụ quản lý mạnh nhất. Không phải status update — là unlock người khác. Hỏi nhiều hơn nói.</div></div></div>
+      <div class="tf-box">
+        <div class="tf-before">Trước: "Output = năng lực cá nhân của tôi"</div>
+        <div class="tf-arrow">↓</div>
+        <div class="tf-after">Sau: "Output = năng lực của 10 người × sự rõ ràng mà tôi tạo ra cho họ"</div>
+      </div>
+    </div>
+    <div class="tab-panel" id="p2-practice">
+      <div class="practice-item">
+        <div class="practice-freq">Hàng tuần · Mỗi direct report</div>
+        <div class="practice-title">Structured 1:1 với framework cụ thể</div>
+        <div class="practice-desc">Template: (1) Họ đang blocked ở đâu? (2) Feedback 1 điều specific trong tuần qua. (3) Career growth — họ muốn gì? Ghi chú sau mỗi 1:1. Xem lại sau 4 tuần — có pattern không?</div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-freq">Hàng quý · Mỗi hire quan trọng</div>
+        <div class="practice-title">Post-mortem mỗi lần hire</div>
+        <div class="practice-desc">6 tháng sau hire: họ A-player không? Tại sao đúng/sai? Signal nào mình đã bỏ qua? Xây hiring scorecard và cải thiện mỗi lần. Top CEOs có hit rate >80% A-players.</div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-freq">Hàng tháng · 1 lần</div>
+        <div class="practice-title">Org design review</div>
+        <div class="practice-desc">Vẽ lại org chart. Hỏi: ai đang bottleneck? Ai đang underutilized? Ai đang làm việc của người khác? Org là code — refactor khi cần.</div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-freq">Ongoing · Mọi quyết định</div>
+        <div class="practice-title">Delegation ladder practice</div>
+        <div class="practice-desc">7 bậc delegation (từ "làm theo tôi nói" → "tự quyết định, báo cáo nếu muốn"). Với mỗi task, ý thức đang ở bậc mấy và có thể lên 1 bậc không? Tăng average delegation level mỗi quý.</div>
+      </div>
+    </div>
+    <div class="tab-panel" id="p2-resources">
+      <div class="resource-item"><div class="resource-title">Radical Candor — Kim Scott</div><div class="resource-type">Sách · Đọc đầu Phase 2</div><div class="resource-note">Framework thực tế nhất cho feedback và management. Đọc + implement ngay — không phải đọc để biết.</div></div>
+      <div class="resource-item"><div class="resource-title">An Elegant Puzzle — Will Larson</div><div class="resource-type">Sách · Dành cho tech leaders</div><div class="resource-note">Tốt nhất về org design và engineering management. Đặc biệt: chapters về sizing teams, delivery/innovation ratio.</div></div>
+      <div class="resource-item"><div class="resource-title">Who: The A Method for Hiring — Smart</div><div class="resource-type">Sách · Tactical</div><div class="resource-note">Framework hiring cụ thể nhất: scorecard, structured interviews, reference checks. Implement từng bước.</div></div>
+      <div class="resource-item"><div class="resource-title">Team Topologies — Skelton & Pais</div><div class="resource-type">Sách · Org design</div><div class="resource-note">Hiểu team coupling, Conway's Law trong thực tế. Áp dụng ngay vào cấu trúc team mình đang có.</div></div>
+      <div class="resource-item"><div class="resource-title">Lenny's Podcast — people & product episodes</div><div class="resource-type">Podcast · Ongoing</div><div class="resource-note">Các CEO/CPO chia sẻ tactical frameworks. Đặc biệt: Claire Hughes Johnson, Brian Chesky, Shreyas Doshi.</div></div>
+    </div>
+    <div class="tab-panel" id="p2-milestones">
+      <div class="milestone-item"><div class="milestone-title">Milestone 1 · Tháng 6 Phase 2</div><div class="milestone-proof">Hire được 2+ người và cả 2 đều outperform expectations sau 6 tháng. Có written hiring scorecard cho từng role.</div><span class="milestone-tag">Irreversible: hiring muscle đã được rèn</span></div>
+      <div class="milestone-item"><div class="milestone-title">Milestone 2 · Tháng 12 Phase 2</div><div class="milestone-proof">Team của mình deliver kết quả quan trọng trong khi mình absent 2+ tuần. Outcome không phụ thuộc vào sự có mặt của mình.</div><span class="milestone-tag">Irreversible: biết cảm giác leverage thực sự là gì</span></div>
+      <div class="milestone-item"><div class="milestone-title">Milestone 3 · Cuối Phase 2</div><div class="milestone-proof">Ít nhất 1 người từng report cho mình được promoted lên senior role và publicly credit mình là một reason.</div><span class="milestone-tag">Irreversible: reputation là người phát triển được người khác</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ PHASE 3 -->
+  <div class="phase-card" id="card-p3">
+    <div class="phase-header">
+      <div class="phase-label">Phase 3 · Năm 4–7</div>
+      <div class="phase-name">Business Architect</div>
+      <div class="phase-tagline">Hiểu và vận hành doanh nghiệp như một system — P&amp;L, strategy, capital</div>
+      <span class="phase-badge">Transformation: Từ "leader giỏi" → "người xây và vận hành business engine"</span>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('p3','core',this)">Năng lực cốt lõi</button>
+      <button class="tab" onclick="showTab('p3','practice',this)">Bài tập & thực hành</button>
+      <button class="tab" onclick="showTab('p3','resources',this)">Tài nguyên</button>
+      <button class="tab" onclick="showTab('p3','milestones',this)">Milestones</button>
+    </div>
+    <div class="tab-panel visible" id="p3-core">
+      <p class="s-label">6 năng lực phải master</p>
+      <div class="item-row"><div class="dot dot-amber"></div><div><div class="item-title">P&amp;L fluency — đọc business như đọc code</div><div class="item-desc">Hiểu unit economics, contribution margin, CAC/LTV, working capital. Không phải accountant — nhưng phải hiểu business model drivers.</div></div></div>
+      <div class="item-row"><div class="dot dot-amber"></div><div><div class="item-title">Strategic planning thực sự</div><div class="item-desc">3-year plan với clear choices: cái gì chúng ta KHÔNG làm? Allocate resources theo strategy, không theo inertia. Annual/quarterly planning cadence.</div></div></div>
+      <div class="item-row"><div class="dot dot-amber"></div><div><div class="item-title">Go-to-market và revenue engine</div><div class="item-desc">Hiểu toàn bộ revenue funnel, sales motion, pricing power. CEO phải biết tại sao deal bị thua, không phải chỉ nghe báo cáo.</div></div></div>
+      <div class="item-row"><div class="dot dot-amber"></div><div><div class="item-title">Capital allocation thinking</div><div class="item-desc">Mỗi đồng đầu tư đi đâu? Opportunity cost là gì? Đây là quyết định quan trọng nhất CEO làm — theo Buffett.</div></div></div>
+      <div class="item-row"><div class="dot dot-amber"></div><div><div class="item-title">Board và investor management</div><div class="item-desc">Hiểu động lực của board, cách present, cách manage expectations. Nhiều CEO giỏi về operations nhưng fail ở đây.</div></div></div>
+      <div class="item-row"><div class="dot dot-amber"></div><div><div class="item-title">Crisis leadership</div><div class="item-desc">Khi mọi thứ break — và nó sẽ break — mình làm gì? Tốc độ quyết định, communication rõ ràng, không panic.</div></div></div>
+      <div class="tf-box">
+        <div class="tf-before">Trước: "Tôi quản lý team tốt"</div>
+        <div class="tf-arrow">↓</div>
+        <div class="tf-after">Sau: "Tôi xây và vận hành một business engine tạo ra value bền vững"</div>
+      </div>
+    </div>
+    <div class="tab-panel" id="p3-practice">
+      <div class="practice-item">
+        <div class="practice-freq">Hàng tháng · 2 giờ</div>
+        <div class="practice-title">Deep-dive P&amp;L một business unit</div>
+        <div class="practice-desc">Pick 1 business unit, model lại toàn bộ economics từ scratch. Không dùng existing model — tự xây. Hỏi: nếu tôi thay đổi X, Y thay đổi thế nào? Tìm đòn bẩy thực sự.</div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-freq">Hàng quý · 2 ngày</div>
+        <div class="practice-title">Strategy offsite với framework cụ thể</div>
+        <div class="practice-desc">Dùng Roger Martin's Playing to Win: (1) Winning aspiration (2) Where to play (3) How to win (4) Capabilities (5) Management systems. Viết ra, không chỉ nói. Review lại sau 1 năm.</div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-freq">Hàng tuần · 30 phút</div>
+        <div class="practice-title">Đọc annual report của công ty mình ngưỡng mộ</div>
+        <div class="practice-desc">Letters to shareholders: Bezos, Buffett, Zuckerberg, Patrick Collison. Chú ý: họ frame priorities thế nào? Họ admit mistakes gì? Họ nói về dài hạn ra sao?</div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-freq">Năm 2 Phase 3 · 1 lần</div>
+        <div class="practice-title">Xây và present business case cho board</div>
+        <div class="practice-desc">Chọn một initiative quan trọng. Xây full business case: market sizing, competitive analysis, financial model, risks, recommendation. Present cho senior stakeholders và defend dưới pressure.</div>
+      </div>
+    </div>
+    <div class="tab-panel" id="p3-resources">
+      <div class="resource-item"><div class="resource-title">7 Powers — Hamilton Helmer</div><div class="resource-type">Sách · Đọc đầu Phase 3</div><div class="resource-note">Framework tốt nhất về competitive moats. Tại sao business có thể giữ được lợi nhuận? Mapping 7 powers vào business của mình.</div></div>
+      <div class="resource-item"><div class="resource-title">Poor Charlie's Almanack — Munger</div><div class="resource-type">Sách · Đọc năm 4–5</div><div class="resource-note">Mental models cho business thinking. Đặc biệt: latticework of models, psychology of misjudgment. Đọc chậm, ghi chép nhiều.</div></div>
+      <div class="resource-item"><div class="resource-title">Playing to Win — Lafley & Martin</div><div class="resource-type">Sách · Strategy execution</div><div class="resource-note">Framework thực tế nhất về strategy. P&G case studies rất cụ thể. Dùng "cascade of choices" cho mọi strategic decision.</div></div>
+      <div class="resource-item"><div class="resource-title">Principles — Ray Dalio</div><div class="resource-type">Sách · Hệ thống vận hành</div><div class="resource-note">Cách Dalio document và hệ thống hóa decision-making là world-class. Học cách xây principles riêng — không cần áp dụng 100%.</div></div>
+      <div class="resource-item"><div class="resource-title">Berkshire Hathaway Letters to Shareholders</div><div class="resource-type">Free online · Đọc toàn bộ</div><div class="resource-note">40 năm thinking về capital allocation, business quality, management. Buffett là giáo viên tốt nhất về business thinking.</div></div>
+      <div class="resource-item"><div class="resource-title">Stripe Press — toàn bộ catalog</div><div class="resource-type">Books/Essays · Ongoing</div><div class="resource-note">Patrick Collison curation về business và technology. Mỗi cuốn đều high-quality. Infrastructure, markets, innovation.</div></div>
+    </div>
+    <div class="tab-panel" id="p3-milestones">
+      <div class="milestone-item"><div class="milestone-title">Milestone 1 · Năm 5</div><div class="milestone-proof">Own một P&amp;L thực sự — dù nhỏ. Đã qua ít nhất 1 budget cycle đầy đủ: plan, execute, review. Hiểu tại sao số không đạt hoặc vượt target.</div><span class="milestone-tag">Irreversible: financial reality đã chạm vào tư duy, không còn abstract</span></div>
+      <div class="milestone-item"><div class="milestone-title">Milestone 2 · Năm 6</div><div class="milestone-proof">Đã navigate ít nhất 1 serious crisis (operational, people, hoặc market) và organization vẫn intact sau đó. Có written after-action review.</div><span class="milestone-tag">Irreversible: crisis confidence — biết mình có thể handle pressure</span></div>
+      <div class="milestone-item"><div class="milestone-title">Milestone 3 · Năm 7</div><div class="milestone-proof">Strategy document của mình được reference bởi board hoặc investors như evidence of strong strategic thinking. Không phải "good presentation" — là "this person thinks clearly."</div><span class="milestone-tag">Irreversible: market nhận ra mình là người suy nghĩ về business</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ PHASE 4 -->
+  <div class="phase-card" id="card-p4">
+    <div class="phase-header">
+      <div class="phase-label">Phase 4 · Năm 7–11</div>
+      <div class="phase-name">Market Shaper</div>
+      <div class="phase-tagline">Xây external reputation — được market nhận ra như một tiếng nói quan trọng</div>
+      <span class="phase-badge">Transformation: Từ "CEO giỏi của company" → "voice của industry"</span>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('p4','core',this)">Năng lực cốt lõi</button>
+      <button class="tab" onclick="showTab('p4','practice',this)">Bài tập & thực hành</button>
+      <button class="tab" onclick="showTab('p4','resources',this)">Tài nguyên</button>
+      <button class="tab" onclick="showTab('p4','milestones',this)">Milestones</button>
+    </div>
+    <div class="tab-panel visible" id="p4-core">
+      <p class="s-label">5 năng lực phải master</p>
+      <div class="item-row"><div class="dot dot-purple"></div><div><div class="item-title">Investor relations và capital raising</div><div class="item-desc">Narrative construction cho investors. Hiểu valuation mechanics, term sheets, dilution. Manage investor expectations — đây là relationship game dài hạn.</div></div></div>
+      <div class="item-row"><div class="dot dot-purple"></div><div><div class="item-title">M&amp;A — cả hai phía</div><div class="item-desc">Hiểu M&amp;A rationale, due diligence, integration. Nhiều CEOs fail ở integration hơn là ở deal-making. Cultural integration là hardest part.</div></div></div>
+      <div class="item-row"><div class="dot dot-purple"></div><div><div class="item-title">Public narrative và thought leadership</div><div class="item-desc">Articulate where the industry is going. Viết bài dài, speak tại conferences, build point of view mà market cites. Không phải marketing — là genuine insight.</div></div></div>
+      <div class="item-row"><div class="dot dot-purple"></div><div><div class="item-title">Talent marketplace positioning</div><div class="item-desc">Tốt nhất muốn làm việc với mình. Employer brand = function of CEO reputation trong tech và startup ecosystem.</div></div></div>
+      <div class="item-row"><div class="dot dot-purple"></div><div><div class="item-title">Geopolitical và macro literacy</div><div class="item-desc">Đặc biệt quan trọng với SEA context: ASEAN dynamics, regulatory environments, cross-border business. Macro thay đổi rules of game.</div></div></div>
+      <div class="tf-box">
+        <div class="tf-before">Trước: "Tôi run một business tốt"</div>
+        <div class="tf-arrow">↓</div>
+        <div class="tf-after">Sau: "Tôi define cách người trong ngành này suy nghĩ về vấn đề X"</div>
+      </div>
+    </div>
+    <div class="tab-panel" id="p4-practice">
+      <div class="practice-item">
+        <div class="practice-freq">Hàng năm · 1–2 bài dài</div>
+        <div class="practice-title">Publish long-form thesis về industry</div>
+        <div class="practice-desc">Không phải blog post — là 3000–5000 word thesis với một clear, non-obvious point of view. Cái mà người khác disagree nhưng không thể refute. Mục tiêu: được cited bởi người khác.</div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-freq">Hàng quý · 1–2 lần</div>
+        <div class="practice-title">Advisory board hoặc investor meetings dù không raise</div>
+        <div class="practice-desc">Gặp VCs, angels, institutional investors ngay cả khi không cần tiền. Khi mình cần, relationship đã warm. Hỏi: "Bạn đang thấy gì trong market mà ít người nhận ra?"</div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-freq">Ongoing</div>
+        <div class="practice-title">Build "CEO inner circle" — 5–7 CEOs cùng level</div>
+        <div class="practice-desc">Peer group CEOs chia sẻ problems thật không share được với board hay employees. Monthly virtual call, quarterly in-person. Tốt nhất: đa dạng ngành nhưng tương đồng scale/stage.</div>
+      </div>
+    </div>
+    <div class="tab-panel" id="p4-resources">
+      <div class="resource-item"><div class="resource-title">No Rules Rules — Reed Hastings</div><div class="resource-type">Sách · Culture at scale</div><div class="resource-note">Netflix culture model — context, not control. Áp dụng carefully nhưng principles về talent density rất mạnh.</div></div>
+      <div class="resource-item"><div class="resource-title">The Hard Thing About Hard Things — Horowitz</div><div class="resource-type">Sách · CEO war stories</div><div class="resource-note">Thực tế nhất về những gì CEOs gặp. Không phải framework — là pattern recognition từ failures. Đọc khi gặp khó khăn thực sự.</div></div>
+      <div class="resource-item"><div class="resource-title">Titan: The Life of John D. Rockefeller</div><div class="resource-type">Tiểu sử · Dài hạn thinking</div><div class="resource-note">Học về category creation, vertical integration, và long-game thinking. Bỏ qua ethics — focus vào business architecture.</div></div>
+      <div class="resource-item"><div class="resource-title">Sequoia Capital — "Adapting to Endure" series</div><div class="resource-type">Essays · Free online</div><div class="resource-note">Framework về building durable business. Đặc biệt trong context SEA và emerging markets.</div></div>
+    </div>
+    <div class="tab-panel" id="p4-milestones">
+      <div class="milestone-item"><div class="milestone-title">Milestone 1 · Năm 8–9</div><div class="milestone-proof">Successfully raised capital hoặc completed một strategic transaction (acquisition, partnership). Market ghi nhận mình là dealmaker.</div><span class="milestone-tag">Irreversible: đã navigate capital markets, không thể pretend chưa làm</span></div>
+      <div class="milestone-item"><div class="milestone-title">Milestone 2 · Năm 10</div><div class="milestone-proof">Ít nhất 3 bài viết dài được cite hoặc share bởi recognized figures trong industry. Được invite speak tại conferences không phải vì company — mà vì POV của mình.</div><span class="milestone-tag">Irreversible: thought leadership là identity, không phải activity</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ PHASE 5 -->
+  <div class="phase-card" id="card-p5">
+    <div class="phase-header">
+      <div class="phase-label">Phase 5 · Năm 11–15+</div>
+      <div class="phase-name">World-class CEO</div>
+      <div class="phase-tagline">Category creation, institutional impact, và compounding legacy</div>
+      <span class="phase-badge">Transformation: Từ "CEO xuất sắc" → "CEO mà người khác dùng làm benchmark"</span>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('p5','core',this)">Điều phân biệt 0.1%</button>
+      <button class="tab" onclick="showTab('p5','practice',this)">Operating principles</button>
+      <button class="tab" onclick="showTab('p5','resources',this)">Tài nguyên cuối</button>
+      <button class="tab" onclick="showTab('p5','milestones',this)">What 0.1% looks like</button>
+    </div>
+    <div class="tab-panel visible" id="p5-core">
+      <p class="s-label">Điều phân biệt top 1% và top 0.1%</p>
+      <div class="item-row"><div class="dot dot-red"></div><div><div class="item-title">Category creation — không phải competition</div><div class="item-desc">Bezos với AWS, Jobs với iPhone, Musk với SpaceX. Họ không thắng game cũ — họ define game mới. Đây là highest form của strategy.</div></div></div>
+      <div class="item-row"><div class="dot dot-red"></div><div><div class="item-title">Institutional trust — vượt qua company</div><div class="item-desc">Khi company gặp khó khăn, board vẫn muốn mình ở lại. Investors vẫn tin. Employees vẫn theo. Đây là tích lũy 15 năm trust không thể shortcut.</div></div></div>
+      <div class="item-row"><div class="dot dot-red"></div><div><div class="item-title">Generational talent development</div><div class="item-desc">Người từng work với mình trở thành CEOs, CXOs ở các công ty khác. "Alumni network" của mình là measure của impact lên ecosystem.</div></div></div>
+      <div class="item-row"><div class="dot dot-red"></div><div><div class="item-title">Long-game clarity trong short-term pressure</div><div class="item-desc">Bezos's 7-year decision framework. Buffett's 20-slot punch card. World-class CEOs không bị distracted bởi quarterly noise — nhưng không naive về short-term reality.</div></div></div>
+      <div class="item-row"><div class="dot dot-red"></div><div><div class="item-title">Self-awareness và continuous reinvention</div><div class="item-desc">CEOs fail khi họ ngừng học. World-class vẫn có coaches. Vẫn seek harsh feedback. Vẫn reinvent operating style khi company scale lên 10x.</div></div></div>
+    </div>
+    <div class="tab-panel" id="p5-practice">
+      <div class="practice-item">
+        <div class="practice-freq">Ongoing · Không bao giờ dừng</div>
+        <div class="practice-title">Executive coach — khi mình đã là CEO</div>
+        <div class="practice-desc">Tất cả world-class CEOs đều có coaches. Không phải dấu hiệu yếu — là dấu hiệu serious. Coach tốt nhất: người đã ở vị trí mình muốn đạt, honest, không có conflict of interest.</div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-freq">Hàng năm · Viết public</div>
+        <div class="practice-title">Annual shareholder/stakeholder letter</div>
+        <div class="practice-desc">Dù public hay không — viết như thể mọi người sẽ đọc. Honest về mistakes. Clear về vision. Account cho capital allocated. Bezos/Buffett model. Đây là accountability mechanism tốt nhất.</div>
+      </div>
+      <div class="practice-item">
+        <div class="practice-freq">Liên tục</div>
+        <div class="practice-title">Institutional memory building</div>
+        <div class="practice-desc">Document decisions. Viết down "why we chose X not Y". Xây culture handbook. Mục tiêu: company operate theo principles dù mình không có mặt. Test: nếu mình biến mất 6 tháng, có gì break không?</div>
+      </div>
+    </div>
+    <div class="tab-panel" id="p5-resources">
+      <div class="resource-item"><div class="resource-title">Jeff Bezos Letters to Shareholders (1997–2020)</div><div class="resource-type">Free online · Đọc tất cả</div><div class="resource-note">Best CEO writing về long-term thinking, customer obsession, và building institutional culture. Đọc chronologically để thấy evolution.</div></div>
+      <div class="resource-item"><div class="resource-title">Zero to One — Thiel</div><div class="resource-type">Sách · Contrarian thinking</div><div class="resource-note">Category creation framework. "What important truth do very few people agree with you on?" — central question cho world-class CEOs.</div></div>
+      <div class="resource-item"><div class="resource-title">The Innovator's Dilemma — Christensen</div><div class="resource-type">Sách · Defense & offense</div><div class="resource-note">Tại sao good companies fail. World-class CEOs dùng như radar để detect disruption threat trước khi market nhận ra.</div></div>
+      <div class="resource-item"><div class="resource-title">INSEAD / Harvard AMP Program</div><div class="resource-type">Executive program · Năm 10–12</div><div class="resource-note">Không phải học kiến thức — là network với CEOs cùng level globally. Timing: khi đã có đủ experience để appreciate và contribute.</div></div>
+    </div>
+    <div class="tab-panel" id="p5-milestones">
+      <div class="milestone-item"><div class="milestone-title">Top 1% signal</div><div class="milestone-proof">Company của mình được nhắc đến như case study trong ngành. Nhận được inbound board invitations từ other companies. Talent chủ động approach mình.</div><span class="milestone-tag">Irreversible: market positioning as a thought leader CEO</span></div>
+      <div class="milestone-item"><div class="milestone-title">Top 0.1% signal</div><div class="milestone-proof">Mình define cách ngành suy nghĩ về một vấn đề. Frameworks của mình được người khác reference. Alumni của mình lead other companies. Được approach để write/speak như một authority.</div><span class="milestone-tag">Irreversible: category của riêng mình trong mind of market</span></div>
+      <div class="milestone-item"><div class="milestone-title">Legacy milestone</div><div class="milestone-proof">Ít nhất 3 người mình mentored đang run their own organizations thành công. Institutional knowledge không phụ thuộc vào sự có mặt của mình.</div><span class="milestone-tag">Irreversible: impact đã embedded vào người khác và organizations</span></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    World-class CEO Roadmap · Personal document · Updated 2026
+  </div>
+</div>
+
+<script>
+  function showPhase(id, btn) {
+    document.querySelectorAll('.phase-card').forEach(c => c.classList.remove('visible'));
+    document.querySelectorAll('.phase-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('card-' + id).classList.add('visible');
+    btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showTab(phase, tab, btn) {
+    const card = document.getElementById('card-' + phase);
+    card.querySelectorAll('.tab-panel').forEach(c => c.classList.remove('visible'));
+    card.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    document.getElementById(phase + '-' + tab).classList.add('visible');
+    btn.classList.add('active');
+  }
+</script>
+</body>
+</html>
