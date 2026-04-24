@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Node.js Mastery Roadmap — Top 1%</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #16161f;
+    --surface: #1c1c27;
+    --surface2: #222230;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8e8f0;
+    --text2: #9090a8;
+    --text3: #5a5a72;
+
+    --green: #2dd4a0;
+    --green-dim: rgba(45,212,160,0.12);
+    --green-border: rgba(45,212,160,0.25);
+    --amber: #f5a623;
+    --amber-dim: rgba(245,166,35,0.1);
+    --amber-border: rgba(245,166,35,0.22);
+    --coral: #f87060;
+    --coral-dim: rgba(248,112,96,0.1);
+    --blue: #60a5fa;
+    --blue-dim: rgba(96,165,250,0.1);
+    --purple: #a78bfa;
+    --purple-dim: rgba(167,139,250,0.1);
+    --purple-border: rgba(167,139,250,0.22);
+
+    --mono: 'DM Mono', monospace;
+    --sans: 'DM Sans', -apple-system, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ─── LAYOUT ─── */
+  .app { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 260px; flex-shrink: 0;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    position: fixed; top: 0; left: 0; height: 100vh;
+    overflow-y: auto; padding: 2rem 0;
+    display: flex; flex-direction: column;
+  }
+
+  .sidebar-logo {
+    padding: 0 1.5rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1rem;
+  }
+  .sidebar-logo .eyebrow {
+    font-size: 10px; font-weight: 500; letter-spacing: .12em;
+    color: var(--text3); text-transform: uppercase; margin-bottom: 4px;
+  }
+  .sidebar-logo h1 {
+    font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.3;
+  }
+
+  .sidebar-progress {
+    padding: 0 1.5rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: .75rem;
+  }
+  .progress-label {
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: var(--text3); margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .progress-bar {
+    height: 3px; background: var(--surface2); border-radius: 2px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: var(--green); border-radius: 2px;
+    transition: width .4s ease;
+  }
+
+  .nav-section { padding: 0 .75rem; margin-bottom: .25rem; }
+  .nav-section-label {
+    font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--text3); padding: .5rem .75rem .25rem; display: block;
+  }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: .5rem .75rem; border-radius: 8px; cursor: pointer;
+    transition: background .12s; position: relative;
+    text-decoration: none; color: var(--text2); font-size: 13.5px;
+    font-weight: 400; border: none; background: none; width: 100%; text-align: left;
+  }
+  .nav-item:hover { background: var(--surface); color: var(--text); }
+  .nav-item.active { background: var(--surface); color: var(--text); font-weight: 500; }
+  .nav-item.active::before {
+    content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+    width: 3px; height: 18px; border-radius: 0 2px 2px 0;
+  }
+
+  .phase-dot {
+    width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 600;
+  }
+  .nav-check {
+    margin-left: auto; font-size: 11px; color: var(--green); opacity: 0;
+    transition: opacity .2s;
+  }
+  .nav-check.done { opacity: 1; }
+
+  .p1-color { background: rgba(45,212,160,.15); color: var(--green); }
+  .p2-color { background: rgba(245,166,35,.15); color: var(--amber); }
+  .p3-color { background: rgba(248,112,96,.15); color: var(--coral); }
+  .p4-color { background: rgba(167,139,250,.15); color: var(--purple); }
+  .p5-color { background: rgba(96,165,250,.15); color: var(--blue); }
+  .pm-color { background: var(--surface2); color: var(--text2); }
+
+  .nav-item.p1-active::before { background: var(--green); }
+  .nav-item.p2-active::before { background: var(--amber); }
+  .nav-item.p3-active::before { background: var(--coral); }
+  .nav-item.p4-active::before { background: var(--purple); }
+  .nav-item.p5-active::before { background: var(--blue); }
+  .nav-item.pm-active::before { background: var(--text2); }
+
+  .sidebar-footer {
+    margin-top: auto; padding: 1.25rem 1.5rem 0;
+    border-top: 1px solid var(--border);
+  }
+  .footer-note { font-size: 11px; color: var(--text3); line-height: 1.6; }
+
+  /* ─── MAIN ─── */
+  .main { margin-left: 260px; flex: 1; min-height: 100vh; }
+
+  .panel { display: none; padding: 3rem; max-width: 860px; }
+  .panel.active { display: block; }
+
+  /* ─── PHASE HEADER ─── */
+  .phase-hero {
+    padding: 2rem; border-radius: 16px; border: 1px solid var(--border);
+    background: var(--bg2); margin-bottom: 2rem; position: relative; overflow: hidden;
+  }
+  .phase-hero::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 200px; height: 200px; border-radius: 50%;
+    opacity: .04;
+  }
+  .hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+  .hero-badge {
+    width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+  }
+  .hero-title { font-size: 22px; font-weight: 600; color: var(--text); line-height: 1.2; margin-bottom: .5rem; }
+  .hero-sub { font-size: 14px; color: var(--text2); line-height: 1.65; }
+  .hero-duration {
+    font-family: var(--mono); font-size: 11px; color: var(--text3);
+    border: 1px solid var(--border); padding: 5px 12px; border-radius: 20px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+
+  /* ─── TRANSFORMATION BOX ─── */
+  .transform-box {
+    border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;
+    border: 1px solid var(--border); background: var(--surface);
+    border-left: 3px solid;
+  }
+  .transform-label {
+    font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    margin-bottom: .5rem;
+  }
+  .transform-text { font-size: 13.5px; color: var(--text2); line-height: 1.7; }
+  .transform-text strong { color: var(--text); font-weight: 500; }
+
+  /* ─── GRID ─── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem;
+  }
+  .card-label {
+    font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--text3); margin-bottom: .75rem;
+  }
+  .card-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: .6rem; }
+
+  /* ─── TOPIC LIST ─── */
+  .topic-list { list-style: none; }
+  .topic-list li {
+    font-size: 13px; color: var(--text2); padding: 6px 0;
+    border-bottom: 1px solid var(--border); line-height: 1.5;
+  }
+  .topic-list li:last-child { border-bottom: none; }
+  .topic-list li span { color: var(--text); font-weight: 500; }
+
+  /* ─── RESOURCE LIST ─── */
+  .resource-list { list-style: none; }
+  .resource-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+  }
+  .resource-item:last-child { border-bottom: none; }
+  .resource-tag {
+    font-size: 9px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 6px; flex-shrink: 0; margin-top: 2px;
+  }
+  .tag-book { background: var(--purple-dim); color: var(--purple); border: 1px solid var(--purple-border); }
+  .tag-course { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber-border); }
+  .tag-code { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-border); }
+  .tag-tool { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
+  .resource-text { font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .resource-text strong { color: var(--text); font-weight: 500; }
+
+  /* ─── CHECKLIST ─── */
+  .checklist-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; margin-bottom: 12px; overflow: hidden;
+  }
+  .checklist-header {
+    padding: .85rem 1.25rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .checklist-header-label {
+    font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text3);
+  }
+  .checklist-header-count { font-size: 11px; font-family: var(--mono); color: var(--text3); }
+
+  .check-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: .85rem 1.25rem; border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: background .1s; position: relative;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item:hover { background: var(--surface); }
+  .check-item.checked { opacity: .55; }
+
+  .checkbox {
+    width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid var(--border2);
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    transition: all .15s; margin-top: 1px; background: transparent;
+  }
+  .check-item.checked .checkbox {
+    background: var(--green); border-color: var(--green);
+  }
+  .checkbox svg { display: none; }
+  .check-item.checked .checkbox svg { display: block; }
+
+  .check-content { flex: 1; }
+  .check-title { font-size: 13.5px; color: var(--text); font-weight: 500; line-height: 1.4; margin-bottom: 2px; }
+  .check-item.checked .check-title { text-decoration: line-through; color: var(--text3); }
+  .check-desc { font-size: 12px; color: var(--text3); line-height: 1.5; }
+
+  .check-tag {
+    font-size: 9px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 5px; flex-shrink: 0; margin-top: 3px;
+    height: fit-content;
+  }
+  .tag-concept { background: var(--blue-dim); color: var(--blue); }
+  .tag-exercise { background: var(--coral-dim); color: var(--coral); }
+  .tag-artifact { background: var(--amber-dim); color: var(--amber); }
+  .tag-gate { background: var(--green-dim); color: var(--green); }
+
+  /* ─── MILESTONE CARDS ─── */
+  .milestone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .milestone-card {
+    border-radius: 12px; padding: 1.25rem; border: 1px solid;
+  }
+  .milestone-gate-label {
+    font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    margin-bottom: .5rem; display: flex; align-items: center; gap: 6px;
+  }
+  .gate-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .milestone-title { font-size: 14px; font-weight: 600; margin-bottom: .4rem; }
+  .milestone-desc { font-size: 12.5px; line-height: 1.55; }
+
+  /* ─── MILESTONE MAP PANEL ─── */
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px;
+    width: 1px; background: var(--border2);
+  }
+  .timeline-item {
+    position: relative; margin-bottom: 1.5rem;
+  }
+  .timeline-dot {
+    position: absolute; left: -2rem; top: 4px;
+    width: 15px; height: 15px; border-radius: 50%; border: 2px solid;
+    background: var(--bg);
+  }
+  .timeline-phase { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+  .timeline-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .timeline-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  .principles-list { list-style: none; }
+  .principle-item {
+    display: flex; gap: 12px; padding: 1rem 0; border-bottom: 1px solid var(--border);
+  }
+  .principle-item:last-child { border-bottom: none; }
+  .principle-num {
+    font-family: var(--mono); font-size: 11px; color: var(--text3);
+    min-width: 24px; margin-top: 2px;
+  }
+  .principle-content {}
+  .principle-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .principle-desc { font-size: 13px; color: var(--text2); line-height: 1.5; }
+
+  .section-title { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text3); margin: 1.75rem 0 .85rem; }
+
+  .full { margin-bottom: 12px; }
+  .mb { margin-bottom: 12px; }
+
+  /* ─── CLEAR BUTTON ─── */
+  .reset-btn {
+    background: none; border: 1px solid var(--border); color: var(--text3);
+    font-family: var(--sans); font-size: 11px; padding: 4px 12px; border-radius: 20px;
+    cursor: pointer; transition: all .15s;
+  }
+  .reset-btn:hover { border-color: var(--border2); color: var(--text2); }
+
+  /* ─── MOBILE ─── */
+  .mobile-nav {
+    display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--bg2); border-bottom: 1px solid var(--border);
+    padding: .75rem 1rem; gap: 8px; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .mobile-nav::-webkit-scrollbar { display: none; }
+  .mobile-btn {
+    padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border);
+    background: none; color: var(--text2); font-family: var(--sans); font-size: 12px;
+    cursor: pointer; white-space: nowrap; transition: all .12s;
+  }
+  .mobile-btn.active { background: var(--surface); color: var(--text); border-color: var(--border2); }
+
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .mobile-nav { display: flex; }
+    .panel { padding: 5rem 1.25rem 2rem; max-width: 100%; }
+    .grid-2, .grid-3, .milestone-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="eyebrow">Mastery Roadmap</div>
+    <h1>Node.js → Top 1%</h1>
+  </div>
+
+  <div class="sidebar-progress">
+    <div class="progress-label">
+      <span>Overall progress</span>
+      <span id="global-pct">0%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="global-bar" style="width:0%"></div></div>
+  </div>
+
+  <div class="nav-section">
+    <span class="nav-section-label">Phases</span>
+    <button class="nav-item p1-active active" onclick="showPanel('p1',this,'p1-active')">
+      <span class="phase-dot p1-color">P1</span> Internals Mastery
+      <span class="nav-check" id="nav-done-p1">✓</span>
+    </button>
+    <button class="nav-item" onclick="showPanel('p2',this,'p2-active')">
+      <span class="phase-dot p2-color">P2</span> Architecture
+      <span class="nav-check" id="nav-done-p2">✓</span>
+    </button>
+    <button class="nav-item" onclick="showPanel('p3',this,'p3-active')">
+      <span class="phase-dot p3-color">P3</span> Performance
+      <span class="nav-check" id="nav-done-p3">✓</span>
+    </button>
+    <button class="nav-item" onclick="showPanel('p4',this,'p4-active')">
+      <span class="phase-dot p4-color">P4</span> Production
+      <span class="nav-check" id="nav-done-p4">✓</span>
+    </button>
+    <button class="nav-item" onclick="showPanel('p5',this,'p5-active')">
+      <span class="phase-dot p5-color">P5</span> Niche Ownership
+      <span class="nav-check" id="nav-done-p5">✓</span>
+    </button>
+    <button class="nav-item" onclick="showPanel('map',this,'pm-active')">
+      <span class="phase-dot pm-color">⌘</span> Milestone Map
+    </button>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="footer-note">Progress tự động lưu trong browser. Mỗi phase là một transformation không thể đảo ngược.</div>
+  </div>
+</aside>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav">
+  <button class="mobile-btn active" onclick="showPanel('p1',this,'')">P1 · Internals</button>
+  <button class="mobile-btn" onclick="showPanel('p2',this,'')">P2 · Architecture</button>
+  <button class="mobile-btn" onclick="showPanel('p3',this,'')">P3 · Performance</button>
+  <button class="mobile-btn" onclick="showPanel('p4',this,'')">P4 · Production</button>
+  <button class="mobile-btn" onclick="showPanel('p5',this,'')">P5 · Niche</button>
+  <button class="mobile-btn" onclick="showPanel('map',this,'')">Map</button>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- ══════════════════════════════ PHASE 1 ══════════════════════════════ -->
+<section class="panel active" id="panel-p1">
+
+  <div class="phase-hero" style="border-color:rgba(45,212,160,.2)">
+    <div class="hero-top">
+      <div>
+        <div class="hero-badge p1-color" style="margin-bottom:.75rem">P1</div>
+        <div class="hero-title">Internals Mastery</div>
+        <div class="hero-sub">Hầu hết senior dev dùng Node.js như một black box. Phase này phá vỡ điều đó — bạn sẽ nhìn thấy event loop, libuv, V8, và I/O model thực sự hoạt động như thế nào.</div>
+      </div>
+      <div class="hero-duration">Tháng 1–2</div>
+    </div>
+  </div>
+
+  <div class="transform-box" style="border-left-color:var(--green)">
+    <div class="transform-label" style="color:var(--green)">Transformation không thể đảo ngược</div>
+    <div class="transform-text">Trước: dùng <strong>async/await</strong> vì "nó hoạt động". Sau: nhìn vào bất kỳ đoạn Node.js nào và thấy ngay <strong>tick phase nào, microtask nào, callback nào được schedule</strong> — và biết chính xác tại sao nó chạy theo thứ tự đó.</div>
+  </div>
+
+  <div class="grid-2 mb">
+    <div class="card">
+      <div class="card-label">Core topics</div>
+      <ul class="topic-list">
+        <li><span>Event Loop:</span> 6 phases, tick queue, microtask queue</li>
+        <li><span>libuv:</span> thread pool, I/O polling, timers</li>
+        <li><span>V8 internals:</span> hidden classes, JIT, GC generations</li>
+        <li><span>Streams:</span> backpressure, highWaterMark, pipeline</li>
+        <li><span>Worker Threads:</span> SharedArrayBuffer, Atomics, transfer</li>
+        <li><span>Cluster + child_process:</span> IPC, load balancing</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Resources</div>
+      <ul class="resource-list">
+        <li class="resource-item"><span class="resource-tag tag-book">Book</span><div class="resource-text"><strong>Node.js Design Patterns</strong> — Casciaro & Mammino (3rd ed.) ch.1–5</div></li>
+        <li class="resource-item"><span class="resource-tag tag-code">Source</span><div class="resource-text"><strong>Node.js source</strong> — đọc lib/internal/timers.js, streams.js trên GitHub</div></li>
+        <li class="resource-item"><span class="resource-tag tag-course">Talk</span><div class="resource-text"><strong>"What the heck is the event loop?"</strong> — Philip Roberts, JSConf EU</div></li>
+        <li class="resource-item"><span class="resource-tag tag-tool">Tool</span><div class="resource-text"><strong>clinic.js</strong> (flame, bubbleprof, heapprofiler) — dùng ngay từ đầu</div></li>
+        <li class="resource-item"><span class="resource-tag tag-book">Book</span><div class="resource-text"><strong>You Don't Know JS</strong> — Kyle Simpson — phần async & performance</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">Checklist Phase 1</div>
+
+  <div class="checklist-card full">
+    <div class="checklist-header">
+      <span class="checklist-header-label">Concepts — phải hiểu không cần Google</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="checklist-header-count" id="count-p1-concepts">0/6</span>
+        <button class="reset-btn" onclick="resetGroup('p1-concepts')">reset</button>
+      </div>
+    </div>
+    <div id="p1-concepts">
+      <div class="check-item" onclick="toggle(this)" data-id="p1c1">
+        <div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-content">
+          <div class="check-title">Event loop 6 phases + microtask + nextTick</div>
+          <div class="check-desc">Dự đoán output của bất kỳ mixture nào giữa setTimeout, setImmediate, Promise, process.nextTick</div>
+        </div>
+        <span class="check-tag tag-concept">Concept</span>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="p1c2">
+        <div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-content">
+          <div class="check-title">libuv thread pool và I/O polling</div>
+          <div class="check-desc">Biết UV_THREADPOOL_SIZE, khi nào blocking xảy ra, tại sao DNS lookup block event loop</div>
+        </div>
+        <span class="check-tag tag-concept">Concept</span>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="p1c3">
+        <div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-content">
+          <div class="check-title">V8 JIT compilation và hidden classes</div>
+          <div class="check-desc">Tại sao thứ tự property assignment quan trọng, deoptimization triggers, GC generations</div>
+        </div>
+        <span class="check-tag tag-concept">Concept</span>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="p1c4">
+        <div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-content">
+          <div class="check-title">Stream backpressure và pipeline</div>
+          <div class="check-desc">highWaterMark, drain event, cork/uncork, pipeline() vs pipe() — không bao giờ OOM khi xử lý large files</div>
+        </div>
+        <span class="check-tag tag-concept">Concept</span>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="p1c5">
+        <div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-content">
+          <div class="check-title">Worker Threads và SharedArrayBuffer</div>
+          <div class="check-desc">Khi nào dùng worker threads vs cluster, transferable objects, Atomics cho coordination</div>
+        </div>
+        <span class="check-tag tag-concept">Concept</span>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="p1c6">
+        <div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-content">
+          <div class="check-title">Cluster module và IPC</div>
+          <div class="check-desc">Fork vs spawn vs exec, IPC channel, load balancing strategies, graceful restart</div>
+        </div>
+        <span class="check-tag tag-concept">Concept</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="checklist-card full">
+    <div class="checklist-header">
+      <span class="checklist-header-label">Exercises — build thật, không fake</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="checklist-header-count" id="count-p1-ex">0/4</span>
+        <button class="reset-btn" onclick="resetGroup('p1-ex')">reset</button>
+      </div>
+    </div>
+    <div id="p1-ex">
+      <div class="check-item" onclick="toggle(this)" data-id="p1e1">
+        <div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-content">
+          <div class="check-title">Event loop visualizer exercise</div>
+          <div class="check-desc">Viết 10 đoạn code trộn setTimeout/setImmediate/Promise/nextTick, dự đoán output rồi chạy. Đúng 100% mới pass.</div>
+        </div>
+        <span class="check-tag tag-exercise">Exercise</span>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="p1e2">
+        <div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-content">
+          <div class="check-title">Stream backpressure lab — xử lý file 10GB &lt; 50MB RAM</div>
+          <div class="check-desc">Build pipeline đọc → transform → ghi mà không vượt 50MB RAM. Nếu crash hoặc OOM → chưa hiểu.</div>
+        </div>
+        <span class="check-tag tag-exercise">Exercise</span>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="p1e3">
+        <div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-content">
+          <div class="check-title">GC profiling — tạo và fix memory leak có chủ đích</div>
+          <div class="check-desc">Dùng --inspect + Chrome DevTools heap snapshot để tìm root cause. Ghi lại bằng blog post ngắn.</div>
+        </div>
+        <span class="check-tag tag-exercise">Exercise</span>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="p1e4">
+        <div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-content">
+          <div class="check-title">Worker thread pool cho CPU-intensive task</div>
+          <div class="check-desc">Implement image resize hoặc bcrypt với worker_threads pooling. Benchmark vs single-threaded và document kết quả.</div>
+        </div>
+        <span class="check-tag tag-exercise">Exercise</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="checklist-card full">
+    <div class="checklist-header">
+      <span class="checklist-header-label">Gate & Public Artifact</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="checklist-header-count" id="count-p1-gate">0/2</span>
+        <button class="reset-btn" onclick="resetGroup('p1-gate')">reset</button>
+      </div>
+    </div>
+    <div id="p1-gate">
+      <div class="check-item" onclick="toggle(this)" data-id="p1g1">
+        <div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-content">
+          <div class="check-title">✓ Gate: Giải thích event loop không nhìn tài liệu</div>
+          <div class="check-desc">Ai đó hỏi về thứ tự execution → trả lời ngay, không cần Google. Đây là điều kiện để sang P2.</div>
+        </div>
+        <span class="check-tag tag-gate">Gate</span>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="p1g2">
+        <div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-content">
+          <div class="check-title">Publish bài viết kỹ thuật về Node.js event loop</div>
+          <div class="check-desc">Medium / dev.to / personal blog. Giải thích với diagram tự tạo. Proof of real understanding, không phải tutorial regurgitation.</div>
+        </div>
+        <span class="check-tag tag-artifact">Artifact</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════ PHASE 2 ══════════════════════════════ -->
+<section class="panel" id="panel-p2">
+
+  <div class="phase-hero" style="border-color:rgba(245,166,35,.2)">
+    <div class="hero-top">
+      <div>
+        <div class="hero-badge p2-color" style="margin-bottom:.75rem">P2</div>
+        <div class="hero-title">Architecture Patterns</div>
+        <div class="hero-sub">Từ "viết được feature" sang "design được system". Phase này là nơi senior thành principal — khả năng nhìn trade-off và ra quyết định kiến trúc có lý do.</div>
+      </div>
+      <div class="hero-duration">Tháng 2–4</div>
+    </div>
+  </div>
+
+  <div class="transform-box" style="border-left-color:var(--amber)">
+    <div class="transform-label" style="color:var(--amber)">Transformation không thể đảo ngược</div>
+    <div class="transform-text">Trước: implement theo spec. Sau: <strong>đặt câu hỏi trước khi code</strong> — consistency hay availability? Saga hay 2PC? Event sourcing hay CRUD? Và biết tại sao câu trả lời phụ thuộc vào context.</div>
+  </div>
+
+  <div class="grid-2 mb">
+    <div class="card">
+      <div class="card-label">Core topics</div>
+      <ul class="topic-list">
+        <li><span>Hexagonal Architecture:</span> ports, adapters, domain isolation</li>
+        <li><span>CQRS + Event Sourcing:</span> khi nào dùng, khi nào không</li>
+        <li><span>Saga Pattern:</span> choreography vs orchestration</li>
+        <li><span>Domain-Driven Design:</span> bounded contexts, aggregates</li>
+        <li><span>Microservices:</span> gRPC, message queues, circuit breaker</li>
+        <li><span>API Design:</span> REST maturity, GraphQL, tRPC type-safety</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Resources</div>
+      <ul class="resource-list">
+        <li class="resource-item"><span class="resource-tag tag-book">Book</span><div class="resource-text"><strong>Designing Data-Intensive Applications</strong> — Kleppmann (ch.9–12 bắt buộc)</div></li>
+        <li class="resource-item"><span class="resource-tag tag-book">Book</span><div class="resource-text"><strong>Software Architecture: The Hard Parts</strong> — Ford, Richards et al.</div></li>
+        <li class="resource-item"><span class="resource-tag tag-code">Source</span><div class="resource-text"><strong>NestJS + tRPC source</strong> — đọc cách inject, decorate, route</div></li>
+        <li class="resource-item"><span class="resource-tag tag-course">Blog</span><div class="resource-text"><strong>Martin Fowler's bliki</strong> — CQRS, Event Sourcing, Saga — primary source</div></li>
+        <li class="resource-item"><span class="resource-tag tag-tool">Tool</span><div class="resource-text"><strong>C4 model</strong> — document architecture của mọi thứ bạn build</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">Checklist Phase 2</div>
+
+  <div class="checklist-card full">
+    <div class="checklist-header">
+      <span class="checklist-header-label">Concepts</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="checklist-header-count" id="count-p2-concepts">0/6</span>
+        <button class="reset-btn" onclick="resetGroup('p2-concepts')">reset</button>
+      </div>
+    </div>
+    <div id="p2-concepts">
+      <div class="check-item" onclick="toggle(this)" data-id="p2c1"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Hexagonal Architecture — ports & adapters</div><div class="check-desc">Isolate domain logic từ infrastructure. Mọi external dependency là adapter, không phải dependency</div></div><span class="check-tag tag-concept">Concept</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p2c2"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">CQRS — command/query responsibility segregation</div><div class="check-desc">Tách read model và write model. Khi nào justified, khi nào over-engineering</div></div><span class="check-tag tag-concept">Concept</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p2c3"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Event Sourcing — event log as source of truth</div><div class="check-desc">Snapshots, projections, replaying events, eventual consistency trade-offs</div></div><span class="check-tag tag-concept">Concept</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p2c4"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Saga pattern — choreography vs orchestration</div><div class="check-desc">Compensating transactions, idempotency, failure scenarios. Biết khi nào mỗi approach fit hơn</div></div><span class="check-tag tag-concept">Concept</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p2c5"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Bounded contexts và aggregate design (DDD)</div><div class="check-desc">Aggregate roots, domain events, anti-corruption layer, context maps</div></div><span class="check-tag tag-concept">Concept</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p2c6"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">CAP theorem và distributed systems trade-offs</div><div class="check-desc">Consistency vs availability, network partitions, eventual consistency models, CRDTs</div></div><span class="check-tag tag-concept">Concept</span></div>
+    </div>
+  </div>
+
+  <div class="checklist-card full">
+    <div class="checklist-header">
+      <span class="checklist-header-label">Exercises</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="checklist-header-count" id="count-p2-ex">0/3</span>
+        <button class="reset-btn" onclick="resetGroup('p2-ex')">reset</button>
+      </div>
+    </div>
+    <div id="p2-ex">
+      <div class="check-item" onclick="toggle(this)" data-id="p2e1"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">E-commerce event-sourced order service</div><div class="check-desc">CQRS + Event Sourcing. Mọi state change là event. Read model rebuild từ event log. Database không phải source of truth.</div></div><span class="check-tag tag-exercise">Exercise</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p2e2"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Distributed saga — Payment → Inventory → Shipping</div><div class="check-desc">Compensating transactions. Test khi Inventory crash sau khi Payment đã committed. Verify rollback đúng.</div></div><span class="check-tag tag-exercise">Exercise</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p2e3"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Viết Architecture Decision Record (ADR) cho project hiện tại</div><div class="check-desc">Một quyết định kiến trúc thực, với alternatives, trade-offs, và decision rationale đầy đủ.</div></div><span class="check-tag tag-exercise">Exercise</span></div>
+    </div>
+  </div>
+
+  <div class="checklist-card full">
+    <div class="checklist-header">
+      <span class="checklist-header-label">Gate & Public Artifact</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="checklist-header-count" id="count-p2-gate">0/2</span>
+        <button class="reset-btn" onclick="resetGroup('p2-gate')">reset</button>
+      </div>
+    </div>
+    <div id="p2-gate">
+      <div class="check-item" onclick="toggle(this)" data-id="p2g1"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">✓ Gate: Pass mock system design interview 45 phút</div><div class="check-desc">Design URL shortener / rate limiter / notification service với data model, scaling strategy, trade-off analysis. Record lại để review.</div></div><span class="check-tag tag-gate">Gate</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p2g2"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Open source project với clean architecture + ADRs</div><div class="check-desc">GitHub repo public, README giải thích architectural decisions, ít nhất 1 ADR trong docs/, test coverage &gt;80%.</div></div><span class="check-tag tag-artifact">Artifact</span></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════ PHASE 3 ══════════════════════════════ -->
+<section class="panel" id="panel-p3">
+
+  <div class="phase-hero" style="border-color:rgba(248,112,96,.2)">
+    <div class="hero-top">
+      <div>
+        <div class="hero-badge p3-color" style="margin-bottom:.75rem">P3</div>
+        <div class="hero-title">Performance Engineering</div>
+        <div class="hero-sub">Top 1% không chỉ biết "cái này chậm" — họ biết chính xác bao nhiêu, tại sao, và fix theo cách nào với trade-off gì. Phase này build tư duy đo lường trước khi optimize.</div>
+      </div>
+      <div class="hero-duration">Tháng 4–6</div>
+    </div>
+  </div>
+
+  <div class="transform-box" style="border-left-color:var(--coral)">
+    <div class="transform-label" style="color:var(--coral)">Transformation không thể đảo ngược</div>
+    <div class="transform-text">Trước: "thêm cache vào cho nhanh". Sau: <strong>profile trước — biết bottleneck ở đâu</strong> (I/O bound? CPU bound? Memory pressure?) rồi mới optimize đúng chỗ. Không bao giờ premature optimize lại.</div>
+  </div>
+
+  <div class="grid-2 mb">
+    <div class="card">
+      <div class="card-label">Core topics</div>
+      <ul class="topic-list">
+        <li><span>Profiling:</span> flame graphs, CPU profiles, heap snapshots</li>
+        <li><span>Benchmarking:</span> wrk, autocannon, k6 — đo đúng cách</li>
+        <li><span>Database perf:</span> query plans, N+1, connection pooling</li>
+        <li><span>Caching:</span> cache-aside, write-through, invalidation</li>
+        <li><span>HTTP optimization:</span> keep-alive, compression, HTTP/2</li>
+        <li><span>Memory management:</span> buffer pools, object reuse, GC pressure</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Resources</div>
+      <ul class="resource-list">
+        <li class="resource-item"><span class="resource-tag tag-tool">Tool</span><div class="resource-text"><strong>0x + clinic.js flame</strong> — flame graph generation cho Node.js</div></li>
+        <li class="resource-item"><span class="resource-tag tag-code">Source</span><div class="resource-text"><strong>Fastify source</strong> — tại sao nhanh hơn Express 2–3x, đọc router và schema validation</div></li>
+        <li class="resource-item"><span class="resource-tag tag-book">Book</span><div class="resource-text"><strong>Systems Performance</strong> — Brendan Gregg (profiling methodology)</div></li>
+        <li class="resource-item"><span class="resource-tag tag-course">Blog</span><div class="resource-text"><strong>Matteo Collina's blog</strong> — Node.js perf deep dives từ core contributor</div></li>
+        <li class="resource-item"><span class="resource-tag tag-tool">Tool</span><div class="resource-text"><strong>autocannon + k6</strong> — load testing, p99 latency, SLA validation</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">Checklist Phase 3</div>
+
+  <div class="checklist-card full">
+    <div class="checklist-header">
+      <span class="checklist-header-label">Concepts</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="checklist-header-count" id="count-p3-concepts">0/5</span>
+        <button class="reset-btn" onclick="resetGroup('p3-concepts')">reset</button>
+      </div>
+    </div>
+    <div id="p3-concepts">
+      <div class="check-item" onclick="toggle(this)" data-id="p3c1"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Đọc và interpret flame graph</div><div class="check-desc">Nhìn vào flame graph bất kỳ, chỉ ra hot path và root cause trong &lt;5 phút</div></div><span class="check-tag tag-concept">Concept</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p3c2"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Database query optimization — EXPLAIN ANALYZE</div><div class="check-desc">Đọc query plan, index strategies, covering indexes, N+1 detection và fix patterns</div></div><span class="check-tag tag-concept">Concept</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p3c3"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Caching invalidation strategies</div><div class="check-desc">Cache-aside, write-through, write-behind, stale-while-revalidate. Trade-offs của từng pattern.</div></div><span class="check-tag tag-concept">Concept</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p3c4"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">HTTP/2 multiplexing và server push</div><div class="check-desc">Khi nào HTTP/2 helps, khi nào overhead outweighs benefits. Head-of-line blocking vs HTTP/1</div></div><span class="check-tag tag-concept">Concept</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p3c5"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Benchmarking methodology — Little's Law</div><n div class="check-desc">Biết khi nào benchmark results misleading, warm-up periods, outliers, p99 vs average</div></div><span class="check-tag tag-concept">Concept</span></div>
+    </div>
+  </div>
+
+  <div class="checklist-card full">
+    <div class="checklist-header">
+      <span class="checklist-header-label">Exercises — numbers phải cụ thể</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="checklist-header-count" id="count-p3-ex">0/3</span>
+        <button class="reset-btn" onclick="resetGroup('p3-ex')">reset</button>
+      </div>
+    </div>
+    <div id="p3-ex">
+      <div class="check-item" onclick="toggle(this)" data-id="p3e1"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Slow API forensics — profile, fix, document</div><div class="check-desc">Lấy API thực đang chậm, profile bằng clinic.js, fix, đo lại. Document before/after với số cụ thể (ms, RPS, p99 latency).</div></div><span class="check-tag tag-exercise">Exercise</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p3e2"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">10k RPS challenge — single core, p99 &lt; 10ms</div><div class="check-desc">REST API đạt 10,000 RPS trên single core với real DB (không mock). Không pass nếu dùng in-memory data.</div></div><span class="check-tag tag-exercise">Exercise</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p3e3"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Memory leak hunt trong deployed service</div><div class="check-desc">Deploy service có leak, dùng heap snapshot comparison theo thời gian để tìm, fix, verify không leak lại sau 24h.</div></div><span class="check-tag tag-exercise">Exercise</span></div>
+    </div>
+  </div>
+
+  <div class="checklist-card full">
+    <div class="checklist-header">
+      <span class="checklist-header-label">Gate & Public Artifact</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="checklist-header-count" id="count-p3-gate">0/2</span>
+        <button class="reset-btn" onclick="resetGroup('p3-gate')">reset</button>
+      </div>
+    </div>
+    <div id="p3-gate">
+      <div class="check-item" onclick="toggle(this)" data-id="p3g1"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">✓ Gate: Đọc flame graph người khác, chỉ root cause trong 5 phút</div><div class="check-desc">Không cần context về service đó. Nhìn vào flame graph → nói được "bottleneck là X vì Y".</div></div><span class="check-tag tag-gate">Gate</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p3g2"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Case study: "Tôi tăng throughput 10x như thế nào"</div><div class="check-desc">Bài viết với flame graphs thực, số liệu trước/sau thực, và giải thích tại sao từng optimization có tác dụng. Đây là loại content tạo reputation.</div></div><span class="check-tag tag-artifact">Artifact</span></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════ PHASE 4 ══════════════════════════════ -->
+<section class="panel" id="panel-p4">
+
+  <div class="phase-hero" style="border-color:rgba(167,139,250,.2)">
+    <div class="hero-top">
+      <div>
+        <div class="hero-badge p4-color" style="margin-bottom:.75rem">P4</div>
+        <div class="hero-title">Production Excellence</div>
+        <div class="hero-sub">Code chạy trên dev không phải achievement. Code chạy 99.9% uptime, tự heal, có full observability — đó mới là top 1%. Phase này là nơi senior nhảy lên principal/staff.</div>
+      </div>
+      <div class="hero-duration">Tháng 6–9</div>
+    </div>
+  </div>
+
+  <div class="transform-box" style="border-left-color:var(--purple)">
+    <div class="transform-label" style="color:var(--purple)">Transformation không thể đảo ngược</div>
+    <div class="transform-text">Trước: "deploy xong là xong". Sau: <strong>mọi service bạn ship đều có SLO, có alerts, có runbooks</strong> — và bạn có thể trả lời "service này healthy không?" bằng dashboard trong 30 giây.</div>
+  </div>
+
+  <div class="grid-2 mb">
+    <div class="card">
+      <div class="card-label">Core topics</div>
+      <ul class="topic-list">
+        <li><span>Observability:</span> metrics (Prometheus), traces (OTel), structured logs</li>
+        <li><span>SLO/SLA/SLI:</span> error budgets, burn rate alerts</li>
+        <li><span>Resilience:</span> circuit breaker, retry w/ backoff, bulkhead</li>
+        <li><span>Security:</span> OWASP Top 10, secrets management, JWT best practices</li>
+        <li><span>Graceful degradation:</span> feature flags, health checks, graceful shutdown</li>
+        <li><span>DB reliability:</span> migrations, connection resilience, read replicas</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Resources</div>
+      <ul class="resource-list">
+        <li class="resource-item"><span class="resource-tag tag-book">Book</span><div class="resource-text"><strong>Site Reliability Engineering</strong> — Google SRE book (free online) — SLO & Error Budgets</div></li>
+        <li class="resource-item"><span class="resource-tag tag-tool">Tool</span><div class="resource-text"><strong>OpenTelemetry JS SDK</strong> — instrument một real service end-to-end</div></li>
+        <li class="resource-item"><span class="resource-tag tag-course">Guide</span><div class="resource-text"><strong>OWASP Testing Guide</strong> — đọc + tự pentest service của mình</div></li>
+        <li class="resource-item"><span class="resource-tag tag-code">Source</span><div class="resource-text"><strong>Opossum (circuit breaker)</strong> — đọc source, hiểu state machine</div></li>
+        <li class="resource-item"><span class="resource-tag tag-book">Book</span><div class="resource-text"><strong>Release It!</strong> — Michael Nygard — stability patterns</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">Checklist Phase 4</div>
+
+  <div class="checklist-card full">
+    <div class="checklist-header">
+      <span class="checklist-header-label">Concepts</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="checklist-header-count" id="count-p4-concepts">0/5</span>
+        <button class="reset-btn" onclick="resetGroup('p4-concepts')">reset</button>
+      </div>
+    </div>
+    <div id="p4-concepts">
+      <div class="check-item" onclick="toggle(this)" data-id="p4c1"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">OpenTelemetry — traces, metrics, logs correlation</div><div class="check-desc">Instrument service với OTel SDK, propagate context qua service boundaries, link traces với logs bằng trace ID</div></div><span class="check-tag tag-concept">Concept</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p4c2"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">SLO + Error budget + Burn rate alerts</div><div class="check-desc">Tính SLI, set SLO, configure burn rate alerts ở Prometheus/Grafana. Biết khi nào freeze feature work</div></div><span class="check-tag tag-concept">Concept</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p4c3"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Circuit breaker state machine</div><div class="check-desc">Closed → Open → Half-Open transitions. Threshold tuning, fallback strategies, bulkhead pattern</div></div><span class="check-tag tag-concept">Concept</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p4c4"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">OWASP Top 10 cho Node.js</div><div class="check-desc">SQL injection, NoSQL injection, broken auth, sensitive data exposure, XXE, broken access control — và cách fix mỗi loại</div></div><span class="check-tag tag-concept">Concept</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p4c5"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Graceful shutdown và zero-downtime deploys</div><div class="check-desc">SIGTERM handling, drain existing connections, health check liveness vs readiness probes, rolling deploys</div></div><span class="check-tag tag-concept">Concept</span></div>
+    </div>
+  </div>
+
+  <div class="checklist-card full">
+    <div class="checklist-header">
+      <span class="checklist-header-label">Exercises</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="checklist-header-count" id="count-p4-ex">0/3</span>
+        <button class="reset-btn" onclick="resetGroup('p4-ex')">reset</button>
+      </div>
+    </div>
+    <div id="p4-ex">
+      <div class="check-item" onclick="toggle(this)" data-id="p4e1"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Full observability stack — OTel + Grafana dashboard</div><div class="check-desc">Traces end-to-end, custom metrics, structured logs với correlation IDs. Dashboard có SLO status, error rate, p99 latency.</div></div><span class="check-tag tag-exercise">Exercise</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p4e2"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Chaos engineering — inject failures, verify resilience</div><div class="check-desc">Kill dependency ngẫu nhiên, verify circuit breaker activates, service degrades gracefully với fallback. Không crash hoàn toàn.</div></div><span class="check-tag tag-exercise">Exercise</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p4e3"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Security audit — pentest service của mình</div><div class="check-desc">Test SQL injection, auth bypass, rate limit bypass, secrets in logs. Viết security report và fix mọi finding.</div></div><span class="check-tag tag-exercise">Exercise</span></div>
+    </div>
+  </div>
+
+  <div class="checklist-card full">
+    <div class="checklist-header">
+      <span class="checklist-header-label">Gate & Public Artifact</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="checklist-header-count" id="count-p4-gate">0/2</span>
+        <button class="reset-btn" onclick="resetGroup('p4-gate')">reset</button>
+      </div>
+    </div>
+    <div id="p4-gate">
+      <div class="check-item" onclick="toggle(this)" data-id="p4g1"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">✓ Gate: Oncall system không quen, debug production incident &lt;15 phút</div><div class="check-desc">Với dashboard và logs của system người khác build, tìm root cause incident trong &lt;15 phút. Test với peer review.</div></div><span class="check-tag tag-gate">Gate</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p4g2"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Publish observability boilerplate repo + blog series</div><div class="check-desc">Node.js starter với full OTel, health checks, graceful shutdown, structured logging. Blog giải thích từng quyết định.</div></div><span class="check-tag tag-artifact">Artifact</span></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════ PHASE 5 ══════════════════════════════ -->
+<section class="panel" id="panel-p5">
+
+  <div class="phase-hero" style="border-color:rgba(96,165,250,.2)">
+    <div class="hero-top">
+      <div>
+        <div class="hero-badge p5-color" style="margin-bottom:.75rem">P5</div>
+        <div class="hero-title">Niche Ownership</div>
+        <div class="hero-sub">Top 1% không chỉ giỏi kỹ thuật — họ owned một intersection. Chọn 1–2 niche và đi sâu đến mức không ai cạnh tranh được. Reputation thay thế resume.</div>
+      </div>
+      <div class="hero-duration">Tháng 9–15</div>
+    </div>
+  </div>
+
+  <div class="transform-box" style="border-left-color:var(--blue)">
+    <div class="transform-label" style="color:var(--blue)">Transformation không thể đảo ngược</div>
+    <div class="transform-text">Trước: "tôi biết Node.js". Sau: <strong>khi ai đó cần giải quyết [specific problem], họ nghĩ đến bạn</strong> — vì bạn đã publish về nó, contributed vào ecosystem, và có track record rõ ràng.</div>
+  </div>
+
+  <div class="grid-3 mb">
+    <div class="card">
+      <div class="card-label">Niche A — Recommended</div>
+      <div class="card-title" style="color:var(--green)">AI-native Node.js</div>
+      <ul class="topic-list">
+        <li>LLM streaming qua Node streams</li>
+        <li>Vector DB integration (pgvector, Qdrant)</li>
+        <li>RAG pipeline architecture</li>
+        <li>AI observability — token tracking, latency</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Niche B</div>
+      <div class="card-title">Real-time systems</div>
+      <ul class="topic-list">
+        <li>WebSocket at scale (Socket.io internals)</li>
+        <li>SSE vs WebSocket trade-offs</li>
+        <li>Pub/sub với Redis Streams / Kafka</li>
+        <li>CRDT cho collaborative editing</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Niche C</div>
+      <div class="card-title">Edge + Serverless</div>
+      <ul class="topic-list">
+        <li>Cloudflare Workers, Deno Deploy internals</li>
+        <li>Cold start optimization</li>
+        <li>Stateless architecture patterns</li>
+        <li>Edge caching strategies</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">Checklist Phase 5</div>
+
+  <div class="checklist-card full">
+    <div class="checklist-header">
+      <span class="checklist-header-label">Reputation-building activities</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="checklist-header-count" id="count-p5-rep">0/4</span>
+        <button class="reset-btn" onclick="resetGroup('p5-rep')">reset</button>
+      </div>
+    </div>
+    <div id="p5-rep">
+      <div class="check-item" onclick="toggle(this)" data-id="p5r1"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Merged PR vào Node.js ecosystem library</div><div class="check-desc">Fastify, undici, tRPC, hoặc tương đương. Không phải typo fix — bug fix hoặc meaningful feature.</div></div><span class="check-tag tag-exercise">Exercise</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p5r2"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Build và publish npm library giải quyết real problem</div><div class="check-desc">Trong niche đã chọn. Publish lên npm, docs đầy đủ, test coverage. Target: 100+ weekly downloads.</div></div><span class="check-tag tag-artifact">Artifact</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p5r3"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Submit và deliver conference/meetup talk</div><div class="check-desc">Bất kỳ conference nào — local, regional, online. Về topic trong niche đã chọn. Quá trình chuẩn bị buộc bạn hiểu sâu hơn.</div></div><span class="check-tag tag-artifact">Artifact</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p5r4"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">Publish technical series 5–10 bài liên kết</div><div class="check-desc">Mỗi bài standalone nhưng reference nhau. Về niche đã chọn. Đây là foundation của technical reputation lâu dài.</div></div><span class="check-tag tag-artifact">Artifact</span></div>
+    </div>
+  </div>
+
+  <div class="checklist-card full">
+    <div class="checklist-header">
+      <span class="checklist-header-label">Gate — Top 1% signal</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="checklist-header-count" id="count-p5-gate">0/2</span>
+        <button class="reset-btn" onclick="resetGroup('p5-gate')">reset</button>
+      </div>
+    </div>
+    <div id="p5-gate">
+      <div class="check-item" onclick="toggle(this)" data-id="p5g1"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">✓ Gate: Người khác chủ động refer đến bạn cho niche problem</div><div class="check-desc">Không phải self-assessment. Khi đồng nghiệp hoặc community member tag bạn khi cần expert opinion — đó là signal.</div></div><span class="check-tag tag-gate">Gate</span></div>
+      <div class="check-item" onclick="toggle(this)" data-id="p5g2"><div class="checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="check-content"><div class="check-title">✓ Gate: Inbound interest từ recruiter hoặc company vì technical content</div><div class="check-desc">Resume không phải entry point — technical content là entry point. Khi điều này xảy ra, roadmap complete.</div></div><span class="check-tag tag-gate">Gate</span></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════ MILESTONE MAP ══════════════════════════════ -->
+<section class="panel" id="panel-map">
+
+  <div class="phase-hero">
+    <div class="hero-top">
+      <div>
+        <div class="hero-title">Milestone Map</div>
+        <div class="hero-sub">15 tháng — 5 mental model shifts không thể đảo ngược. Mỗi bước thay đổi cách bạn nhìn problems, không chỉ thêm knowledge.</div>
+      </div>
+      <div class="hero-duration">15 tháng</div>
+    </div>
+  </div>
+
+  <div class="section-title">Timeline transformation</div>
+
+  <div class="timeline full mb">
+    <div class="timeline-item">
+      <div class="timeline-dot" style="border-color:var(--green);background:var(--green-dim)"></div>
+      <div class="timeline-phase" style="color:var(--green)">Tháng 1–2 · Phase 1</div>
+      <div class="timeline-title">Từ "dùng Node.js" → "hiểu Node.js từ trong ra ngoài"</div>
+      <div class="timeline-desc">Event loop, libuv, V8 không còn là black box. Khi thấy async code, bạn thấy chính xác thứ gì đang xảy ra ở runtime level.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot" style="border-color:var(--amber);background:var(--amber-dim)"></div>
+      <div class="timeline-phase" style="color:var(--amber)">Tháng 2–4 · Phase 2</div>
+      <div class="timeline-title">Từ "implement feature" → "design system"</div>
+      <div class="timeline-desc">Mọi quyết định kỹ thuật đều có trade-off analysis đi kèm. Bạn đặt câu hỏi về consistency, availability, và failure modes trước khi code.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot" style="border-color:var(--coral);background:var(--coral-dim)"></div>
+      <div class="timeline-phase" style="color:var(--coral)">Tháng 4–6 · Phase 3</div>
+      <div class="timeline-title">Từ "cảm giác chậm" → "số liệu chính xác"</div>
+      <div class="timeline-desc">Không optimize mà không profile trước. Mọi performance claim đều có benchmark data và flame graph đi kèm.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot" style="border-color:var(--purple);background:var(--purple-dim)"></div>
+      <div class="timeline-phase" style="color:var(--purple)">Tháng 6–9 · Phase 4</div>
+      <div class="timeline-title">Từ "code chạy là được" → "production-grade mindset"</div>
+      <div class="timeline-desc">SLO, observability, và resilience là requirement, không phải optional. Mọi service ship đều có runbook và alert đi kèm.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot" style="border-color:var(--blue);background:var(--blue-dim)"></div>
+      <div class="timeline-phase" style="color:var(--blue)">Tháng 9–15 · Phase 5</div>
+      <div class="timeline-title">Từ "engineer biết nhiều thứ" → "người owned một niche"</div>
+      <div class="timeline-desc">Reputation thay thế resume. Khi người khác cần giải quyết problem trong niche của bạn, họ nghĩ đến bạn đầu tiên.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Nguyên tắc xuyên suốt</div>
+
+  <div class="card full mb">
+    <ul class="principles-list">
+      <li class="principle-item">
+        <span class="principle-num">01</span>
+        <div class="principle-content">
+          <div class="principle-title">Đọc source code, không chỉ docs</div>
+          <div class="principle-desc">Docs giải thích what. Source code giải thích why và how. Top 1% đọc source của libraries họ dùng.</div>
+        </div>
+      </li>
+      <li class="principle-item">
+        <span class="principle-num">02</span>
+        <div class="principle-content">
+          <div class="principle-title">Không học topic nào mà không có deliverable</div>
+          <div class="principle-desc">Mỗi phase phải có artifact public để prove competence — không phải để flex, mà vì quá trình chuẩn bị artifact buộc bạn hiểu thật sự.</div>
+        </div>
+      </li>
+      <li class="principle-item">
+        <span class="principle-num">03</span>
+        <div class="principle-content">
+          <div class="principle-title">Measure trước khi optimize</div>
+          <div class="principle-desc">Không có số liệu = không có improvement. Mọi performance claim phải có benchmark data.</div>
+        </div>
+      </li>
+      <li class="principle-item">
+        <span class="principle-num">04</span>
+        <div class="principle-content">
+          <div class="principle-title">Build trong production, không chỉ localhost</div>
+          <div class="principle-desc">Real traffic reveal problems mà test không thấy. Deploy sớm, fail sớm, học sớm.</div>
+        </div>
+      </li>
+      <li class="principle-item">
+        <span class="principle-num">05</span>
+        <div class="principle-content">
+          <div class="principle-title">Reputation > Resume</div>
+          <div class="principle-desc">Ở level này, ai biết bạn quan trọng hơn bạn biết gì. Career Signal là bottleneck, không phải technical skill.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="section-title">Public artifacts — roadmap theo phase</div>
+  <div class="card full">
+    <ul class="resource-list">
+      <li class="resource-item"><span class="resource-tag tag-book" style="background:rgba(45,212,160,.12);color:var(--green);border-color:var(--green-border)">P1</span><div class="resource-text"><strong>Bài viết kỹ thuật về Node.js event loop</strong> với diagram tự tạo — proof bạn thực sự hiểu internals</div></li>
+      <li class="resource-item"><span class="resource-tag tag-book" style="background:var(--amber-dim);color:var(--amber);border-color:var(--amber-border)">P2</span><div class="resource-text"><strong>Open source project với clean architecture</strong> + Architecture Decision Records trong docs/</div></li>
+      <li class="resource-item"><span class="resource-tag tag-book" style="background:var(--coral-dim);color:var(--coral);border-color:rgba(248,112,96,.25)">P3</span><div class="resource-text"><strong>Case study "10x throughput"</strong> với flame graphs và số liệu thực — loại content tạo reputation nhanh nhất</div></li>
+      <li class="resource-item"><span class="resource-tag tag-book" style="background:var(--purple-dim);color:var(--purple);border-color:var(--purple-border)">P4</span><div class="resource-text"><strong>Observability boilerplate repo</strong> + blog series giải thích từng quyết định kỹ thuật</div></li>
+      <li class="resource-item"><span class="resource-tag tag-book" style="background:var(--blue-dim);color:var(--blue);border-color:rgba(96,165,250,.25)">P5</span><div class="resource-text"><strong>npm library + conference talk + 5-bài technical series</strong> — foundation của long-term reputation</div></li>
+    </ul>
+  </div>
+
+</section>
+
+</main>
+</div>
+
+<script>
+const STORAGE_KEY = 'nodejs-roadmap-v1';
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+  catch { return {}; }
+}
+
+function saveState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+let state = loadState();
+
+function toggle(el) {
+  const id = el.dataset.id;
+  if (state[id]) { delete state[id]; el.classList.remove('checked'); }
+  else { state[id] = true; el.classList.add('checked'); }
+  saveState(state);
+  updateAllCounts();
+  updateProgress();
+}
+
+function resetGroup(groupId) {
+  const group = document.getElementById(groupId);
+  if (!group) return;
+  group.querySelectorAll('.check-item').forEach(item => {
+    delete state[item.dataset.id];
+    item.classList.remove('checked');
+  });
+  saveState(state);
+  updateAllCounts();
+  updateProgress();
+}
+
+function updateCount(groupId, countId) {
+  const group = document.getElementById(groupId);
+  const countEl = document.getElementById(countId);
+  if (!group || !countEl) return;
+  const items = group.querySelectorAll('.check-item');
+  const done = group.querySelectorAll('.check-item.checked').length;
+  countEl.textContent = `${done}/${items.length}`;
+}
+
+const groups = [
+  ['p1-concepts','count-p1-concepts'],['p1-ex','count-p1-ex'],['p1-gate','count-p1-gate'],
+  ['p2-concepts','count-p2-concepts'],['p2-ex','count-p2-ex'],['p2-gate','count-p2-gate'],
+  ['p3-concepts','count-p3-concepts'],['p3-ex','count-p3-ex'],['p3-gate','count-p3-gate'],
+  ['p4-concepts','count-p4-concepts'],['p4-ex','count-p4-ex'],['p4-gate','count-p4-gate'],
+  ['p5-rep','count-p5-rep'],['p5-gate','count-p5-gate'],
+];
+
+function updateAllCounts() {
+  groups.forEach(([g,c]) => updateCount(g,c));
+
+  // Update sidebar nav checks
+  const phases = ['p1','p2','p3','p4','p5'];
+  phases.forEach(p => {
+    const allItems = document.querySelectorAll(`[data-id^="${p}"]`);
+    const checkedItems = document.querySelectorAll(`[data-id^="${p}"].checked`);
+    const navDone = document.getElementById(`nav-done-${p}`);
+    if (navDone) {
+      navDone.classList.toggle('done', allItems.length > 0 && checkedItems.length === allItems.length);
+    }
+  });
+}
+
+function updateProgress() {
+  const allItems = document.querySelectorAll('.check-item');
+  const checkedItems = document.querySelectorAll('.check-item.checked');
+  const pct = allItems.length ? Math.round(checkedItems.length / allItems.length * 100) : 0;
+  document.getElementById('global-pct').textContent = `${pct}%`;
+  document.getElementById('global-bar').style.width = `${pct}%`;
+}
+
+function applyState() {
+  Object.keys(state).forEach(id => {
+    const el = document.querySelector(`[data-id="${id}"]`);
+    if (el) el.classList.add('checked');
+  });
+}
+
+let currentNavBtn = null;
+let currentActiveClass = '';
+
+function showPanel(id, btn, activeClass) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+
+  // Desktop sidebar
+  document.querySelectorAll('.sidebar .nav-item').forEach(b => {
+    b.classList.remove('active','p1-active','p2-active','p3-active','p4-active','p5-active','pm-active');
+  });
+  if (btn && btn.closest('.sidebar')) {
+    btn.classList.add('active');
+    if (activeClass) btn.classList.add(activeClass);
+  }
+
+  // Mobile nav
+  document.querySelectorAll('.mobile-btn').forEach(b => b.classList.remove('active'));
+  if (btn && btn.closest('.mobile-nav')) {
+    btn.classList.add('active');
+  }
+}
+
+// Init
+applyState();
+updateAllCounts();
+updateProgress();
+</script>
+</body>
+</html>
