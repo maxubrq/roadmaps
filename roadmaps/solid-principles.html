@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOLID Principles — Deep Mastery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0e11;
+  --bg2: #13151a;
+  --bg3: #1a1d24;
+  --bg4: #20242e;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8eaf0;
+  --text2: #8b90a0;
+  --text3: #555b6e;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Inter', sans-serif;
+  --display: 'Syne', sans-serif;
+  --radius: 10px;
+  --radius-lg: 16px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* HEADER */
+.site-header {
+  padding: 2.5rem 0 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.site-header::before {
+  content: '';
+  position: absolute;
+  top: -80px; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 300px;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  pointer-events: none;
+  transition: background .4s;
+}
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 1rem;
+}
+.main-title {
+  font-family: var(--display);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  line-height: 1.05;
+  margin-bottom: .75rem;
+}
+.main-title .solid-letters { display: inline-flex; gap: 0; }
+.main-title .sl {
+  display: inline-block;
+  transition: color .3s;
+}
+.main-desc {
+  font-size: 15px;
+  color: var(--text2);
+  max-width: 480px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
+}
+
+/* PRINCIPLE PILLS */
+.pill-nav {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 1rem 0;
+  flex-wrap: wrap;
+}
+.pill-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border-radius: 40px;
+  border: 1.5px solid;
+  cursor: pointer;
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .03em;
+  transition: all .2s;
+  background: transparent;
+}
+.pill-btn:hover { transform: translateY(-2px); }
+.pill-btn.active { color: #fff; }
+.pill-btn .pill-letter {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* MAIN LAYOUT */
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* PRINCIPLE HEADER */
+.principle-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+  padding: 1.75rem;
+  background: var(--bg2);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  animation: fadeUp .35s ease both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.principle-letter-big {
+  font-family: var(--display);
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.principle-meta {}
+.principle-name {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+.principle-oneliner {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* TABS */
+.tab-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.tab-btn {
+  padding: 7px 16px;
+  border-radius: 30px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text2);
+  font-family: var(--sans);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.tab-btn:hover { border-color: var(--border2); color: var(--text); }
+.tab-btn.on {
+  background: var(--bg3);
+  border-color: var(--border2);
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* CARDS */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  animation: fadeUp .3s ease both;
+}
+.card.accent-left {
+  border-left: 3px solid;
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+}
+.card-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 8px;
+}
+.card-title {
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+/* SCENARIO BADGE */
+.scenario-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  margin-bottom: 1rem;
+  letter-spacing: .03em;
+}
+.scenario-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: .6;
+}
+
+/* HOOK TEXT */
+.hook-text {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text2);
+}
+.hook-text code {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: var(--bg4);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--text);
+}
+
+/* SCENE BLOCK */
+.scene {
+  border-left: 3px solid;
+  background: var(--bg3);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 1rem 1.25rem;
+  margin: .75rem 0;
+}
+.scene pre {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.85;
+  color: var(--text2);
+  white-space: pre-wrap;
+}
+
+/* INSIGHT ROW */
+.insight-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: var(--bg3);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  margin-top: 10px;
+}
+.insight-arrow { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+.insight-text { font-size: 13px; color: var(--text2); line-height: 1.7; }
+.insight-text strong { color: var(--text); font-weight: 500; }
+
+/* CODE COMPARE */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: .75rem;
+}
+@media (max-width: 600px) { .compare { grid-template-columns: 1fr; } }
+.code-block {
+  border-radius: var(--radius);
+  padding: 12px 14px;
+}
+.code-block.bad { background: rgba(220,38,38,.08); border: 1px solid rgba(220,38,38,.2); }
+.code-block.good { background: rgba(34,197,94,.07); border: 1px solid rgba(34,197,94,.18); }
+.code-block-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.code-block.bad .code-block-label { color: #ef4444; }
+.code-block.good .code-block-label { color: #22c55e; }
+
+/* CODE */
+pre {
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  color: #8b9abc;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.kw  { color: #7aa2f7; }
+.cls { color: #e0af68; }
+.cm  { color: #4a5168; font-style: italic; }
+.err { color: #f7768e; }
+.ok  { color: #9ece6a; }
+.str { color: #9ece6a; }
+
+/* STEPS */
+.steps { }
+.step {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.step:last-child { border-bottom: none; }
+.step-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  min-width: 22px;
+  padding-top: 2px;
+  flex-shrink: 0;
+}
+.step-title {
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 5px;
+}
+.step-desc {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+.step-code {
+  background: var(--bg3);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+}
+
+/* FINAL TEST */
+.final-block {
+  background: rgba(34,197,94,.06);
+  border: 1px solid rgba(34,197,94,.15);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-top: 12px;
+}
+.final-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #22c55e;
+  margin-bottom: 8px;
+}
+
+/* RULES */
+.rule {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.rule:last-child { border-bottom: none; }
+.rule-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  min-width: 20px;
+  padding-top: 2px;
+  flex-shrink: 0;
+}
+.rule-title {
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.rule-body { font-size: 13px; color: var(--text2); line-height: 1.65; }
+.rule-body code {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  background: var(--bg4);
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: var(--text);
+}
+
+/* MYTHS */
+.myth {
+  background: var(--bg3);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+}
+.myth-q { font-family: var(--mono); font-size: 12px; font-weight: 500; color: #f7768e; margin-bottom: 5px; }
+.myth-a { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+/* CHECKLIST */
+.check-item {
+  display: flex;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+.check-item:last-child { border-bottom: none; }
+.check-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+.check-text { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+/* NAV */
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 30px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--text2);
+  font-family: var(--sans);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.nav-btn:hover { background: var(--bg3); color: var(--text); border-color: var(--border2); }
+.progress-dots { display: flex; gap: 6px; align-items: center; }
+.pdot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--border2);
+  cursor: pointer;
+  transition: all .2s;
+  border: none;
+  padding: 0;
+}
+.pdot.on { transform: scale(1.5); }
+
+/* FOOTER */
+.site-footer {
+  text-align: center;
+  padding: 2rem 1rem 3rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: .06em;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .principle-header { flex-direction: column; gap: .75rem; }
+  .principle-letter-big { font-size: 40px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header" id="site-header">
+  <p class="eyebrow">Software engineering fundamentals</p>
+  <h1 class="main-title">
+    <span class="solid-letters" id="solid-letters"></span>
+    <br>
+    <span style="color: var(--text2); font-size: .45em; font-weight: 500; letter-spacing: -.01em;">Principles</span>
+  </h1>
+  <p class="main-desc">Real stories. Real code. Real refactoring walkthroughs. Built for engineers who want to understand deeply, explain clearly, and apply immediately.</p>
+  <nav class="pill-nav" id="pill-nav"></nav>
+</header>
+
+<main class="container">
+  <div id="principle-header"></div>
+  <div class="tab-bar" id="tab-bar"></div>
+  <div id="body"></div>
+  <div class="nav-bar">
+    <button class="nav-btn" id="prev-btn" onclick="go((cur+4)%5)">← <span id="prev-label"></span></button>
+    <div class="progress-dots" id="progress-dots"></div>
+    <button class="nav-btn" id="next-btn" onclick="go((cur+1)%5)"><span id="next-label"></span> →</button>
+  </div>
+</main>
+
+<footer class="site-footer">
+  SOLID Principles — Built for freshers &amp; junior engineers who mean business
+</footer>
+
+<script>
+var D = [
+{
+  L:"S", ac:"#7c6ff7", bg:"rgba(124,111,247,0.12)", border:"rgba(124,111,247,0.35)",
+  name:"Single responsibility",
+  oneliner:"One class. One boss. One reason to ever change it.",
+  story:{
+    badge:"Real scenario: Social media startup",
+    hook:"It's your first week. The senior dev says \"just add the analytics tracking to the User class, it already has everything.\" Six months later, that class is 800 lines, three teams fight over it every sprint, and nobody understands what it does anymore.",
+    title:"3 AM. Production is down. Two devs are blaming each other.",
+    scene:"It's 11 PM. Priya (Growth team) merged her A/B test changes to User.js.\nCarlos (Auth team) had also been editing User.js — his OAuth2 fix.\n\nGit picked Carlos's version. Priya's tracking code vanished.\nNobody noticed until 3 AM when the CEO asked\nwhy signup conversions dropped to zero.\n\nThe class had three bosses:\n→ Growth team    (tracking, funnels, experiments)\n→ Auth team      (login, OAuth, sessions)\n→ Data team      (persistence, migrations, exports)\n\nThree bosses = three reasons to change = one disaster.",
+    insight:"<strong>SRP is not about class size. It's about political boundaries.</strong> Ask: if this code changes, which Slack channel gets pinged? If the answer is more than one — that's your violation.",
+    bad:`<span class="cls">class User</span> {
+  <span class="cm">// Auth team owns this</span>
+  <span class="kw">async</span> login(email, password) { ... }
+  <span class="kw">async</span> refreshOAuthToken() { ... }
+
+  <span class="cm">// Growth team owns this</span>
+  trackSignupFunnel(step) { analytics.track(...) }
+  getABTestVariant(test) { ... }
+
+  <span class="cm">// Data team owns this</span>
+  <span class="kw">async</span> saveToDatabase() { ... }
+  exportToCSV() { ... }
+
+  <span class="err">// 3 teams. 3 Slack channels. 1 class. Pure chaos.</span>
+}`,
+    good:`<span class="cm">// auth/auth.service.js — Auth team owns this</span>
+<span class="kw">class</span> <span class="cls">AuthService</span> {
+  <span class="kw">async</span> login(email, password) { ... }
+  <span class="kw">async</span> refreshOAuthToken() { ... }
+}
+
+<span class="cm">// growth/tracking.service.js — Growth team owns this</span>
+<span class="kw">class</span> <span class="cls">TrackingService</span> {
+  trackSignupFunnel(userId, step) { ... }
+  getABTestVariant(userId, test) { ... }
+}
+
+<span class="cm">// data/user.repository.js — Data team owns this</span>
+<span class="kw">class</span> <span class="cls">UserRepository</span> {
+  <span class="kw">async</span> save(user) { ... }
+  exportToCSV(filters) { ... }
+}
+<span class="ok">// Priya and Carlos can now merge simultaneously. Forever.</span>`
+  },
+  walkthrough:{
+    badge:"Codebase: Node.js Express API at a fintech startup",
+    scenario:"An Order class that the finance team, the logistics team, and the notifications team all edit. Every release is a negotiation over who deploys first.",
+    steps:[
+      { title:"Map every method to its owner first — before touching code",
+        desc:"Print the class. Go through each method and write the team name next to it. Any class with two or more team names is a SRP violation. This audit takes 10 minutes and prevents weeks of pain.",
+        code:`<span class="cm">// The audit — annotate before you refactor:</span>
+<span class="kw">class</span> <span class="cls">Order</span> {
+  calculateTax()        <span class="cm">// Finance ← owner</span>
+  applyVATRules()       <span class="cm">// Finance ← owner</span>
+  generateInvoicePDF()  <span class="cm">// Finance ← owner</span>
+  assignToWarehouse()   <span class="cm">// Logistics ← owner</span>
+  estimateDelivery()    <span class="cm">// Logistics ← owner</span>
+  sendConfirmationSMS() <span class="cm">// Notifications ← owner</span>
+  save()                <span class="cm">// DB team ← owner</span>
+  <span class="err">// Result: 4 owners. This class must be split.</span>
+}` },
+      { title:"Extract the finance concern — leave the data alone",
+        desc:"Finance logic moves out. It receives an Order as input — plain data. It does not need to inherit from Order or know about warehouses.",
+        code:`<span class="cm">// src/finance/order-billing.service.js</span>
+<span class="kw">class</span> <span class="cls">OrderBillingService</span> {
+  calculateTax(order) {
+    <span class="kw">const</span> rate = VAT_RATES[order.country] ?? 0.2
+    <span class="kw">return</span> order.subtotal * rate
+  }
+  generateInvoicePDF(order) {
+    <span class="kw">return</span> PDFGenerator.render(<span class="str">'invoice'</span>, order)
+  }
+}
+<span class="ok">// Finance team has their own file. They deploy independently.</span>` },
+      { title:"Extract the logistics concern",
+        desc:"Warehouse assignment and delivery estimation have nothing to do with invoices. They move to their own service with their own tests.",
+        code:`<span class="cm">// src/logistics/order-fulfillment.service.js</span>
+<span class="kw">class</span> <span class="cls">OrderFulfillmentService</span> {
+  <span class="kw">async</span> assignToWarehouse(order) {
+    <span class="kw">const</span> wh = <span class="kw">await</span> Warehouse.findNearest(order.destination)
+    order.warehouseId = wh.id
+    <span class="kw">return</span> wh
+  }
+  estimateDelivery(order, warehouse) {
+    <span class="kw">return</span> DeliveryEstimator.calculate(order, warehouse)
+  }
+}
+<span class="ok">// Logistics ships their features without touching billing.</span>` },
+      { title:"Extract notifications — the most underrated split",
+        desc:"Notification logic almost always gets stuffed into the domain model. It never belongs there. It depends on templates, third-party SDKs, and user preferences — a completely different change axis.",
+        code:`<span class="cm">// src/notifications/order-notifications.service.js</span>
+<span class="kw">class</span> <span class="cls">OrderNotificationsService</span> {
+  <span class="kw">async</span> sendConfirmation(order, user) {
+    <span class="kw">await</span> SMS.send(user.phone, \`Order \${order.id} confirmed\`)
+    <span class="kw">await</span> Email.send(user.email, templates.confirmation(order))
+  }
+}
+<span class="ok">// Template changes, new channels — all isolated here.</span>` },
+      { title:"The Order model becomes a clean data object",
+        desc:"What remains is pure data. No logic from any team. The domain model is now stable — it changes only when the fundamental business data structure changes.",
+        code:`<span class="cm">// src/orders/order.model.js</span>
+<span class="kw">class</span> <span class="cls">Order</span> {
+  <span class="kw">constructor</span>(data) {
+    <span class="kw">this</span>.id       = data.id
+    <span class="kw">this</span>.userId    = data.userId
+    <span class="kw">this</span>.subtotal  = data.subtotal
+    <span class="kw">this</span>.country   = data.country
+    <span class="kw">this</span>.status    = data.status ?? <span class="str">'pending'</span>
+  }
+}
+<span class="ok">// One owner: the DB team. One reason to change: data schema.</span>` }
+    ],
+    final:`<span class="cm">// Before: testing tax required mocking warehouses and SMS</span>
+<span class="cm">// After:</span>
+<span class="kw">test</span>(<span class="str">'UK order gets 20% VAT'</span>, () => {
+  <span class="kw">const</span> order   = <span class="kw">new</span> <span class="cls">Order</span>({ subtotal: 100, country: <span class="str">'GB'</span> })
+  <span class="kw">const</span> billing = <span class="kw">new</span> <span class="cls">OrderBillingService</span>()
+  expect(billing.calculateTax(order)).toBe(20)
+})
+<span class="ok">// No warehouse. No SMS. No noise. Tests run in 8ms.</span>`
+  },
+  rules:[
+    { n:"1", title:"Ask which Slack channel gets pinged, not how many lines there are",
+      body:"Before writing a class, ask: if this changes, who needs to be notified? One channel = one responsibility. Two channels = split it." },
+    { n:"2", title:"Merge conflicts are SRP violations wearing a different costume",
+      body:"When two unrelated features cause a merge conflict on the same file, that file is violating SRP. The conflict is the diagnosis. Stop resolving it — start refactoring." },
+    { n:"3", title:"The facade pattern saves the public API",
+      body:"If splitting breaks existing callers, add a thin facade that delegates to the new classes. External API unchanged. Internal structure fixed." }
+  ],
+  myths:[
+    { q:'"SRP means tiny classes with one method each"',
+      a:"A PaymentProcessor with charge(), refund(), getStatus() — all owned by the payments team — is perfectly fine at 200 lines. Size is irrelevant. Political ownership is everything." },
+    { q:'"We should split this class to follow SRP"',
+      a:"Only split when two different people or teams have conflicting reasons to change it. Splitting for the sake of splitting creates scattered, hard-to-navigate code." }
+  ],
+  checks:[
+    "Two unrelated feature tickets both require editing the same file",
+    "A bug in the shipping logic causes you to redeploy the billing code",
+    "Testing one feature requires setting up mocks for a completely unrelated feature"
+  ]
+},
+{
+  L:"O", ac:"#4fd1a5", bg:"rgba(79,209,165,0.1)", border:"rgba(79,209,165,0.3)",
+  name:"Open / closed",
+  oneliner:"Add new behavior by adding new code — never by editing working code.",
+  story:{
+    badge:"Real scenario: SaaS analytics platform",
+    hook:"Every time your sales team closes a deal with a new enterprise client, they promise a 'custom report format.' It's always 'just a small change.' But every change to the report generator has broken production twice. The codebase is held hostage by a 300-line if/else chain nobody dares touch.",
+    title:"The if/else chain that became a hostage situation",
+    scene:`ReportGenerator.generate(type, data):
+  if type == "pdf":    ...
+  elif type == "csv":  ...
+  elif type == "xlsx": ... ← broke production in March
+  elif type == "json": ... ← added for ClientX last Tuesday
+  elif type == "xml":  ... ← ClientY wants this next sprint
+  elif type == "???":  ← ClientZ is negotiating right now
+
+Every new client = edit this function.
+Every edit = run the full regression suite (45 min).
+
+The function became so scary the team started
+scheduling "report generator edit windows"
+so only one person touched it per week.`,
+    insight:"<strong>The code that changes most often should be the easiest to add — without touching anything that already works.</strong> The moment you find yourself scheduling 'edit windows' for a function, OCP is screaming at you.",
+    bad:`<span class="kw">function</span> generateReport(type, data) {
+  <span class="kw">if</span> (type === <span class="str">'pdf'</span>) {
+    <span class="kw">return</span> PDFLib.render(data)
+  } <span class="kw">else if</span> (type === <span class="str">'csv'</span>) {
+    <span class="kw">return</span> data.map(r => r.join(<span class="str">','</span>))
+  } <span class="kw">else if</span> (type === <span class="str">'xml'</span>) {
+    <span class="err">// NEW — just added for ClientY, fingers crossed</span>
+    <span class="kw">return</span> XMLBuilder.build(data)
+  }
+  <span class="err">// Every new format = edit here = risk breaking PDF + CSV</span>
+}`,
+    good:`<span class="cm">// The stable contract — never changes:</span>
+<span class="kw">interface</span> <span class="cls">ReportFormatter</span> {
+  format(data: ReportData[]): <span class="kw">string</span> | Buffer
+}
+
+<span class="kw">class</span> <span class="cls">PDFFormatter</span>  <span class="kw">implements</span> <span class="cls">ReportFormatter</span> {
+  format(data) { <span class="kw">return</span> PDFLib.render(data) }
+}
+<span class="kw">class</span> <span class="cls">CSVFormatter</span>  <span class="kw">implements</span> <span class="cls">ReportFormatter</span> {
+  format(data) { <span class="kw">return</span> data.map(r=>r.join(<span class="str">','</span>)).join(<span class="str">'\n'</span>) }
+}
+<span class="kw">class</span> <span class="cls">XMLFormatter</span>  <span class="kw">implements</span> <span class="cls">ReportFormatter</span> {
+  format(data) { <span class="kw">return</span> XMLBuilder.build(data) }
+}
+<span class="ok">// ClientZ wants YAML? New file. Zero risk to PDF/CSV/XML.</span>`
+  },
+  walkthrough:{
+    badge:"Codebase: Express.js notification system",
+    scenario:"A NotificationSender with hardcoded channels. Every new channel (Slack, Teams, WhatsApp, PagerDuty) requires editing the core sending logic and re-testing every other channel.",
+    steps:[
+      { title:"Name the axis that keeps changing",
+        desc:"The type of notification channel keeps changing. The act of 'send a message to a user via some channel' never changes. That stable sentence becomes your interface.",
+        code:`<span class="cm">// What is stable? "Send content to a recipient."</span>
+<span class="cm">// What changes? The channel.</span>
+
+<span class="kw">interface</span> <span class="cls">NotificationChannel</span> {
+  send(recipient: <span class="kw">string</span>, message: <span class="kw">string</span>): Promise<<span class="kw">void</span>>
+}
+
+<span class="ok">// This interface is frozen forever.
+// New channels implement it. They don't change it.</span>` },
+      { title:"Existing channels become isolated classes",
+        desc:"Email and SMS that already work move into their own classes. They are closed now. A bug in the new Slack integration cannot possibly affect them.",
+        code:`<span class="kw">class</span> <span class="cls">EmailChannel</span> <span class="kw">implements</span> <span class="cls">NotificationChannel</span> {
+  <span class="kw">async</span> send(email, message) {
+    <span class="kw">await</span> sendgrid.send({ to: email, text: message })
+  }
+}
+<span class="kw">class</span> <span class="cls">SMSChannel</span> <span class="kw">implements</span> <span class="cls">NotificationChannel</span> {
+  <span class="kw">async</span> send(phone, message) {
+    <span class="kw">await</span> twilio.messages.create({ to: phone, body: message })
+  }
+}
+<span class="ok">// These files are closed. They will not change for Slack.</span>` },
+      { title:"New channel = new file, full stop",
+        desc:"ClientZ wants Slack notifications. You create one new file. The existing EmailChannel and SMSChannel don't even know Slack exists.",
+        code:`<span class="cm">// NEW FILE: src/channels/slack.channel.ts</span>
+<span class="kw">class</span> <span class="cls">SlackChannel</span> <span class="kw">implements</span> <span class="cls">NotificationChannel</span> {
+  <span class="kw">constructor</span>(<span class="kw">private</span> webhookUrl: <span class="kw">string</span>) {}
+
+  <span class="kw">async</span> send(recipient, message) {
+    <span class="kw">await</span> fetch(<span class="kw">this</span>.webhookUrl, {
+      method: <span class="str">'POST'</span>,
+      body: JSON.stringify({ text: \`\${recipient}: \${message}\` })
+    })
+  }
+}
+<span class="ok">// Email untouched. SMS untouched. Regression suite: skip both.</span>` },
+      { title:"The core NotificationService becomes a stable orchestrator",
+        desc:"It never changes. It only knows about the interface, never the concrete channels. You could add 50 channels and this file stays exactly as written.",
+        code:`<span class="kw">class</span> <span class="cls">NotificationService</span> {
+  <span class="kw">constructor</span>(<span class="kw">private</span> channels: <span class="cls">NotificationChannel</span>[]) {}
+
+  <span class="kw">async</span> notify(recipient: <span class="kw">string</span>, message: <span class="kw">string</span>) {
+    <span class="kw">await</span> Promise.all(
+      <span class="kw">this</span>.channels.map(ch => ch.send(recipient, message))
+    )
+  }
+}
+<span class="ok">// This file was written once. It will never need editing.</span>` },
+      { title:"Wire channels from config for runtime extensibility",
+        desc:"For enterprise clients with different channel preferences, load channels from config. The service never changes, but behavior changes completely per client.",
+        code:`<span class="kw">const</span> channelMap = {
+  email: (cfg) => <span class="kw">new</span> <span class="cls">EmailChannel</span>(cfg.apiKey),
+  sms:   (cfg) => <span class="kw">new</span> <span class="cls">SMSChannel</span>(cfg.accountSid),
+  slack: (cfg) => <span class="kw">new</span> <span class="cls">SlackChannel</span>(cfg.webhookUrl),
+}
+
+<span class="kw">function</span> buildServiceForClient(clientConfig) {
+  <span class="kw">const</span> channels = clientConfig.channels
+    .map(c => channelMap[c.type](c))
+  <span class="kw">return</span> <span class="kw">new</span> <span class="cls">NotificationService</span>(channels)
+}
+<span class="ok">// New client, new channels? One line in channelMap. Done.</span>` }
+    ],
+    final:`describe(<span class="str">'SlackChannel'</span>, () => {
+  it(<span class="str">'posts to webhook'</span>, <span class="kw">async</span> () => {
+    <span class="kw">const</span> mockFetch = jest.fn().mockResolvedValue({ ok: <span class="kw">true</span> })
+    <span class="kw">const</span> ch = <span class="kw">new</span> <span class="cls">SlackChannel</span>(<span class="str">'https://hooks.slack.com/xxx'</span>)
+    <span class="kw">await</span> ch.send(<span class="str">'#alerts'</span>, <span class="str">'Server down'</span>)
+    expect(mockFetch).toHaveBeenCalledTimes(1)
+  })
+})
+<span class="ok">// EmailChannel tests: unchanged. SMSChannel tests: unchanged.</span>`
+  },
+  rules:[
+    { n:"1", title:"If you're scheduling 'edit windows' for a function, it's OCP violation",
+      body:"Any function that has become too scary to edit casually needs to become an open extension point. That fear is your signal." },
+    { n:"2", title:"Find the one sentence that never changes — that's your interface",
+      body:"'Format data as a report.' 'Send a message to a recipient.' One sentence. One method signature. That's your abstraction." },
+    { n:"3", title:"Don't abstract until you see the second variant arrive",
+      body:"One if statement is not a problem. Two if statements for the same thing is the signal to abstract. Don't build the extension point before you know what extends it." }
+  ],
+  myths:[
+    { q:'"OCP means never editing existing code"',
+      a:"No. You edit to fix bugs and improve performance. OCP means the core orchestration logic should not change just because you're adding a new variant." },
+    { q:'"I need inheritance to follow OCP"',
+      a:"Strategy pattern via interfaces, higher-order functions, plugins, config-driven behavior — all OCP-compliant. Inheritance is one option, usually not the best one." }
+  ],
+  checks:[
+    "Adding a new 'type' of anything requires editing a function that already has other types in it",
+    "You find yourself saying 'just add another elif' to a function that's been growing for 2 years",
+    "Regression testing for a new feature requires re-running tests for completely unrelated features"
+  ]
+},
+{
+  L:"L", ac:"#f7a165", bg:"rgba(247,161,101,0.1)", border:"rgba(247,161,101,0.3)",
+  name:"Liskov substitution",
+  oneliner:"If it walks like a duck and quacks like a duck — it must actually be a duck, not a bomb.",
+  story:{
+    badge:"Real scenario: Payments platform",
+    hook:"Your codebase has a PaymentProcessor base class. Everything works. Then someone adds WireTransferProcessor that extends it. Tests pass. In production, refund() silently returns null. 47 customers don't get their money back. Nobody knows until customer support calls.",
+    title:"The refund that silently became a lie",
+    scene:`Monday 9 AM: Carlos extends PaymentProcessor with WireTransfer.
+Monday 9:15 AM: All unit tests pass. Carlos ships.
+Monday 2 PM: Customer Sarah buys a $3,200 laptop.
+Monday 3 PM: Sarah realizes she ordered the wrong model.
+
+She clicks Refund. The system calls processor.refund(order).
+WireTransfer.refund() returns null. No error. No exception.
+
+The generic handler catches nothing. Returns HTTP 200.
+Sarah gets a success message. No refund happens.
+
+Tuesday 11 AM: Sarah calls support.
+Tuesday 11:30 AM: Support finds 47 other customers
+had the same silent failure over the past 14 hours.
+
+The abstraction lied. And the lie was silent.`,
+    insight:"<strong>Liskov violations don't always crash loudly. The most dangerous ones are silent.</strong> A subclass that returns null, swallows exceptions, or does nothing is worse than one that throws — because callers never know they were deceived.",
+    bad:`<span class="kw">class</span> <span class="cls">PaymentProcessor</span> {
+  <span class="kw">async</span> charge(order) { <span class="cm">/* ... */</span> }
+  <span class="kw">async</span> refund(order) { <span class="cm">/* ... */</span> }
+  <span class="cm">// Contract: refund() WILL attempt a refund.</span>
+}
+
+<span class="kw">class</span> <span class="cls">WireTransferProcessor</span> <span class="kw">extends</span> <span class="cls">PaymentProcessor</span> {
+  <span class="kw">async</span> charge(order) { <span class="cm">/* works fine */</span> }
+  <span class="kw">async</span> refund(order) {
+    <span class="err">// "wire transfers can't be refunded" — silent lie</span>
+    <span class="err">return null</span>
+  }
+}
+<span class="err">// 47 customers silently lost their refunds.</span>`,
+    good:`<span class="cm">// Split the contract honestly:</span>
+<span class="kw">interface</span> <span class="cls">IChargeable</span> {
+  charge(order: Order): Promise<ChargeResult>
+}
+<span class="kw">interface</span> <span class="cls">IRefundable</span> {
+  refund(order: Order): Promise<RefundResult>
+}
+
+<span class="cm">// Card processor can do both:</span>
+<span class="kw">class</span> <span class="cls">CardProcessor</span> <span class="kw">implements</span> <span class="cls">IChargeable</span>, <span class="cls">IRefundable</span> {
+  <span class="kw">async</span> charge(o) { ... }
+  <span class="kw">async</span> refund(o) { ... }
+}
+
+<span class="cm">// Wire transfer is honest about what it can do:</span>
+<span class="kw">class</span> <span class="cls">WireTransferProcessor</span> <span class="kw">implements</span> <span class="cls">IChargeable</span> {
+  <span class="kw">async</span> charge(o) { ... }
+  <span class="ok">// No refund(). Type system prevents the lie.</span>
+}`
+  },
+  walkthrough:{
+    badge:"Codebase: Python Django — Storage backends",
+    scenario:"A cloud storage system where S3, local disk, and a read-only archive all implement the same interface. The archive silently drops writes — a classic LSP violation hiding in plain sight.",
+    steps:[
+      { title:"Write the Liskov test before you write any subclass",
+        desc:"Take any test written for the base type. Run it against every subtype. Any failure is a violation. One test. Five minutes. Do this before merging any new subclass.",
+        code:`<span class="cm"># The Liskov test — run against EVERY subtype</span>
+<span class="kw">def</span> assert_storage_contract(storage_class):
+  storage = storage_class()
+  storage.write(<span class="str">"test.txt"</span>, b<span class="str">"hello"</span>)
+  result = storage.read(<span class="str">"test.txt"</span>)
+  <span class="kw">assert</span> result == b<span class="str">"hello"</span>, <span class="str">f"{storage_class} broke contract"</span>
+
+assert_storage_contract(S3Storage)         <span class="ok"># pass</span>
+assert_storage_contract(LocalDiskStorage)  <span class="ok"># pass</span>
+assert_storage_contract(ArchiveStorage)    <span class="err"># FAIL — silently drops writes</span>` },
+      { title:"Find the violation — archive silently drops writes",
+        desc:"ArchiveStorage.write() doesn't write. It logs a warning and returns. The caller gets no error. Files appear to be saved. They are not.",
+        code:`<span class="kw">class</span> <span class="cls">ArchiveStorage</span>(Storage):
+  <span class="kw">def</span> write(self, path, data):
+    <span class="cm"># "Archives are read-only, so..."</span>
+    logger.warning(<span class="str">f"Write ignored: {path}"</span>)
+    <span class="err">return  # silent lie. caller has no idea.</span>
+
+  <span class="kw">def</span> read(self, path):
+    <span class="kw">return</span> self.archive_bucket.get(path)
+
+<span class="err"># Liskov test fails: write() breaks the postcondition
+# "after write(path, data), read(path) == data"</span>` },
+      { title:"Fix: make the contract return explicit results",
+        desc:"Now every write returns a WriteStatus. No more silent drops. The type itself communicates the outcome.",
+        code:`<span class="kw">from enum import</span> Enum
+
+<span class="kw">class</span> <span class="cls">WriteStatus</span>(Enum):
+  WRITTEN  = <span class="str">"written"</span>
+  SKIPPED  = <span class="str">"skipped"</span>   <span class="cm"># honest: "I didn't write it"</span>
+  FAILED   = <span class="str">"failed"</span>
+
+<span class="kw">class</span> <span class="cls">Storage</span>(ABC):
+  <span class="kw">@abstractmethod</span>
+  <span class="kw">def</span> write(self, path, data) -> <span class="cls">WriteStatus</span>: ...
+
+<span class="kw">class</span> <span class="cls">ArchiveStorage</span>(Storage):
+  <span class="kw">def</span> write(self, path, data):
+    <span class="kw">return</span> WriteStatus.SKIPPED  <span class="ok"># explicit. honest. safe.</span>` },
+      { title:"Fix option B — split the interface so archive can't pretend",
+        desc:"If 'read-only' is a real concept in your domain, model it explicitly. Archive never claims to support writing. The type system prevents callers from even trying.",
+        code:`<span class="kw">class</span> <span class="cls">ReadableStorage</span>(ABC):
+  <span class="kw">@abstractmethod</span>
+  <span class="kw">def</span> read(self, path: str) -> bytes: ...
+
+<span class="kw">class</span> <span class="cls">WritableStorage</span>(ReadableStorage):
+  <span class="kw">@abstractmethod</span>
+  <span class="kw">def</span> write(self, path: str, data: bytes) -> WriteStatus: ...
+
+<span class="kw">class</span> <span class="cls">ArchiveStorage</span>(ReadableStorage):  <span class="cm"># only reads</span>
+  <span class="kw">def</span> read(self, path): <span class="kw">return</span> self.bucket.get(path)
+  <span class="ok"># write() doesn't exist here. Type system enforces it.</span>` },
+      { title:"Caller code is now honest about what it needs",
+        desc:"Callers declare their actual requirement. BackupService gets WritableStorage. ReportService gets ReadableStorage. Archive can never be passed where writing is expected.",
+        code:`<span class="kw">class</span> <span class="cls">BackupService</span>:
+  <span class="kw">def</span> __init__(self, storage: WritableStorage):
+    self.storage = storage  <span class="cm"># Archive can't be passed here</span>
+
+<span class="kw">class</span> <span class="cls">ReportService</span>:
+  <span class="kw">def</span> __init__(self, storage: ReadableStorage):
+    self.storage = storage  <span class="ok"># Archive is perfectly valid here</span>
+
+<span class="ok"># Type system prevents the silent failure. Permanently.</span>` }
+    ],
+    final:`<span class="cm"># Liskov test now passes for all subtypes:</span>
+<span class="kw">def</span> test_writable_contract(cls):
+  storage = cls()
+  status  = storage.write(<span class="str">"f.txt"</span>, b<span class="str">"data"</span>)
+  <span class="kw">assert</span> isinstance(status, WriteStatus)
+  <span class="kw">if</span> status == WriteStatus.WRITTEN:
+    <span class="kw">assert</span> storage.read(<span class="str">"f.txt"</span>) == b<span class="str">"data"</span>
+
+<span class="ok"># No more silent failures. No more 47 confused customers.</span>`
+  },
+  rules:[
+    { n:"1", title:"'Is-a' is about behavior, not biology",
+      body:"A WireTransferProcessor IS-A PaymentProcessor in English. But if it can't honor the refund contract, it is NOT-A PaymentProcessor in code. Inheritance models behavior, not language." },
+    { n:"2", title:"Silent returns are worse than exceptions",
+      body:"A subclass that throws is annoying. A subclass that returns null or silently does nothing is dangerous. The most painful LSP violations are the quiet ones." },
+    { n:"3", title:"Write the Liskov test before shipping any new subclass",
+      body:"Take any test for the base class. Run it against the new subclass before merging. One test. Five minutes. Catches the entire class of LSP bugs." }
+  ],
+  myths:[
+    { q:'"We can just catch the exception in the caller"',
+      a:"That means every caller needs special-case knowledge about specific subtypes. Polymorphism is dead. You've traded a design problem for an operational one that bites at 2 AM." },
+    { q:'"LSP only matters in strongly typed languages"',
+      a:"Python and JavaScript callers make the same assumptions about substitutability. The runtime just doesn't tell you until production." }
+  ],
+  checks:[
+    "A subclass method returns null, empty, or silently does nothing for an operation the parent promises",
+    "Your code has isinstance() or type checks before calling a polymorphic method",
+    "Customer support reports errors that 'shouldn't be possible' — a subclass is swallowing failures"
+  ]
+},
+{
+  L:"I", ac:"#60a5fa", bg:"rgba(96,165,250,0.1)", border:"rgba(96,165,250,0.3)",
+  name:"Interface segregation",
+  oneliner:"Don't force a class to implement things it can't do. Interfaces should fit like gloves — not like hazmat suits.",
+  story:{
+    badge:"Real scenario: Multi-platform publishing tool",
+    hook:"You build one big IPublisher interface with post(), deletePost(), editPost(), uploadMedia(), getAnalytics(). Twitter can't delete or edit. Instagram has no analytics. LinkedIn has no media upload on free tier. Every platform is an exception factory.",
+    title:"The interface that turned every platform into a liar",
+    scene:`IPublisher demands: post, delete, edit, uploadMedia, getAnalytics.
+
+TwitterPublisher:
+  post()         → works
+  deletePost()   → throws "API deprecated"
+  editPost()     → throws "Twitter doesn't support edits"
+  getAnalytics() → works
+
+InstagramPublisher:
+  post()         → works
+  editPost()     → works
+  getAnalytics() → throws "requires Business account"
+
+LinkedInPublisher:
+  post()         → works
+  uploadMedia()  → throws "Premium API only"
+  getAnalytics() → throws "Premium API only"
+
+Every platform is a different combination of lies.
+Every test needs a different set of mocks.
+Every new platform adds more NotImplementedErrors.`,
+    insight:"<strong>A fat interface is a contract you force others to lie about.</strong> When implementors throw NotImplementedError, it's not their fault — it's the interface designer's fault for demanding promises that can't be kept.",
+    bad:`<span class="kw">interface</span> <span class="cls">IPublisher</span> {
+  post(content: Content): Promise<PostResult>
+  deletePost(id: <span class="kw">string</span>): Promise<<span class="kw">void</span>>
+  editPost(id: <span class="kw">string</span>, c: Content): Promise<<span class="kw">void</span>>
+  uploadMedia(file: Buffer): Promise<MediaUrl>
+  getAnalytics(id: <span class="kw">string</span>): Promise<Analytics>
+}
+
+<span class="kw">class</span> <span class="cls">TwitterPublisher</span> <span class="kw">implements</span> <span class="cls">IPublisher</span> {
+  async deletePost() { <span class="err">throw new Error('API deprecated')</span> }
+  async editPost()   { <span class="err">throw new Error('Not supported')</span> }
+  <span class="cm">// Platform forced to lie. Interface designer's fault.</span>
+}`,
+    good:`<span class="cm">// Carved to fit what each platform actually does:</span>
+<span class="kw">interface</span> <span class="cls">IPostable</span>   { post(c: Content): Promise<PostResult> }
+<span class="kw">interface</span> <span class="cls">IDeletable</span>  { deletePost(id: <span class="kw">string</span>): Promise<<span class="kw">void</span>> }
+<span class="kw">interface</span> <span class="cls">IEditable</span>   { editPost(id: <span class="kw">string</span>, c: Content): Promise<<span class="kw">void</span>> }
+<span class="kw">interface</span> <span class="cls">IAnalyzable</span> { getAnalytics(id: <span class="kw">string</span>): Promise<Analytics> }
+
+<span class="cm">// Twitter is honest about what it supports:</span>
+<span class="kw">class</span> <span class="cls">TwitterPublisher</span> <span class="kw">implements</span> <span class="cls">IPostable</span>, <span class="cls">IAnalyzable</span> {
+  async post(c) { ... }
+  async getAnalytics(id) { ... }
+  <span class="ok">// No delete. No edit. No lies. Type system enforces it.</span>
+}`
+  },
+  walkthrough:{
+    badge:"Codebase: TypeScript — Data export pipeline",
+    scenario:"A fat IDataSource interface that forces ReadonlyCSVSource to implement write() and delete(). Test mocks require 6 stubs for code that only uses 2 of them.",
+    steps:[
+      { title:"Measure the fat — count the stubbed methods in tests",
+        desc:"If you mock a method but never assert on it, that method is interface fat. Count them. That number tells you how bloated your interface is.",
+        code:`<span class="cm">// Test before refactor — spot the noise:</span>
+<span class="kw">const</span> mockSource: IDataSource = {
+  read:      jest.fn().mockResolvedValue([...]),  <span class="ok">// ← used</span>
+  readBatch: jest.fn().mockResolvedValue([...]),  <span class="ok">// ← used</span>
+  write:     jest.fn(),  <span class="err">// ← never called, just required</span>
+  delete:    jest.fn(),  <span class="err">// ← never called, just required</span>
+  truncate:  jest.fn(),  <span class="err">// ← never called, just required</span>
+  migrate:   jest.fn(),  <span class="err">// ← never called, just required</span>
+}
+<span class="err">// 4 mocks for methods the test never touches.
+// ISP violation made visible by test setup pain.</span>` },
+      { title:"Map callers to what they actually use",
+        desc:"Trace who calls what before splitting. The export pipeline only reads. The admin panel writes and deletes. Two callers, two interfaces.",
+        code:`<span class="cm">// Call-site audit:</span>
+<span class="cm">// ExportPipeline    → read, readBatch</span>
+<span class="cm">// AdminDashboard    → write, delete</span>
+<span class="cm">// MigrationRunner   → migrate, truncate</span>
+
+<span class="ok">// Three callers → three role interfaces.
+// Name them after what the caller does.</span>` },
+      { title:"Create role interfaces — named after caller behavior",
+        desc:"Each interface is named from the caller's perspective. Not ISource (which is just the class wearing a hat). IReadableSource, IWritableSource.",
+        code:`<span class="kw">interface</span> <span class="cls">IReadableSource</span><<span class="kw">T</span>> {
+  read(query?: Query): Promise<T[]>
+  readBatch(size: <span class="kw">number</span>): AsyncIterable<T[]>
+}
+
+<span class="kw">interface</span> <span class="cls">IWritableSource</span><<span class="kw">T</span>> {
+  write(records: T[]): Promise<WriteResult>
+  delete(ids: <span class="kw">string</span>[]): Promise<<span class="kw">void</span>>
+}
+
+<span class="kw">interface</span> <span class="cls">IMigratableSource</span> {
+  migrate(schema: Schema): Promise<MigrationResult>
+  truncate(): Promise<<span class="kw">void</span>>
+}` },
+      { title:"ReadonlyCSVSource is now clean and honest",
+        desc:"It only implements IReadableSource. Two methods. No stubs, no throws, no lies. Changes to IWritableSource are completely invisible to this class.",
+        code:`<span class="kw">class</span> <span class="cls">ReadonlyCSVSource</span><<span class="kw">T</span>> <span class="kw">implements</span> <span class="cls">IReadableSource</span><<span class="kw">T</span>> {
+  <span class="kw">constructor</span>(<span class="kw">private</span> filepath: <span class="kw">string</span>) {}
+
+  <span class="kw">async</span> read(query?) {
+    <span class="kw">const</span> rows = <span class="kw">await</span> parseCSV(<span class="kw">this</span>.filepath)
+    <span class="kw">return</span> query ? rows.filter(query.predicate) : rows
+  }
+  <span class="kw">async</span> *readBatch(size) {
+    <span class="kw">for await</span> (<span class="kw">const</span> chunk <span class="kw">of</span> streamCSV(<span class="kw">this</span>.filepath, size))
+      <span class="kw">yield</span> chunk
+  }
+  <span class="ok">// Two methods. Perfectly honest.</span>
+}` },
+      { title:"The export pipeline declares its minimal contract",
+        desc:"ExportPipeline only asks for IReadableSource. You can pass it a CSV, Postgres, S3, or a mock — anything that reads. The type system prevents passing something that can't.",
+        code:`<span class="kw">class</span> <span class="cls">ExportPipeline</span><<span class="kw">T</span>> {
+  <span class="kw">constructor</span>(<span class="kw">private</span> source: <span class="cls">IReadableSource</span><<span class="kw">T</span>>) {}
+
+  <span class="kw">async</span> exportToS3(bucket: <span class="kw">string</span>) {
+    <span class="kw">for await</span> (<span class="kw">const</span> batch <span class="kw">of</span> <span class="kw">this</span>.source.readBatch(500)) {
+      <span class="kw">await</span> S3.upload(bucket, batch)
+    }
+  }
+}
+<span class="ok">// Works with CSV, Postgres, MongoDB, mock — any IReadableSource.</span>` }
+    ],
+    final:`<span class="cm">// After ISP: mock is as small as the actual dependency</span>
+<span class="kw">const</span> mockSource: <span class="cls">IReadableSource</span><User> = {
+  read:      jest.fn().mockResolvedValue([{ id: <span class="str">'1'</span> }]),
+  readBatch: jest.fn()
+}
+<span class="cm">// Zero noise mocks.</span>
+<span class="kw">const</span> pipeline = <span class="kw">new</span> <span class="cls">ExportPipeline</span>(mockSource)
+<span class="kw">await</span> pipeline.exportToS3(<span class="str">'my-bucket'</span>)
+expect(mockSource.readBatch).toHaveBeenCalled()
+<span class="ok">// From 6 mocks to 2. ISP in action.</span>`
+  },
+  rules:[
+    { n:"1", title:"Count the noise mocks in your tests — that's your ISP debt",
+      body:"Every method you mock but never assert on is interface fat. Ten minutes auditing your test setup reveals ISP violations faster than reading the code." },
+    { n:"2", title:"Name interfaces after what callers do, not what classes have",
+      body:"IReadableSource, not ISource. IChargeable, not IPaymentProcessor. The name should come from the caller's perspective. If it sounds like the class's name, it's probably a header interface." },
+    { n:"3", title:"ISP violations in Python/JS show up as AttributeError in production",
+      body:"No explicit interface? The fat interface is still there — it's the set of methods your function calls on its argument. If you call 5 methods and only 2 are relevant, you're living with ISP debt." }
+  ],
+  myths:[
+    { q:'"More interfaces means more complexity"',
+      a:"More fat interfaces means more complexity. More focused interfaces means more clarity. A 5-method interface is harder to satisfy than two 2-method interfaces when you can only fulfill part of the contract." },
+    { q:'"We can leave unimplemented methods and document them"',
+      a:"Documentation lies over time. NotImplementedError at runtime surprises the caller at the worst moment. The type system is the only documentation that can't go stale." }
+  ],
+  checks:[
+    "Your test setup mocks 5+ methods but the test only asserts on 1 or 2",
+    "A class implements an interface but throws or returns empty for several of the methods",
+    "Adding a new method to an interface forces you to update 8 classes that don't care about it"
+  ]
+},
+{
+  L:"D", ac:"#6ee7b7", bg:"rgba(110,231,183,0.1)", border:"rgba(110,231,183,0.3)",
+  name:"Dependency inversion",
+  oneliner:"Your business logic should run without a database, an internet connection, or a credit card.",
+  story:{
+    badge:"Real scenario: Healthcare startup",
+    hook:"The team spends 40 minutes setting up the local environment before writing a single line of code. Unit tests require Docker, Postgres, and a Twilio test account. A new junior dev spent their entire first week just getting the test suite to run.",
+    title:"The codebase that required a PhD to test",
+    scene:`AppointmentService.__init__():
+  self.db     = PostgresDatabase(host=os.environ['DB_HOST'])
+  self.sms    = TwilioSMSClient(os.environ['TWILIO_SID'])
+  self.mailer = SendGridClient(os.environ['SENDGRID_KEY'])
+  self.cache  = RedisCache(os.environ['REDIS_URL'])
+
+To run ONE unit test:
+  → Start Docker
+  → Run docker-compose up (2 min)
+  → Set 4 environment variables
+  → Hope Twilio test credentials work today
+  → Pray Redis isn't already on port 6379
+
+"But our tests are thorough!" the tech lead said.
+Developers had stopped writing tests.
+Because every test felt like deploying to production.
+
+The business logic was pure. The tests were impure.
+Concrete infrastructure had colonized the domain.`,
+    insight:"<strong>If your business logic tests require infrastructure, your business logic IS infrastructure.</strong> DIP exists so that the code describing what your product does can be read, run, and tested by any developer with a laptop — no Docker, no credentials, no ceremony.",
+    bad:`<span class="kw">class</span> <span class="cls">AppointmentService</span> {
+  <span class="kw">constructor</span>() {
+    <span class="err">this.db     = new PostgresDB(process.env.DB_URL)</span>
+    <span class="err">this.sms    = new TwilioClient(process.env.TWILIO_SID)</span>
+    <span class="err">this.mailer = new SendGridClient(process.env.SG_KEY)</span>
+  }
+  <span class="kw">async</span> book(patientId, doctorId, time) {
+    <span class="kw">const</span> appt = { patientId, doctorId, time }
+    <span class="kw">await</span> <span class="kw">this</span>.db.save(appt)
+    <span class="kw">await</span> <span class="kw">this</span>.sms.send(patientId, <span class="str">'Appointment confirmed'</span>)
+  }
+}
+<span class="err">// Business logic held hostage by infrastructure.</span>`,
+    good:`<span class="cm">// Interfaces owned by the business layer:</span>
+<span class="kw">interface</span> <span class="cls">IAppointmentRepo</span> {
+  save(appt: Appointment): Promise<<span class="kw">void</span>>
+  findConflicts(doctorId: <span class="kw">string</span>, time: Date): Promise<Appointment[]>
+}
+<span class="kw">interface</span> <span class="cls">INotifier</span> {
+  notify(userId: <span class="kw">string</span>, message: <span class="kw">string</span>): Promise<<span class="kw">void</span>>
+}
+
+<span class="kw">class</span> <span class="cls">AppointmentService</span> {
+  <span class="kw">constructor</span>(
+    <span class="kw">private</span> repo:     <span class="cls">IAppointmentRepo</span>,
+    <span class="kw">private</span> notifier: <span class="cls">INotifier</span>
+  ) {}
+  <span class="kw">async</span> book(patientId, doctorId, time) {
+    <span class="kw">const</span> appt = <span class="kw">new</span> Appointment(patientId, doctorId, time)
+    <span class="kw">await</span> <span class="kw">this</span>.repo.save(appt)
+    <span class="kw">await</span> <span class="kw">this</span>.notifier.notify(patientId, <span class="str">'Confirmed'</span>)
+  }
+}
+<span class="ok">// Business logic is free. Infrastructure is a plugin.</span>`
+  },
+  walkthrough:{
+    badge:"Codebase: NestJS — Full before/after with real file paths",
+    scenario:"A complete NestJS service that went from '45-minute setup + integration tests only' to 'instant unit tests + infrastructure swappable in one line'.",
+    steps:[
+      { title:"Define interfaces inside the domain — this IS the inversion",
+        desc:"The interfaces don't live in src/infra. They live in src/appointments. This is what makes it an inversion — infrastructure must come to business, not the other way.",
+        code:`<span class="cm">// src/appointments/ports/appointment-repo.port.ts</span>
+<span class="kw">export interface</span> <span class="cls">IAppointmentRepo</span> {
+  save(appt: Appointment): Promise<<span class="kw">void</span>>
+  findConflicts(doctorId: <span class="kw">string</span>, time: Date): Promise<Appointment[]>
+}
+
+<span class="cm">// src/appointments/ports/notifier.port.ts</span>
+<span class="kw">export interface</span> <span class="cls">INotifier</span> {
+  notify(userId: <span class="kw">string</span>, message: <span class="kw">string</span>): Promise<<span class="kw">void</span>>
+}
+
+<span class="ok">// These live in src/appointments/ — the business layer.
+// Infrastructure imports FROM here. Not the other way.</span>` },
+      { title:"AppointmentService contains only business logic",
+        desc:"Read this class. It describes what your product does in pure business language. No pgClient, no twilio, no environment variables. Any developer can understand it on day one.",
+        code:`<span class="cm">// src/appointments/appointment.service.ts</span>
+<span class="kw">import</span> { IAppointmentRepo } <span class="kw">from</span> <span class="ok">'./ports/appointment-repo.port'</span>
+<span class="kw">import</span> { INotifier }        <span class="kw">from</span> <span class="ok">'./ports/notifier.port'</span>
+
+<span class="kw">export class</span> <span class="cls">AppointmentService</span> {
+  <span class="kw">constructor</span>(
+    <span class="kw">private</span> repo:     <span class="cls">IAppointmentRepo</span>,
+    <span class="kw">private</span> notifier: <span class="cls">INotifier</span>
+  ) {}
+
+  <span class="kw">async</span> book(patientId, doctorId, time) {
+    <span class="kw">const</span> conflicts = <span class="kw">await</span> <span class="kw">this</span>.repo.findConflicts(doctorId, time)
+    <span class="kw">if</span> (conflicts.length > 0) <span class="kw">throw new</span> Error(<span class="str">'Time slot unavailable'</span>)
+    <span class="kw">const</span> appt = <span class="kw">new</span> Appointment(patientId, doctorId, time)
+    <span class="kw">await</span> <span class="kw">this</span>.repo.save(appt)
+    <span class="kw">await</span> <span class="kw">this</span>.notifier.notify(patientId, \`Appointment at \${time}\`)
+    <span class="kw">return</span> appt
+  }
+}
+<span class="ok">// Zero infrastructure imports. Pure product logic.</span>` },
+      { title:"Infrastructure adapters implement the interfaces",
+        desc:"Postgres and Twilio live in the infra layer and depend on the business interfaces. The business layer doesn't know they exist. Infra imports from business, business doesn't import from infra.",
+        code:`<span class="cm">// src/infra/postgres-appointment.repo.ts</span>
+<span class="kw">import</span> { IAppointmentRepo } <span class="kw">from</span> <span class="ok">'../appointments/ports/appointment-repo.port'</span>
+
+<span class="kw">export class</span> <span class="cls">PostgresAppointmentRepo</span> <span class="kw">implements</span> <span class="cls">IAppointmentRepo</span> {
+  <span class="kw">async</span> save(appt) { <span class="kw">await</span> pgPool.query(<span class="str">'INSERT ...'</span>, [appt]) }
+  <span class="kw">async</span> findConflicts(doctorId, time) { <span class="kw">return</span> pgPool.query(...) }
+}
+<span class="ok">// Infra depends on business. Business doesn't know infra exists.</span>` },
+      { title:"In-memory double for tests — zero config, zero Docker",
+        desc:"For tests, inject in-memory implementations. 10 lines. Runs in microseconds. Needs zero setup. Exercises the exact same business logic as production.",
+        code:`<span class="cm">// src/test-doubles/in-memory-appointment.repo.ts</span>
+<span class="kw">export class</span> <span class="cls">InMemoryAppointmentRepo</span> <span class="kw">implements</span> <span class="cls">IAppointmentRepo</span> {
+  <span class="kw">private</span> store: Appointment[] = []
+
+  <span class="kw">async</span> save(appt) { <span class="kw">this</span>.store.push(appt) }
+  <span class="kw">async</span> findConflicts(doctorId, time) {
+    <span class="kw">return this</span>.store.filter(
+      a => a.doctorId === doctorId &&
+           a.time.getTime() === time.getTime()
+    )
+  }
+}
+<span class="ok">// 10 lines. No Docker. No Postgres. Tests run in 2ms.</span>` },
+      { title:"Wire everything at the composition root",
+        desc:"The NestJS module is the only place that knows both business and infra exist. Change one line here to swap databases.",
+        code:`<span class="cm">// src/appointments/appointments.module.ts</span>
+@Module({
+  providers: [
+    { provide: <span class="str">'IAppointmentRepo'</span>, useClass: <span class="cls">PostgresAppointmentRepo</span> },
+    { provide: <span class="str">'INotifier'</span>,        useClass: <span class="cls">TwilioNotifier</span> },
+    <span class="cls">AppointmentService</span>
+  ]
+})
+<span class="kw">export class</span> <span class="cls">AppointmentsModule</span> {}
+
+<span class="cm">// Swap Postgres → MongoDB next quarter?</span>
+<span class="cm">// Change: { provide: 'IAppointmentRepo', useClass: MongoRepo }</span>
+<span class="ok">// AppointmentService: unchanged. Tests: unchanged.</span>` }
+    ],
+    final:`describe(<span class="str">'AppointmentService'</span>, () => {
+  it(<span class="str">'prevents double-booking'</span>, <span class="kw">async</span> () => {
+    <span class="kw">const</span> repo    = <span class="kw">new</span> <span class="cls">InMemoryAppointmentRepo</span>()
+    <span class="kw">const</span> service = <span class="kw">new</span> <span class="cls">AppointmentService</span>(repo, { notify: jest.fn() })
+
+    <span class="kw">const</span> time = <span class="kw">new</span> Date(<span class="str">'2025-06-15T10:00'</span>)
+    <span class="kw">await</span> service.book(<span class="str">'patient1'</span>, <span class="str">'dr1'</span>, time)
+    <span class="kw">await</span> expect(service.book(<span class="str">'patient2'</span>, <span class="str">'dr1'</span>, time))
+      .rejects.toThrow(<span class="str">'Time slot unavailable'</span>)
+  })
+})
+<span class="ok">// Runs in 3ms. No Docker. No env vars. No ceremony.</span>`
+  },
+  rules:[
+    { n:"1", title:"The interface lives in the business layer — that's the whole point",
+      body:"IAppointmentRepo in src/appointments, not src/infra. If the interface lives with infrastructure, business still depends on infrastructure. The directory matters as much as the abstraction." },
+    { n:"2", title:"If your tests need Docker, your architecture has a bug",
+      body:"Unit tests for business logic should need nothing but a laptop. If they need real infrastructure, DIP is violated somewhere in that test's dependency chain." },
+    { n:"3", title:"Write the in-memory double first — it validates the interface",
+      body:"Before writing the Postgres adapter, write the in-memory version. It takes 10 lines. If the interface is awkward to implement simply, the interface needs redesigning." }
+  ],
+  myths:[
+    { q:'"DIP means we need a DI framework like Spring or NestJS"',
+      a:"Constructor injection with zero framework is complete DIP. new AppointmentService(new InMemoryRepo(), new MockNotifier()) — that's DIP. No annotations, no magic required." },
+    { q:'"This is over-engineering for a small project"',
+      a:"Testable code is not over-engineering. If tests are slow and painful, the project will stay small because nobody can safely extend it." }
+  ],
+  checks:[
+    "New developers spend more than 30 minutes setting up to run tests",
+    "Your unit test README has 'docker-compose up' as a prerequisite",
+    "Swapping a third-party service requires editing files in the business logic layer"
+  ]
+}
+];
+
+var cur = 0, tab = 'story';
+
+function applyAccent(p) {
+  document.documentElement.style.setProperty('--cur-ac', p.ac);
+  var header = document.getElementById('site-header');
+  header.style.setProperty('--glow-color', p.ac);
+  var before = document.querySelector('.site-header::before');
+  document.getElementById('site-header').style.cssText += '--glow:'+p.ac;
+
+  var style = document.getElementById('glow-style') || document.createElement('style');
+  style.id = 'glow-style';
+  style.textContent = `.site-header::before { background: ${p.ac}; }`;
+  document.head.appendChild(style);
+}
+
+function buildPills() {
+  var nav = document.getElementById('pill-nav');
+  nav.innerHTML = D.map(function(p, i) {
+    var active = i === cur;
+    return `<button class="pill-btn ${active ? 'active' : ''}"
+      style="border-color:${p.ac};color:${active ? '#fff' : p.ac};background:${active ? p.ac : p.bg}"
+      onclick="go(${i})">
+      <span class="pill-letter">${p.L}</span>
+      <span>${p.name}</span>
+    </button>`;
+  }).join('');
+}
+
+function buildTitle() {
+  var letters = document.getElementById('solid-letters');
+  letters.innerHTML = D.map(function(p, i) {
+    return `<span class="sl" style="color:${i === cur ? p.ac : 'var(--text3)'}">${p.L}</span>`;
+  }).join('');
+}
+
+function buildPrincipleHeader() {
+  var p = D[cur];
+  document.getElementById('principle-header').innerHTML = `
+    <div class="principle-header" style="animation:fadeUp .35s ease both">
+      <div class="principle-letter-big" style="color:${p.ac}">${p.L}</div>
+      <div class="principle-meta">
+        <div class="principle-name">${p.name}</div>
+        <div class="principle-oneliner">${p.oneliner}</div>
+      </div>
+    </div>`;
+}
+
+function buildTabs() {
+  var tabs = ['story','walkthrough','rules','myths','checklist'];
+  var labels = ['Story','Walkthrough','Rules','Myths','Checklist'];
+  document.getElementById('tab-bar').innerHTML = tabs.map(function(t, i) {
+    return `<button class="tab-btn ${t === tab ? 'on' : ''}" onclick="setTab('${t}')">${labels[i]}</button>`;
+  }).join('');
+}
+
+function badge(text, ac) {
+  return `<div class="scenario-badge" style="background:${ac}20;color:${ac}">${text}</div>`;
+}
+
+function buildBody() {
+  var p = D[cur];
+  var html = '';
+
+  if (tab === 'story') {
+    html = badge(p.story.badge, p.ac)
+      + `<div class="card accent-left" style="border-left-color:${p.ac}">
+           <div class="card-label" style="color:${p.ac}">The hook</div>
+           <div class="hook-text">${p.story.hook}</div>
+         </div>`
+      + `<div class="card">
+           <div class="card-title">${p.story.title}</div>
+           <div class="scene" style="border-left-color:${p.ac}"><pre>${p.story.scene}</pre></div>
+           <div class="insight-row">
+             <div class="insight-arrow" style="color:${p.ac}">→</div>
+             <div class="insight-text">${p.story.insight}</div>
+           </div>
+         </div>`
+      + `<div style="font-family:var(--display);font-size:13px;font-weight:600;color:var(--text2);margin-bottom:8px;letter-spacing:.02em">CODE: BEFORE VS AFTER</div>`
+      + `<div class="compare">
+           <div class="code-block bad"><div class="code-block-label">The violation</div><pre>${p.story.bad}</pre></div>
+           <div class="code-block good"><div class="code-block-label">Fixed</div><pre>${p.story.good}</pre></div>
+         </div>`;
+  }
+
+  else if (tab === 'walkthrough') {
+    var steps = p.walkthrough.steps.map(function(s, i) {
+      return `<div class="step">
+        <div class="step-num" style="color:${p.ac}">${i+1}</div>
+        <div>
+          <div class="step-title">${s.title}</div>
+          <div class="step-desc">${s.desc}</div>
+          <div class="step-code"><pre>${s.code}</pre></div>
+        </div>
+      </div>`;
+    }).join('');
+    html = badge(p.walkthrough.badge, p.ac)
+      + `<div class="card accent-left" style="border-left-color:${p.ac}">
+           <div class="card-label" style="color:${p.ac}">Scenario</div>
+           <div class="hook-text">${p.walkthrough.scenario}</div>
+         </div>`
+      + `<div class="card">
+           <div class="card-title">Full refactoring — step by step</div>
+           <div class="steps">${steps}</div>
+           <div class="final-block">
+             <div class="final-label">The test that proves it worked</div>
+             <pre>${p.walkthrough.final}</pre>
+           </div>
+         </div>`;
+  }
+
+  else if (tab === 'rules') {
+    html = `<div class="card">
+      <div class="card-title">The 3 things to actually internalize</div>
+      ${p.rules.map(function(r) {
+        return `<div class="rule">
+          <div class="rule-num" style="color:${p.ac}">${r.n}</div>
+          <div>
+            <div class="rule-title">${r.title}</div>
+            <div class="rule-body">${r.body}</div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  else if (tab === 'myths') {
+    html = `<div class="card">
+      <div class="card-title">Things that will confuse you when you hear them</div>
+      ${p.myths.map(function(m) {
+        return `<div class="myth">
+          <div class="myth-q">${m.q}</div>
+          <div class="myth-a">${m.a}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  else if (tab === 'checklist') {
+    html = `<div class="card">
+      <div class="card-title">Diagnose this in your own codebase right now</div>
+      ${p.checks.map(function(c) {
+        return `<div class="check-item">
+          <div class="check-dot" style="background:${p.ac}"></div>
+          <div class="check-text">${c}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  document.getElementById('body').innerHTML = html;
+}
+
+function buildNav() {
+  var prev = D[(cur+4)%5];
+  var next = D[(cur+1)%5];
+  document.getElementById('prev-label').textContent = prev.L + ' — ' + prev.name;
+  document.getElementById('next-label').textContent = next.name + ' — ' + next.L;
+  document.getElementById('progress-dots').innerHTML = D.map(function(p, i) {
+    return `<button class="pdot ${i===cur?'on':''}" style="${i===cur?'background:'+p.ac:''}" onclick="go(${i})"></button>`;
+  }).join('');
+}
+
+function render() {
+  var p = D[cur];
+  applyAccent(p);
+  buildPills();
+  buildTitle();
+  buildPrincipleHeader();
+  buildTabs();
+  buildBody();
+  buildNav();
+}
+
+function go(i) {
+  cur = i; tab = 'story';
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function setTab(t) {
+  tab = t;
+  buildTabs();
+  buildBody();
+}
+
+render();
+</script>
+</body>
+</html>
