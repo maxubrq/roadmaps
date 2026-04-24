@@ -1,0 +1,2234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAGA Pattern — Deep Dive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #16161f;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --text: #e8e6f0;
+  --muted: #7a7891;
+  --purple: #a78bfa;
+  --purple-dim: #6d5fd4;
+  --teal: #34d399;
+  --teal-dim: #1a6b4e;
+  --coral: #fb7185;
+  --coral-dim: #9f1239;
+  --amber: #fbbf24;
+  --amber-dim: #92400e;
+  --blue: #60a5fa;
+  --blue-dim: #1e3a5f;
+  --green: #86efac;
+  --mono: 'DM Mono', monospace;
+  --serif: 'Instrument Serif', serif;
+  --sans: 'Syne', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── NOISE TEXTURE ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ─── HEADER ─── */
+header {
+  position: relative;
+  padding: 5rem 4rem 4rem;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  top: -120px; left: -80px;
+  width: 600px; height: 400px;
+  background: radial-gradient(ellipse at center, rgba(167,139,250,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.header-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--purple);
+  border: 1px solid rgba(167,139,250,0.3);
+  border-radius: 4px;
+  padding: 4px 12px;
+  margin-bottom: 1.5rem;
+}
+
+header h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+header h1 em {
+  font-style: italic;
+  color: var(--purple);
+}
+
+header p {
+  font-size: 1rem;
+  color: var(--muted);
+  max-width: 600px;
+  line-height: 1.7;
+  font-family: 'DM Mono', monospace;
+  font-weight: 300;
+}
+
+.header-meta {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.meta-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.meta-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ─── NAV ─── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,10,15,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 4rem;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+nav::-webkit-scrollbar { display: none; }
+
+.nav-tab {
+  padding: 1rem 1.25rem;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.nav-tab:hover { color: var(--text); }
+.nav-tab.active { color: var(--purple); border-bottom-color: var(--purple); }
+
+/* ─── MAIN ─── */
+main {
+  padding: 3rem 4rem;
+  max-width: 1200px;
+}
+
+.section { display: none; }
+.section.active { display: block; }
+
+/* ─── SECTION TITLE ─── */
+.section-header {
+  margin-bottom: 2.5rem;
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+}
+
+.section-sub {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 300;
+}
+
+/* ─── CARDS ─── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.75rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.mini-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.mini-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.mini-value {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* ─── SVG DIAGRAMS ─── */
+.diagram-wrap {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+}
+
+.diagram-wrap svg { display: block; width: 100%; height: auto; }
+
+/* ─── CODE BLOCKS ─── */
+.code-block {
+  background: #0d0d14;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 1rem 0;
+  position: relative;
+}
+
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.code-lang {
+  color: var(--purple);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.copy-btn {
+  background: transparent;
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+}
+
+.copy-btn:hover { color: var(--text); border-color: var(--border2); background: var(--bg3); }
+.copy-btn.copied { color: var(--teal); border-color: var(--teal-dim); }
+
+/* syntax highlighting */
+.kw { color: #c084fc; }
+.fn { color: #34d399; }
+.st { color: #fbbf24; }
+.cm { color: #4a4869; font-style: italic; }
+.num { color: #fb923c; }
+.cls { color: #60a5fa; }
+.prop { color: #e8e6f0; }
+.op { color: #94a3b8; }
+
+/* ─── STEPPER ─── */
+.stepper-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.step-btn {
+  background: transparent;
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.step-btn:hover:not(:disabled) { background: var(--bg3); border-color: var(--purple); }
+.step-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.step-dots { display: flex; gap: 6px; }
+
+.step-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--border2);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.step-dot.active { background: var(--purple); }
+
+.step-counter {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+/* ─── FLOW SVG colors ─── */
+.node-purple { fill: rgba(167,139,250,0.12); stroke: rgba(167,139,250,0.4); }
+.node-teal   { fill: rgba(52,211,153,0.12);  stroke: rgba(52,211,153,0.4); }
+.node-coral  { fill: rgba(251,113,133,0.12); stroke: rgba(251,113,133,0.4); }
+.node-amber  { fill: rgba(251,191,36,0.12);  stroke: rgba(251,191,36,0.4); }
+.node-blue   { fill: rgba(96,165,250,0.12);  stroke: rgba(96,165,250,0.4); }
+.node-gray   { fill: rgba(120,116,145,0.12); stroke: rgba(120,116,145,0.4); }
+.node-red    { fill: rgba(251,113,133,0.25); stroke: rgba(251,113,133,0.7); }
+.node-green  { fill: rgba(134,239,172,0.15); stroke: rgba(134,239,172,0.5); }
+
+.t-purple { fill: #a78bfa; }
+.t-teal   { fill: #34d399; }
+.t-coral  { fill: #fb7185; }
+.t-amber  { fill: #fbbf24; }
+.t-blue   { fill: #60a5fa; }
+.t-muted  { fill: #7a7891; }
+.t-main   { fill: #e8e6f0; }
+.t-red    { fill: #fca5a5; }
+.t-green  { fill: #86efac; }
+
+/* ─── COMPARISON TABLE ─── */
+.comp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.comp-table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  font-weight: 400;
+}
+
+.comp-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.comp-table tr:last-child td { border-bottom: none; }
+.comp-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+.badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+
+.b-green { background: rgba(134,239,172,0.15); color: #86efac; border: 1px solid rgba(134,239,172,0.3); }
+.b-red   { background: rgba(251,113,133,0.15); color: #fb7185; border: 1px solid rgba(251,113,133,0.3); }
+.b-amber { background: rgba(251,191,36,0.15);  color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+
+/* ─── CODE TABS ─── */
+.code-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 0;
+  flex-wrap: wrap;
+}
+
+.code-tab {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  color: var(--muted);
+  background: var(--bg3);
+  transition: all 0.2s;
+  border-bottom: none;
+  margin-bottom: -1px;
+}
+
+.code-tab.active {
+  color: var(--purple);
+  background: #0d0d14;
+  border-color: var(--border2);
+  border-bottom-color: #0d0d14;
+}
+
+.code-panel { display: none; }
+.code-panel.active { display: block; }
+
+/* ─── TRADEOFF GRID ─── */
+.tradeoff-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 700px) {
+  .tradeoff-grid { grid-template-columns: 1fr; }
+  header, main, nav { padding-left: 1.5rem; padding-right: 1.5rem; }
+}
+
+.tradeoff-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+}
+
+.tradeoff-card h4 {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  font-weight: 400;
+}
+
+.tradeoff-card ul {
+  list-style: none;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.9;
+}
+
+.tradeoff-card ul li::before {
+  content: '–  ';
+  color: var(--border2);
+}
+
+.tc-pros h4   { color: var(--teal); }
+.tc-cons h4   { color: var(--coral); }
+.tc-when h4   { color: var(--amber); }
+.tc-avoid h4  { color: var(--blue); }
+
+/* ─── ANIMATED FLOW ─── */
+@keyframes flow {
+  0% { stroke-dashoffset: 20; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section.active { animation: slideIn 0.3s ease; }
+
+.flow-line {
+  stroke-dasharray: 6 4;
+  animation: flow 1.2s linear infinite;
+}
+
+.pulse { animation: pulse 2s ease-in-out infinite; }
+
+/* ─── THREE.JS CANVAS ─── */
+#three-mount {
+  width: 100%;
+  height: 420px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  position: relative;
+  background: #07070e;
+}
+
+#three-mount canvas { display: block; }
+
+.three-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.three-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.three-btn:hover, .three-btn.active {
+  color: var(--purple);
+  border-color: rgba(167,139,250,0.4);
+  background: rgba(167,139,250,0.08);
+}
+
+.three-legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  margin-top: 4rem;
+  padding: 2rem 4rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: gap;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <div class="header-badge">Distributed Systems Pattern</div>
+  <h1>The <em>SAGA</em> Pattern<br>Deep Dive</h1>
+  <p>A sequence of local transactions where each step publishes an event that triggers the next — with compensating transactions for rollback semantics across service boundaries.</p>
+  <div class="header-meta">
+    <div class="meta-item">
+      <span class="meta-label">Consistency Model</span>
+      <span class="meta-value">Eventual</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">ACID properties</span>
+      <span class="meta-value">ACD (no Isolation)</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Flavors</span>
+      <span class="meta-value">Choreography · Orchestration</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Origin</span>
+      <span class="meta-value">Hector Garcia-Molina, 1987</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="nav-tab active"  onclick="showSection('overview')">01 Overview</div>
+  <div class="nav-tab"         onclick="showSection('choreography')">02 Choreography</div>
+  <div class="nav-tab"         onclick="showSection('orchestration')">03 Orchestration</div>
+  <div class="nav-tab"         onclick="showSection('compensation')">04 Compensation</div>
+  <div class="nav-tab"         onclick="showSection('isolation')">05 Lost Isolation</div>
+  <div class="nav-tab"         onclick="showSection('threed')">06 3D Visualizer</div>
+  <div class="nav-tab"         onclick="showSection('code')">07 Code</div>
+  <div class="nav-tab"         onclick="showSection('tradeoffs')">08 Trade-offs</div>
+</nav>
+
+<!-- ═══ MAIN ═══ -->
+<main>
+
+<!-- ══════════════════════════════════ -->
+<!-- SECTION 01 — OVERVIEW             -->
+<!-- ══════════════════════════════════ -->
+<section class="section active" id="s-overview">
+  <div class="section-header">
+    <div class="section-title">What is a SAGA?</div>
+    <div class="section-sub">// formal definition, motivation, anatomy</div>
+  </div>
+
+  <div class="card-grid">
+    <div class="mini-card">
+      <div class="mini-label" style="color:var(--coral)">The Problem</div>
+      <div class="mini-value" style="font-size:13px;font-weight:400;line-height:1.6">A business transaction that spans multiple microservices — each with its own database — cannot use a single ACID transaction.</div>
+    </div>
+    <div class="mini-card">
+      <div class="mini-label" style="color:var(--teal)">The Solution</div>
+      <div class="mini-value" style="font-size:13px;font-weight:400;line-height:1.6">Break the global transaction into a sequence of local transactions T₁…Tₙ, each committing immediately, with compensating transactions C₁…Cₙ₋₁ for undo semantics.</div>
+    </div>
+    <div class="mini-card">
+      <div class="mini-label" style="color:var(--amber)">The Invariant</div>
+      <div class="mini-value" style="font-size:13px;font-weight:400;line-height:1.6">Either all Tᵢ succeed (happy path) or Cᵢ…C₁ execute in reverse order (compensating path). Partial completion is never the final state.</div>
+    </div>
+  </div>
+
+  <!-- Happy path diagram -->
+  <div class="card">
+    <div class="card-title">Happy path — 4 services, 4 local transactions</div>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+        <!-- T1 -->
+        <rect x="10" y="55" width="140" height="65" rx="8" class="node-purple" stroke-width="1"/>
+        <text x="80" y="79" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" class="t-purple">T1: Order Svc</text>
+        <text x="80" y="96" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-muted">Create order</text>
+        <text x="80" y="110" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" class="t-purple">STATUS=PENDING</text>
+        <!-- T2 -->
+        <rect x="190" y="55" width="140" height="65" rx="8" class="node-teal" stroke-width="1"/>
+        <text x="260" y="79" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" class="t-teal">T2: Payment Svc</text>
+        <text x="260" y="96" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-muted">Reserve funds</text>
+        <text x="260" y="110" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" class="t-teal">STATUS=RESERVED</text>
+        <!-- T3 -->
+        <rect x="370" y="55" width="140" height="65" rx="8" class="node-amber" stroke-width="1"/>
+        <text x="440" y="79" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" class="t-amber">T3: Inventory</text>
+        <text x="440" y="96" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-muted">Reserve stock</text>
+        <text x="440" y="110" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" class="t-amber">STATUS=RESERVED</text>
+        <!-- T4 -->
+        <rect x="550" y="55" width="140" height="65" rx="8" class="node-blue" stroke-width="1"/>
+        <text x="620" y="79" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" class="t-blue">T4: Shipping</text>
+        <text x="620" y="96" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-muted">Create shipment</text>
+        <text x="620" y="110" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" class="t-blue">SCHEDULED</text>
+        <!-- Arrows -->
+        <line x1="151" y1="87" x2="188" y2="87" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#ah)"/>
+        <line x1="331" y1="87" x2="368" y2="87" stroke="#34d399" stroke-width="1.5" marker-end="url(#ah)"/>
+        <line x1="511" y1="87" x2="548" y2="87" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#ah)"/>
+        <!-- Event labels -->
+        <text x="169" y="78" text-anchor="middle" font-family="'DM Mono',monospace" font-size="9" class="t-muted">event</text>
+        <text x="349" y="78" text-anchor="middle" font-family="'DM Mono',monospace" font-size="9" class="t-muted">event</text>
+        <text x="529" y="78" text-anchor="middle" font-family="'DM Mono',monospace" font-size="9" class="t-muted">event</text>
+        <!-- Bottom note -->
+        <text x="350" y="155" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-muted">Each local transaction commits immediately to its own database</text>
+        <text x="350" y="172" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-muted">No distributed lock · No 2-phase commit · Eventual consistency</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Failure path diagram -->
+  <div class="card">
+    <div class="card-title">Failure path — T3 fails, compensations unwind backwards</div>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 700 230" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="af" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+        <!-- T1 done -->
+        <rect x="10" y="40" width="140" height="60" rx="8" class="node-purple" stroke-width="1"/>
+        <text x="80" y="64" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" class="t-purple">T1: Order</text>
+        <text x="80" y="82" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-teal">✓ committed</text>
+        <!-- T2 done -->
+        <rect x="190" y="40" width="140" height="60" rx="8" class="node-teal" stroke-width="1"/>
+        <text x="260" y="64" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" class="t-teal">T2: Payment</text>
+        <text x="260" y="82" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-teal">✓ committed</text>
+        <!-- T3 failed -->
+        <rect x="370" y="40" width="140" height="60" rx="8" class="node-red" stroke-width="1.5"/>
+        <text x="440" y="64" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" class="t-red">T3: Inventory</text>
+        <text x="440" y="82" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-red">✗ failed</text>
+        <!-- T4 skipped -->
+        <rect x="550" y="40" width="140" height="60" rx="8" class="node-gray" stroke-width="1"/>
+        <text x="620" y="64" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" class="t-muted">T4: Shipping</text>
+        <text x="620" y="82" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-muted">— skipped</text>
+        <!-- Forward arrows -->
+        <line x1="151" y1="70" x2="188" y2="70" stroke="#7a7891" stroke-width="1.5" marker-end="url(#af)"/>
+        <line x1="331" y1="70" x2="368" y2="70" stroke="#7a7891" stroke-width="1.5" marker-end="url(#af)"/>
+        <!-- Backward compensation arrows -->
+        <path d="M370 118 C310 155, 310 165, 260 165 L260 102" fill="none" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#af)"/>
+        <path d="M260 165 C200 175, 165 165, 140 155 L80 102" fill="none" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#af)"/>
+        <!-- Compensation labels -->
+        <rect x="196" y="155" width="128" height="18" rx="4" fill="rgba(251,113,133,0.1)" stroke="rgba(251,113,133,0.3)" stroke-width="0.5"/>
+        <text x="260" y="168" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" class="t-coral">C2: release funds</text>
+        <rect x="16" y="155" width="128" height="18" rx="4" fill="rgba(251,113,133,0.1)" stroke="rgba(251,113,133,0.3)" stroke-width="0.5"/>
+        <text x="80" y="168" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" class="t-coral">C1: cancel order</text>
+        <!-- Note -->
+        <text x="350" y="210" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-muted">Compensations run in reverse order: C(n-1) → C(n-2) → … → C1</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Formal definition (Garcia-Molina & Salem, 1987)</div>
+    <p style="font-size:14px;line-height:1.8;color:var(--muted)">
+      A SAGA is a sequence of transactions <strong style="color:var(--text)">T₁, T₂, …, Tₙ</strong> that can be interleaved with other transactions. 
+      The database system guarantees that either all transactions in the SAGA are executed, or if the SAGA does not complete, 
+      then the sub-sequence <strong style="color:var(--text)">T₁, T₂, …, Tₖ, Cₖ, Cₖ₋₁, …, C₁</strong> is executed for some 
+      <em style="color:var(--amber)">0 ≤ k &lt; n</em>. Each <strong style="color:var(--coral)">Cᵢ</strong> is the 
+      <em>compensating transaction</em> for <strong style="color:var(--teal)">Tᵢ</strong>.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════ -->
+<!-- SECTION 02 — CHOREOGRAPHY         -->
+<!-- ══════════════════════════════════ -->
+<section class="section" id="s-choreography">
+  <div class="section-header">
+    <div class="section-title">Choreography-based SAGA</div>
+    <div class="section-sub">// event-driven · no central coordinator · pub/sub</div>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem">
+    <div class="card-title">Architecture principle</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.7">
+      Each service <strong style="color:var(--text)">listens</strong> to events from other services and decides locally what to do next. 
+      There is no central "brain" — the workflow emerges from event reactions. Services are fully decoupled at the <em>deployment</em> level 
+      but <em>implicitly</em> coupled via the event contract.
+    </p>
+  </div>
+
+  <!-- Stepper -->
+  <div class="stepper-nav">
+    <button class="step-btn" id="cbtn-prev" onclick="choreoStep(-1)" disabled>← Prev</button>
+    <div class="step-dots" id="c-dots"></div>
+    <span class="step-counter" id="c-counter">1 / 6</span>
+    <button class="step-btn" id="cbtn-next" onclick="choreoStep(1)">Next →</button>
+  </div>
+
+  <div class="card" id="choreo-frame" style="min-height:360px"></div>
+</section>
+
+<!-- ══════════════════════════════════ -->
+<!-- SECTION 03 — ORCHESTRATION        -->
+<!-- ══════════════════════════════════ -->
+<section class="section" id="s-orchestration">
+  <div class="section-header">
+    <div class="section-title">Orchestration-based SAGA</div>
+    <div class="section-sub">// central coordinator · command/reply pattern · explicit state machine</div>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem">
+    <div class="card-title">Architecture principle</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.7">
+      A dedicated <strong style="color:var(--purple)">Saga Orchestrator</strong> issues commands to participant services 
+      and reacts to their replies. The orchestrator owns the entire saga state machine. Services have no knowledge of each other 
+      — they only respond to commands from the orchestrator. This makes the workflow <em>explicit and auditable</em> but 
+      introduces the orchestrator as a potential SPOF.
+    </p>
+  </div>
+
+  <div class="stepper-nav">
+    <button class="step-btn" id="obtn-prev" onclick="orchStep(-1)" disabled>← Prev</button>
+    <div class="step-dots" id="o-dots"></div>
+    <span class="step-counter" id="o-counter">1 / 6</span>
+    <button class="step-btn" id="obtn-next" onclick="orchStep(1)">Next →</button>
+  </div>
+
+  <div class="card" id="orch-frame" style="min-height:360px"></div>
+
+  <div class="card">
+    <div class="card-title">Orchestrator state machine</div>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 700 170" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="asm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+        <!-- States -->
+        <rect x="10" y="55" width="100" height="36" rx="6" class="node-gray" stroke-width="1"/>
+        <text x="60" y="77" text-anchor="middle" font-family="'DM Mono',monospace" font-size="12" class="t-muted">STARTED</text>
+
+        <rect x="150" y="55" width="100" height="36" rx="6" class="node-purple" stroke-width="1"/>
+        <text x="200" y="77" text-anchor="middle" font-family="'DM Mono',monospace" font-size="12" class="t-purple">ORDER_PLACED</text>
+
+        <rect x="300" y="55" width="110" height="36" rx="6" class="node-teal" stroke-width="1"/>
+        <text x="355" y="77" text-anchor="middle" font-family="'DM Mono',monospace" font-size="12" class="t-teal">PAYMENT_DONE</text>
+
+        <rect x="460" y="55" width="110" height="36" rx="6" class="node-amber" stroke-width="1"/>
+        <text x="515" y="77" text-anchor="middle" font-family="'DM Mono',monospace" font-size="12" class="t-amber">STOCK_RESERVED</text>
+
+        <rect x="580" y="55" width="100" height="36" rx="6" class="node-green" stroke-width="1"/>
+        <text x="630" y="77" text-anchor="middle" font-family="'DM Mono',monospace" font-size="12" class="t-green">COMPLETED</text>
+
+        <!-- Bottom: compensating states -->
+        <rect x="300" y="125" width="110" height="30" rx="6" class="node-red" stroke-width="1"/>
+        <text x="355" y="144" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-red">COMPENSATING</text>
+
+        <rect x="150" y="125" width="100" height="30" rx="6" class="node-coral" stroke-width="1"/>
+        <text x="200" y="144" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-coral">FAILED</text>
+
+        <!-- Arrows forward -->
+        <line x1="111" y1="73" x2="148" y2="73" stroke="#7a7891" stroke-width="1.2" marker-end="url(#asm)"/>
+        <line x1="251" y1="73" x2="298" y2="73" stroke="#a78bfa" stroke-width="1.2" marker-end="url(#asm)"/>
+        <line x1="411" y1="73" x2="458" y2="73" stroke="#34d399" stroke-width="1.2" marker-end="url(#asm)"/>
+        <line x1="571" y1="73" x2="578" y2="73" stroke="#fbbf24" stroke-width="1.2" marker-end="url(#asm)"/>
+
+        <!-- Failure fork from PAYMENT_DONE or STOCK_RESERVED -->
+        <line x1="355" y1="91" x2="355" y2="123" stroke="#fb7185" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#asm)"/>
+        <line x1="300" y1="140" x2="252" y2="140" stroke="#fb7185" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#asm)"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════ -->
+<!-- SECTION 04 — COMPENSATION         -->
+<!-- ══════════════════════════════════ -->
+<section class="section" id="s-compensation">
+  <div class="section-header">
+    <div class="section-title">Compensating Transactions</div>
+    <div class="section-sub">// semantic undo · idempotency · not a rollback</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Why compensations ≠ database rollbacks</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="mini-card">
+        <div class="mini-label" style="color:var(--coral)">Database Rollback</div>
+        <ul style="font-size:13px;color:var(--muted);line-height:1.8;padding-left:1.2em">
+          <li>Atomic — as-if-never-happened</li>
+          <li>Invisible to other transactions</li>
+          <li>Done by the DB engine</li>
+          <li>No business logic needed</li>
+          <li>Instant, guaranteed</li>
+        </ul>
+      </div>
+      <div class="mini-card">
+        <div class="mini-label" style="color:var(--teal)">Compensating Transaction</div>
+        <ul style="font-size:13px;color:var(--muted);line-height:1.8;padding-left:1.2em">
+          <li>A new forward transaction</li>
+          <li>Effects are visible in the window T–C</li>
+          <li>Written by the developer</li>
+          <li>Requires business logic</li>
+          <li>Can itself fail and need retry</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Compensation matrix — e-commerce order saga</div>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>#</th><th>Transaction</th><th>Action</th>
+          <th>Compensating Tx</th><th>Idempotent?</th><th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--muted);font-family:var(--mono);font-size:12px">T1</td>
+          <td>Create Order</td>
+          <td style="font-family:var(--mono);font-size:12px;color:var(--muted)">status=PENDING</td>
+          <td><code style="font-family:var(--mono);font-size:12px;color:var(--coral)">C1: status=CANCELLED</code></td>
+          <td><span class="badge b-green">Yes</span></td>
+          <td style="font-size:12px;color:var(--muted)">Setting status is idempotent</td>
+        </tr>
+        <tr>
+          <td style="color:var(--muted);font-family:var(--mono);font-size:12px">T2</td>
+          <td>Reserve Payment</td>
+          <td style="font-family:var(--mono);font-size:12px;color:var(--muted)">debit hold account</td>
+          <td><code style="font-family:var(--mono);font-size:12px;color:var(--coral)">C2: release hold → credit</code></td>
+          <td><span class="badge b-green">Yes</span></td>
+          <td style="font-size:12px;color:var(--muted)">Use idempotency key on payment gateway</td>
+        </tr>
+        <tr>
+          <td style="color:var(--muted);font-family:var(--mono);font-size:12px">T3</td>
+          <td>Reserve Inventory</td>
+          <td style="font-family:var(--mono);font-size:12px;color:var(--muted)">qty -= n</td>
+          <td><code style="font-family:var(--mono);font-size:12px;color:var(--coral)">C3: qty += n</code></td>
+          <td><span class="badge b-amber">Careful</span></td>
+          <td style="font-size:12px;color:var(--muted)">Must prevent double-compensation</td>
+        </tr>
+        <tr>
+          <td style="color:var(--muted);font-family:var(--mono);font-size:12px">T4</td>
+          <td>Create Shipment</td>
+          <td style="font-family:var(--mono);font-size:12px;color:var(--muted)">allocate carrier slot</td>
+          <td><code style="font-family:var(--mono);font-size:12px;color:var(--coral)">C4: cancel shipment</code></td>
+          <td><span class="badge b-red">External</span></td>
+          <td style="font-size:12px;color:var(--muted)">Carrier API may not be idempotent — add dedup</td>
+        </tr>
+        <tr>
+          <td style="color:var(--muted);font-family:var(--mono);font-size:12px">T5</td>
+          <td>Send Confirmation</td>
+          <td style="font-family:var(--mono);font-size:12px;color:var(--muted)">email dispatched</td>
+          <td><code style="font-family:var(--mono);font-size:12px;color:var(--muted)">C5: n/a (send apology)</code></td>
+          <td><span class="badge b-red">Impossible</span></td>
+          <td style="font-size:12px;color:var(--muted)">Cannot un-send email — pivot transaction</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Compensation failure strategies</div>
+    <div class="card-grid">
+      <div class="mini-card">
+        <div class="mini-label" style="color:var(--purple)">Retry with exponential backoff</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">Compensations MUST be retried until they succeed. Design every Cᵢ to be idempotent from day one.</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-label" style="color:var(--amber)">Dead-letter queue (DLQ)</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">Exhausted retries → DLQ → alerting → human or automated replay. Never silently discard.</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-label" style="color:var(--teal)">Durable saga state store</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">Persist which step the saga is on so any process can resume after a crash — at-least-once execution.</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-label" style="color:var(--blue)">Pivot transaction</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">Some actions (sent email, printed invoice) cannot be undone. Pivot = last non-compensatable step; design all prior steps to be compensatable.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════ -->
+<!-- SECTION 05 — LOST ISOLATION       -->
+<!-- ══════════════════════════════════ -->
+<section class="section" id="s-isolation">
+  <div class="section-header">
+    <div class="section-title">The Lost Isolation Problem</div>
+    <div class="section-sub">// dirty reads · lost updates · countermeasures</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Why SAGAs have no Isolation</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:1rem">
+      In a classic ACID transaction, the <strong style="color:var(--text)">I</strong> guarantees that intermediate states are 
+      invisible to other transactions. A SAGA has <em style="color:var(--coral)">no such guarantee</em> — each Tᵢ commits 
+      immediately and becomes visible to the entire world before the saga completes.
+    </p>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 700 240" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="ai" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+        <!-- Timeline header -->
+        <text x="10" y="25" font-family="'DM Mono',monospace" font-size="11" class="t-muted">SAGA A</text>
+        <text x="10" y="85" font-family="'DM Mono',monospace" font-size="11" class="t-muted">SAGA B</text>
+        <text x="10" y="145" font-family="'DM Mono',monospace" font-size="11" class="t-muted">DB State</text>
+
+        <!-- Time axis -->
+        <line x1="80" y1="200" x2="680" y2="200" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        <text x="680" y="215" font-family="'DM Mono',monospace" font-size="10" class="t-muted">time →</text>
+
+        <!-- SAGA A events -->
+        <line x1="80" y1="15" x2="680" y2="15" stroke="rgba(167,139,250,0.15)" stroke-width="1" stroke-dasharray="3 4"/>
+        <rect x="100" y="5" width="80" height="22" rx="4" class="node-purple" stroke-width="1"/>
+        <text x="140" y="20" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" class="t-purple">T1 commit</text>
+        <rect x="280" y="5" width="80" height="22" rx="4" class="node-teal" stroke-width="1"/>
+        <text x="320" y="20" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" class="t-teal">T2 commit</text>
+        <rect x="460" y="5" width="80" height="22" rx="4" class="node-red" stroke-width="1"/>
+        <text x="500" y="20" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" class="t-red">T3 FAIL → C2</text>
+        <rect x="580" y="5" width="80" height="22" rx="4" class="node-coral" stroke-width="1"/>
+        <text x="620" y="20" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" class="t-coral">C1 done</text>
+
+        <!-- SAGA B events (interleaved) -->
+        <line x1="80" y1="75" x2="680" y2="75" stroke="rgba(251,191,36,0.1)" stroke-width="1" stroke-dasharray="3 4"/>
+        <rect x="200" y="65" width="110" height="22" rx="4" class="node-amber" stroke-width="1"/>
+        <text x="255" y="80" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" class="t-amber">reads order.status</text>
+
+        <!-- DB state bar -->
+        <rect x="80"  y="135" width="118" height="18" rx="3" fill="rgba(167,139,250,0.2)" stroke="rgba(167,139,250,0.4)" stroke-width="0.5"/>
+        <text x="139" y="148" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" class="t-purple">PENDING</text>
+        <rect x="200" y="135" width="118" height="18" rx="3" fill="rgba(52,211,153,0.2)" stroke="rgba(52,211,153,0.4)" stroke-width="0.5"/>
+        <text x="259" y="148" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" class="t-teal">PAYMENT HELD</text>
+        <rect x="320" y="135" width="138" height="18" rx="3" fill="rgba(251,113,133,0.2)" stroke="rgba(251,113,133,0.4)" stroke-width="0.5"/>
+        <text x="389" y="148" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" class="t-coral">→ compensating…</text>
+        <rect x="460" y="135" width="100" height="18" rx="3" fill="rgba(120,116,145,0.2)" stroke="rgba(120,116,145,0.4)" stroke-width="0.5"/>
+        <text x="510" y="148" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" class="t-muted">CANCELLED</text>
+
+        <!-- Read line from SAGA B -->
+        <line x1="255" y1="87" x2="255" y2="133" stroke="#fbbf24" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#ai)"/>
+
+        <!-- Dirty read annotation -->
+        <rect x="255" y="92" width="130" height="16" rx="3" fill="rgba(251,191,36,0.12)" stroke="rgba(251,191,36,0.3)" stroke-width="0.5"/>
+        <text x="320" y="104" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" class="t-amber">dirty read: sees HELD</text>
+
+        <text x="350" y="225" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-muted">SAGA B reads a state that will be compensated away — the definition of a dirty read</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Anomalies and countermeasures</div>
+    <table class="comp-table">
+      <thead>
+        <tr><th>Anomaly</th><th>Description</th><th>Countermeasure</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--coral);font-family:var(--mono);font-size:12px">Dirty read</td>
+          <td style="font-size:13px;color:var(--muted)">Another saga reads a value written by a still-in-progress saga that later compensates</td>
+          <td style="font-size:13px;color:var(--muted)">Semantic locks — mark records as "in saga" and refuse reads from other sagas</td>
+        </tr>
+        <tr>
+          <td style="color:var(--coral);font-family:var(--mono);font-size:12px">Lost update</td>
+          <td style="font-size:13px;color:var(--muted)">Two sagas read the same record, both modify it; one overwrites the other's change</td>
+          <td style="font-size:13px;color:var(--muted)">Optimistic locking with version numbers / ETags</td>
+        </tr>
+        <tr>
+          <td style="color:var(--coral);font-family:var(--mono);font-size:12px">Fuzzy / non-repeatable read</td>
+          <td style="font-size:13px;color:var(--muted)">Same query returns different results within one saga because another saga committed between the reads</td>
+          <td style="font-size:13px;color:var(--muted)">Re-read and verify at critical decision points; use snapshot-at-saga-start</td>
+        </tr>
+        <tr>
+          <td style="color:var(--amber);font-family:var(--mono);font-size:12px">Phantom read</td>
+          <td style="font-size:13px;color:var(--muted)">A range query returns different rows across two reads within the same saga</td>
+          <td style="font-size:13px;color:var(--muted)">Mostly accepted as a known SAGA trade-off; mitigate with order-level locking</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Semantic lock pattern</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:1rem">
+      A simple countermeasure: add a <code style="font-family:var(--mono);color:var(--purple)">saga_lock</code> flag / state 
+      to records being modified. Any concurrent saga that tries to read a locked record either <em>fails fast</em> or 
+      <em>retries</em>. The lock is released when the owning saga completes or compensates.
+    </p>
+    <div class="code-block" style="font-size:12px">
+<span class="cm">-- T1: Create order with semantic lock</span>
+<span class="kw">INSERT INTO</span> orders (id, status, saga_lock)
+<span class="kw">VALUES</span> (<span class="st">'ord-123'</span>, <span class="st">'PENDING'</span>, <span class="kw">TRUE</span>);
+
+<span class="cm">-- Concurrent reader checks the lock</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> orders
+<span class="kw">WHERE</span> id = <span class="st">'ord-123'</span> <span class="kw">AND</span> saga_lock = <span class="kw">FALSE</span>;
+<span class="cm">-- Returns 0 rows → caller retries or fails fast</span>
+
+<span class="cm">-- C1: Release lock on compensation</span>
+<span class="kw">UPDATE</span> orders
+<span class="kw">SET</span> status = <span class="st">'CANCELLED'</span>, saga_lock = <span class="kw">FALSE</span>
+<span class="kw">WHERE</span> id = <span class="st">'ord-123'</span>;</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════ -->
+<!-- SECTION 06 — 3D VISUALIZER        -->
+<!-- ══════════════════════════════════ -->
+<section class="section" id="s-threed">
+  <div class="section-header">
+    <div class="section-title">3D SAGA Flow Visualizer</div>
+    <div class="section-sub">// interactive three.js · drag to rotate · scroll to zoom</div>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem">
+    <div class="card-title">Controls</div>
+    <div class="three-controls" id="three-controls">
+      <button class="three-btn active" onclick="setMode('happy')">Happy path</button>
+      <button class="three-btn" onclick="setMode('failure')">Failure + compensation</button>
+      <button class="three-btn" onclick="setMode('choreography')">Choreography events</button>
+      <button class="three-btn" onclick="setMode('orchestration')">Orchestration commands</button>
+    </div>
+  </div>
+
+  <div id="three-mount"></div>
+
+  <div class="three-legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div>Order Service</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div>Payment Service</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div>Inventory Service</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#60a5fa"></div>Shipping Service</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#fb7185"></div>Compensation flow</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f8f8ff"></div>Orchestrator</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════ -->
+<!-- SECTION 07 — CODE                 -->
+<!-- ══════════════════════════════════ -->
+<section class="section" id="s-code">
+  <div class="section-header">
+    <div class="section-title">Implementation Code</div>
+    <div class="section-sub">// Node.js · TypeScript · real-world patterns</div>
+  </div>
+
+  <div class="code-tabs">
+    <div class="code-tab active" onclick="showCodeTab('orchestrator')">Orchestrator</div>
+    <div class="code-tab" onclick="showCodeTab('participant')">Participant service</div>
+    <div class="code-tab" onclick="showCodeTab('choreography')">Choreography</div>
+    <div class="code-tab" onclick="showCodeTab('idempotency')">Idempotency key</div>
+    <div class="code-tab" onclick="showCodeTab('state')">Saga state store</div>
+  </div>
+
+  <div id="code-panels"></div>
+</section>
+
+<!-- ══════════════════════════════════ -->
+<!-- SECTION 08 — TRADE-OFFS           -->
+<!-- ══════════════════════════════════ -->
+<section class="section" id="s-tradeoffs">
+  <div class="section-header">
+    <div class="section-title">Trade-offs & Comparisons</div>
+    <div class="section-sub">// SAGA vs 2PC vs Outbox · choreography vs orchestration</div>
+  </div>
+
+  <div class="tradeoff-grid">
+    <div class="tradeoff-card tc-pros">
+      <h4>✦ Pros</h4>
+      <ul>
+        <li>No distributed lock contention</li>
+        <li>Each service stays loosely coupled</li>
+        <li>Works across heterogeneous DBs</li>
+        <li>Scales independently per service</li>
+        <li>Survives partial network failures</li>
+        <li>Long-running transactions OK</li>
+      </ul>
+    </div>
+    <div class="tradeoff-card tc-cons">
+      <h4>✦ Cons</h4>
+      <ul>
+        <li>No isolation — dirty reads possible</li>
+        <li>Compensations add business complexity</li>
+        <li>Debugging distributed state is hard</li>
+        <li>Choreography: implicit event coupling</li>
+        <li>Orchestration: orchestrator = SPOF risk</li>
+        <li>Testing all failure paths is expensive</li>
+      </ul>
+    </div>
+    <div class="tradeoff-card tc-when">
+      <h4>✦ Use when</h4>
+      <ul>
+        <li>Multiple microservices need coordination</li>
+        <li>Long-lived business transactions</li>
+        <li>Services own separate databases</li>
+        <li>High throughput (2PC is too slow)</li>
+        <li>Cross-cloud / cross-vendor services</li>
+      </ul>
+    </div>
+    <div class="tradeoff-card tc-avoid">
+      <h4>✦ Avoid when</h4>
+      <ul>
+        <li>Strong isolation required (financial ledger)</li>
+        <li>Single service / single DB — use ACID</li>
+        <li>Compensations are impossible (email)</li>
+        <li>Team unfamiliar with eventual consistency</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">SAGA vs 2-Phase Commit vs Outbox pattern</div>
+    <table class="comp-table">
+      <thead>
+        <tr><th>Dimension</th><th>2PC</th><th>SAGA</th><th>Outbox + CDC</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:500">Consistency</td>
+          <td style="color:var(--teal)">Strong (ACID)</td>
+          <td style="color:var(--amber)">Eventual</td>
+          <td style="color:var(--blue)">Near-strong</td>
+        </tr>
+        <tr>
+          <td style="font-weight:500">Availability</td>
+          <td style="color:var(--coral)">Low (blocking lock)</td>
+          <td style="color:var(--teal)">High</td>
+          <td style="color:var(--teal)">High</td>
+        </tr>
+        <tr>
+          <td style="font-weight:500">Throughput</td>
+          <td style="color:var(--coral)">Low</td>
+          <td style="color:var(--teal)">High</td>
+          <td style="color:var(--amber)">Medium–High</td>
+        </tr>
+        <tr>
+          <td style="font-weight:500">Complexity</td>
+          <td style="color:var(--amber)">Medium (infra-level)</td>
+          <td style="color:var(--coral)">High (compensations)</td>
+          <td style="color:var(--amber)">Medium</td>
+        </tr>
+        <tr>
+          <td style="font-weight:500">Isolation</td>
+          <td style="color:var(--teal)">Full</td>
+          <td style="color:var(--coral)">None</td>
+          <td style="color:var(--amber)">Partial</td>
+        </tr>
+        <tr>
+          <td style="font-weight:500">Cross-DB support</td>
+          <td style="color:var(--coral)">Needs XA driver</td>
+          <td style="color:var(--teal)">Yes, any DB</td>
+          <td style="color:var(--teal)">Yes</td>
+        </tr>
+        <tr>
+          <td style="font-weight:500">Failure recovery</td>
+          <td style="color:var(--amber)">Coordinator restart</td>
+          <td style="color:var(--teal)">Compensate + retry</td>
+          <td style="color:var(--teal)">Replay from outbox</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Choreography vs Orchestration</div>
+    <table class="comp-table">
+      <thead>
+        <tr><th>Dimension</th><th>Choreography</th><th>Orchestration</th></tr>
+      </thead>
+      <tbody>
+        <tr><td style="font-weight:500">Coordination</td><td>Emergent (event reactions)</td><td>Explicit (central brain)</td></tr>
+        <tr><td style="font-weight:500">Coupling</td><td>Implicit via event schema</td><td>Explicit command contract</td></tr>
+        <tr><td style="font-weight:500">Debuggability</td><td style="color:var(--coral)">Hard (distributed state)</td><td style="color:var(--teal)">Easy (one log to check)</td></tr>
+        <tr><td style="font-weight:500">SPOF risk</td><td style="color:var(--teal)">None</td><td style="color:var(--coral)">Orchestrator</td></tr>
+        <tr><td style="font-weight:500">Cyclic dependency risk</td><td style="color:var(--coral)">High</td><td style="color:var(--teal)">Low</td></tr>
+        <tr><td style="font-weight:500">Good for</td><td>Simple sagas, &lt;4 steps</td><td>Complex sagas, many branches</td></tr>
+        <tr><td style="font-weight:500">Tooling</td><td>Kafka, RabbitMQ, SNS/SQS</td><td>Temporal, Axon, AWS Step Fn</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <span>SAGA Pattern — Garcia-Molina &amp; Salem, 1987</span>
+  <span>Interactive deep-dive · Built with Three.js + vanilla JS</span>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SCRIPTS                                                 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<script>
+// ─── Section navigation ───
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('s-' + id).classList.add('active');
+  const tabs = document.querySelectorAll('.nav-tab');
+  const map = ['overview','choreography','orchestration','compensation','isolation','threed','code','tradeoffs'];
+  const idx = map.indexOf(id);
+  if (tabs[idx]) tabs[idx].classList.add('active');
+  if (id === 'threed' && !window.threeInitialized) initThree();
+  if (id === 'code') renderCodePanels();
+}
+
+// ─── Choreography stepper ───
+const choreoSteps = [
+  {
+    title: 'Step 1 — Client places order',
+    desc: 'The Order Service receives the HTTP request and executes T1: creates an Order record with status=PENDING. After committing locally, it publishes an <strong style="color:#a78bfa">OrderCreated</strong> event to the message broker.',
+    svg: `<svg viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="ah1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <rect x="10" y="70" width="140" height="60" rx="8" fill="rgba(167,139,250,0.2)" stroke="rgba(167,139,250,0.7)" stroke-width="1.5"/>
+      <text x="80" y="95" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" fill="#a78bfa">Order Service</text>
+      <text x="80" y="113" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">T1: Create order</text>
+      <rect x="240" y="70" width="160" height="60" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text x="320" y="95" text-anchor="middle" font-family="'Syne',sans-serif" font-size="12" fill="#e8e6f0">Message Broker</text>
+      <text x="320" y="113" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">Kafka / RabbitMQ</text>
+      <rect x="480" y="70" width="150" height="60" rx="8" fill="rgba(52,211,153,0.07)" stroke="rgba(52,211,153,0.2)" stroke-width="1"/>
+      <text x="555" y="95" text-anchor="middle" font-family="'Syne',sans-serif" font-size="12" fill="#7a7891">Payment Service</text>
+      <text x="555" y="113" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#4a4869">waiting…</text>
+      <line x1="151" y1="100" x2="238" y2="100" stroke="#a78bfa" stroke-width="2" marker-end="url(#ah1)"/>
+      <text x="194" y="88" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#a78bfa">OrderCreated</text>
+      <text x="330" y="175" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#7a7891">Order Service publishes event after local commit — fire and forget</text>
+    </svg>`
+  },
+  {
+    title: 'Step 2 — Payment Service reacts',
+    desc: 'The Payment Service is subscribed to <strong style="color:#a78bfa">OrderCreated</strong>. It executes T2: reserves the customer\'s funds. On success it publishes <strong style="color:#34d399">PaymentReserved</strong>. On failure it publishes <strong style="color:#fb7185">PaymentFailed</strong> which triggers compensations.',
+    svg: `<svg viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <rect x="10" y="70" width="140" height="60" rx="8" fill="rgba(167,139,250,0.12)" stroke="rgba(167,139,250,0.4)" stroke-width="1"/>
+      <text x="80" y="95" text-anchor="middle" font-family="'Syne',sans-serif" font-size="12" fill="#a78bfa">Order Service</text>
+      <text x="80" y="113" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">✓ committed</text>
+      <rect x="240" y="70" width="160" height="60" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text x="320" y="100" text-anchor="middle" font-family="'Syne',sans-serif" font-size="12" fill="#e8e6f0">Message Broker</text>
+      <rect x="480" y="50" width="160" height="60" rx="8" fill="rgba(52,211,153,0.2)" stroke="rgba(52,211,153,0.7)" stroke-width="1.5"/>
+      <text x="560" y="75" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" fill="#34d399">Payment Service</text>
+      <text x="560" y="93" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">T2: Reserve funds</text>
+      <!-- success path -->
+      <line x1="400" y1="100" x2="478" y2="75" stroke="#34d399" stroke-width="2" marker-end="url(#ah2)"/>
+      <text x="435" y="78" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#34d399">OrderCreated</text>
+      <!-- publishes -->
+      <rect x="480" y="135" width="160" height="40" rx="6" fill="rgba(52,211,153,0.1)" stroke="rgba(52,211,153,0.3)" stroke-width="0.5"/>
+      <text x="560" y="155" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#34d399">→ publish PaymentReserved</text>
+      <text x="330" y="185" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#7a7891">Payment service consumes event, acts, publishes next event</text>
+    </svg>`
+  },
+  {
+    title: 'Step 3 — Inventory Service reacts',
+    desc: 'The Inventory Service is subscribed to <strong style="color:#34d399">PaymentReserved</strong>. It executes T3: decrements stock quantity. On success it publishes <strong style="color:#fbbf24">StockReserved</strong>.',
+    svg: `<svg viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="ah3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <!-- services -->
+      <rect x="10" y="80" width="110" height="46" rx="8" fill="rgba(167,139,250,0.1)" stroke="rgba(167,139,250,0.3)" stroke-width="1"/>
+      <text x="65" y="107" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">Order ✓</text>
+      <rect x="160" y="80" width="110" height="46" rx="8" fill="rgba(52,211,153,0.1)" stroke="rgba(52,211,153,0.3)" stroke-width="1"/>
+      <text x="215" y="107" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">Payment ✓</text>
+      <!-- broker -->
+      <rect x="310" y="70" width="130" height="60" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <text x="375" y="104" text-anchor="middle" font-family="'Syne',sans-serif" font-size="12" fill="#e8e6f0">Broker</text>
+      <!-- inventory highlighted -->
+      <rect x="490" y="50" width="155" height="60" rx="8" fill="rgba(251,191,36,0.2)" stroke="rgba(251,191,36,0.7)" stroke-width="1.5"/>
+      <text x="567" y="74" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" fill="#fbbf24">Inventory Svc</text>
+      <text x="567" y="92" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">T3: Reserve stock</text>
+      <line x1="441" y1="100" x2="488" y2="78" stroke="#fbbf24" stroke-width="2" marker-end="url(#ah3)"/>
+      <text x="460" y="80" text-anchor="middle" font-family="'DM Mono',monospace" font-size="9" fill="#fbbf24">PaymentReserved</text>
+      <rect x="490" y="130" width="155" height="36" rx="6" fill="rgba(251,191,36,0.1)" stroke="rgba(251,191,36,0.3)" stroke-width="0.5"/>
+      <text x="567" y="152" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#fbbf24">→ publish StockReserved</text>
+      <text x="330" y="195" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#7a7891">Each service only knows about the events it subscribes to</text>
+    </svg>`
+  },
+  {
+    title: 'Step 4 — Saga completes',
+    desc: 'The Shipping Service subscribes to <strong style="color:#fbbf24">StockReserved</strong>, executes T4, and the saga reaches its final happy state. No service knows about the full workflow — the coordinator is just the message broker.',
+    svg: `<svg viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="ah4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <rect x="10" y="80" width="100" height="42" rx="6" fill="rgba(167,139,250,0.1)" stroke="rgba(167,139,250,0.3)" stroke-width="1"/>
+      <text x="60" y="105" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">Order ✓</text>
+      <rect x="130" y="80" width="100" height="42" rx="6" fill="rgba(52,211,153,0.1)" stroke="rgba(52,211,153,0.3)" stroke-width="1"/>
+      <text x="180" y="105" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">Payment ✓</text>
+      <rect x="250" y="80" width="100" height="42" rx="6" fill="rgba(251,191,36,0.1)" stroke="rgba(251,191,36,0.3)" stroke-width="1"/>
+      <text x="300" y="105" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">Inventory ✓</text>
+      <rect x="450" y="60" width="140" height="60" rx="8" fill="rgba(96,165,250,0.2)" stroke="rgba(96,165,250,0.7)" stroke-width="1.5"/>
+      <text x="520" y="84" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" fill="#60a5fa">Shipping Svc</text>
+      <text x="520" y="102" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">T4: Create shipment</text>
+      <line x1="351" y1="101" x2="448" y2="85" stroke="#60a5fa" stroke-width="2" marker-end="url(#ah4)"/>
+      <text x="395" y="82" text-anchor="middle" font-family="'DM Mono',monospace" font-size="9" fill="#60a5fa">StockReserved</text>
+      <!-- Checkmark -->
+      <circle cx="520" cy="148" r="20" fill="rgba(134,239,172,0.15)" stroke="rgba(134,239,172,0.5)" stroke-width="1.5"/>
+      <text x="520" y="155" text-anchor="middle" font-family="'Syne',sans-serif" font-size="18" fill="#86efac">✓</text>
+      <text x="330" y="185" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#7a7891">SAGA completed — all 4 local transactions committed</text>
+    </svg>`
+  },
+  {
+    title: 'Step 5 — Failure: Payment fails',
+    desc: 'If T2 (Payment) fails, the Payment Service publishes <strong style="color:#fb7185">PaymentFailed</strong>. The Order Service is subscribed to this event and executes its compensating transaction <strong style="color:#fb7185">C1: cancel order</strong>.',
+    svg: `<svg viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="ah5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <rect x="10" y="60" width="140" height="60" rx="8" fill="rgba(167,139,250,0.15)" stroke="rgba(167,139,250,0.5)" stroke-width="1"/>
+      <text x="80" y="83" text-anchor="middle" font-family="'Syne',sans-serif" font-size="12" font-weight="600" fill="#a78bfa">Order Service</text>
+      <text x="80" y="100" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">T1: committed</text>
+      <!-- C1 block -->
+      <rect x="10" y="140" width="140" height="40" rx="6" fill="rgba(251,113,133,0.15)" stroke="rgba(251,113,133,0.5)" stroke-width="1"/>
+      <text x="80" y="164" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#fb7185">C1: cancel order</text>
+      <!-- broker -->
+      <rect x="250" y="70" width="140" height="50" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      <text x="320" y="99" text-anchor="middle" font-family="'Syne',sans-serif" font-size="12" fill="#e8e6f0">Broker</text>
+      <!-- Payment -->
+      <rect x="480" y="60" width="160" height="60" rx="8" fill="rgba(251,113,133,0.2)" stroke="rgba(251,113,133,0.7)" stroke-width="1.5"/>
+      <text x="560" y="83" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" fill="#fb7185">Payment Service</text>
+      <text x="560" y="101" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#fb7185">T2: ✗ FAILED</text>
+      <!-- arrows -->
+      <line x1="480" y1="100" x2="392" y2="95" stroke="#fb7185" stroke-width="2" marker-end="url(#ah5)"/>
+      <text x="432" y="84" text-anchor="middle" font-family="'DM Mono',monospace" font-size="9" fill="#fb7185">PaymentFailed</text>
+      <line x1="248" y1="95" x2="152" y2="90" stroke="#fb7185" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#ah5)"/>
+      <line x1="80" y1="121" x2="80" y2="138" stroke="#fb7185" stroke-width="1.5" marker-end="url(#ah5)"/>
+      <text x="330" y="195" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#7a7891">Order Service subscribes to PaymentFailed and executes C1</text>
+    </svg>`
+  },
+  {
+    title: 'Step 6 — The coupling problem',
+    desc: 'Choreography looks clean but has a hidden problem: <strong style="color:#fbbf24">implicit coupling via event contracts</strong>. Every service must agree on event schema. Adding a new step means publishing a new event and having every interested party subscribe. With many services, tracking which service reacts to which event becomes hard — the "dance" becomes hard to follow.',
+    svg: `<svg viewBox="0 0 660 220" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="ah6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <!-- 4 services in a loose mesh -->
+      <rect x="10" y="20" width="120" height="40" rx="6" class="node-purple" stroke-width="1"/>
+      <text x="70" y="44" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-purple">Order</text>
+      <rect x="530" y="20" width="120" height="40" rx="6" class="node-teal" stroke-width="1"/>
+      <text x="590" y="44" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-teal">Payment</text>
+      <rect x="10" y="160" width="120" height="40" rx="6" class="node-amber" stroke-width="1"/>
+      <text x="70" y="184" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-amber">Inventory</text>
+      <rect x="530" y="160" width="120" height="40" rx="6" class="node-blue" stroke-width="1"/>
+      <text x="590" y="184" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-blue">Shipping</text>
+      <!-- Crisscross arrows — implicit coupling -->
+      <line x1="130" y1="40" x2="530" y2="40" stroke="rgba(167,139,250,0.4)" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#ah6)"/>
+      <line x1="590" y1="62" x2="590" y2="158" stroke="rgba(52,211,153,0.4)" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#ah6)"/>
+      <line x1="530" y1="180" x2="132" y2="180" stroke="rgba(96,165,250,0.4)" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#ah6)"/>
+      <line x1="70" y1="62" x2="70" y2="158" stroke="rgba(251,191,36,0.4)" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#ah6)"/>
+      <line x1="130" y1="60" x2="530" y2="160" stroke="rgba(251,113,133,0.3)" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#ah6)"/>
+      <line x1="530" y1="60" x2="130" y2="160" stroke="rgba(167,139,250,0.3)" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#ah6)"/>
+      <!-- Warning -->
+      <rect x="230" y="88" width="200" height="44" rx="8" fill="rgba(251,191,36,0.12)" stroke="rgba(251,191,36,0.3)" stroke-width="0.5"/>
+      <text x="330" y="107" text-anchor="middle" font-family="'Syne',sans-serif" font-size="12" font-weight="600" fill="#fbbf24">Implicit coupling</text>
+      <text x="330" y="124" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">Hard to trace across &gt;4 services</text>
+      <text x="330" y="210" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#7a7891">Consider Orchestration for complex sagas with many steps/branches</text>
+    </svg>`
+  }
+];
+
+let choreoIdx = 0;
+
+function renderChoreo() {
+  const s = choreoSteps[choreoIdx];
+  document.getElementById('choreo-frame').innerHTML = `
+    <div style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--purple)">${s.title}</div>
+    <p style="font-size:13px;color:#7a7891;line-height:1.7;margin-bottom:1rem">${s.desc}</p>
+    ${s.svg}
+  `;
+  document.getElementById('c-counter').textContent = `${choreoIdx+1} / ${choreoSteps.length}`;
+  document.getElementById('cbtn-prev').disabled = choreoIdx === 0;
+  document.getElementById('cbtn-next').disabled = choreoIdx === choreoSteps.length - 1;
+  const dots = document.getElementById('c-dots');
+  dots.innerHTML = choreoSteps.map((_,i) =>
+    `<div class="step-dot ${i===choreoIdx?'active':''}" onclick="choreoIdx=${i};renderChoreo()"></div>`
+  ).join('');
+}
+
+function choreoStep(d) { choreoIdx = Math.max(0, Math.min(choreoSteps.length-1, choreoIdx+d)); renderChoreo(); }
+renderChoreo();
+
+// ─── Orchestration stepper ───
+const orchSteps = [
+  {
+    title: 'Architecture — central orchestrator',
+    desc: 'A dedicated <strong style="color:#e8e6f0">Saga Orchestrator</strong> (a separate service or durable workflow engine) sends <em>commands</em> to participant services and receives <em>replies</em>. It holds the entire saga state machine in one place.',
+    svg: `<svg viewBox="0 0 660 240" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="ao1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <!-- Orchestrator center -->
+      <rect x="240" y="90" width="170" height="55" rx="10" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+      <text x="325" y="112" text-anchor="middle" font-family="'Syne',sans-serif" font-size="14" font-weight="700" fill="#e8e6f0">Orchestrator</text>
+      <text x="325" y="133" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">Owns full state machine</text>
+      <!-- Services -->
+      <rect x="10" y="20" width="120" height="40" rx="6" class="node-purple" stroke-width="1"/>
+      <text x="70" y="44" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-purple">Order Svc</text>
+      <rect x="10" y="195" width="120" height="40" rx="6" class="node-teal" stroke-width="1"/>
+      <text x="70" y="219" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-teal">Payment Svc</text>
+      <rect x="530" y="20" width="120" height="40" rx="6" class="node-amber" stroke-width="1"/>
+      <text x="590" y="44" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-amber">Inventory Svc</text>
+      <rect x="530" y="195" width="120" height="40" rx="6" class="node-blue" stroke-width="1"/>
+      <text x="590" y="219" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-blue">Shipping Svc</text>
+      <!-- Command arrows from orchestrator -->
+      <line x1="240" y1="105" x2="132" y2="42" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" marker-end="url(#ao1)"/>
+      <line x1="240" y1="130" x2="132" y2="213" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" marker-end="url(#ao1)"/>
+      <line x1="410" y1="105" x2="528" y2="42" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" marker-end="url(#ao1)"/>
+      <line x1="410" y1="130" x2="528" y2="213" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" marker-end="url(#ao1)"/>
+      <text x="325" y="225" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">cmd →      ← reply</text>
+    </svg>`
+  },
+  {
+    title: 'Step 1 — Orchestrator issues CreateOrder command',
+    desc: 'The orchestrator sends a <strong style="color:#a78bfa">CreateOrder</strong> command to the Order Service via a command channel (e.g. a dedicated Kafka topic or async HTTP call). It then waits for a reply.',
+    svg: `<svg viewBox="0 0 660 180" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="ao2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <rect x="10" y="65" width="160" height="55" rx="8" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+      <text x="90" y="88" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" fill="#e8e6f0">Orchestrator</text>
+      <text x="90" y="107" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">state: STARTED</text>
+      <rect x="490" y="65" width="160" height="55" rx="8" fill="rgba(167,139,250,0.2)" stroke="rgba(167,139,250,0.7)" stroke-width="1.5"/>
+      <text x="570" y="88" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" fill="#a78bfa">Order Service</text>
+      <text x="570" y="107" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">T1: Create order</text>
+      <line x1="172" y1="87" x2="488" y2="87" stroke="#a78bfa" stroke-width="2" marker-end="url(#ao2)"/>
+      <text x="330" y="75" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#a78bfa">CreateOrder command</text>
+      <line x1="488" y1="108" x2="172" y2="108" stroke="rgba(167,139,250,0.5)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ao2)"/>
+      <text x="330" y="125" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#7a7891">OrderCreated reply</text>
+      <text x="330" y="162" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#7a7891">Orchestrator waits for reply before issuing next command</text>
+    </svg>`
+  },
+  {
+    title: 'Step 2 — Sequential commands: Payment → Inventory → Shipping',
+    desc: 'After each successful reply, the orchestrator advances its state machine and issues the next command. The key insight: services <strong style="color:var(--text)">only see commands directed at them</strong> — no service knows about other services.',
+    svg: `<svg viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="ao3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <!-- Orchestrator vertical -->
+      <rect x="280" y="10" width="110" height="190" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text x="335" y="34" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#e8e6f0">Orchestrator</text>
+      <text x="335" y="52" text-anchor="middle" font-family="'DM Mono',monospace" font-size="9" fill="#7a7891">state machine</text>
+      <text x="335" y="80" text-anchor="middle" font-family="'DM Mono',monospace" font-size="9" fill="#a78bfa">ORDER_PLACED</text>
+      <text x="335" y="115" text-anchor="middle" font-family="'DM Mono',monospace" font-size="9" fill="#34d399">PAYMENT_DONE</text>
+      <text x="335" y="150" text-anchor="middle" font-family="'DM Mono',monospace" font-size="9" fill="#fbbf24">STOCK_RESERVED</text>
+      <text x="335" y="185" text-anchor="middle" font-family="'DM Mono',monospace" font-size="9" fill="#60a5fa">COMPLETED</text>
+      <!-- Services right -->
+      <rect x="490" y="15" width="150" height="36" rx="6" class="node-teal" stroke-width="1"/>
+      <text x="565" y="37" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-teal">Payment Svc</text>
+      <rect x="490" y="75" width="150" height="36" rx="6" class="node-amber" stroke-width="1"/>
+      <text x="565" y="97" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-amber">Inventory Svc</text>
+      <rect x="490" y="135" width="150" height="36" rx="6" class="node-blue" stroke-width="1"/>
+      <text x="565" y="157" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" class="t-blue">Shipping Svc</text>
+      <!-- Arrows -->
+      <line x1="392" y1="78" x2="488" y2="33" stroke="#34d399" stroke-width="1.5" marker-end="url(#ao3)"/>
+      <line x1="392" y1="113" x2="488" y2="93" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#ao3)"/>
+      <line x1="392" y1="148" x2="488" y2="153" stroke="#60a5fa" stroke-width="1.5" marker-end="url(#ao3)"/>
+      <!-- Replies -->
+      <line x1="488" y1="45" x2="392" y2="95" stroke="rgba(52,211,153,0.3)" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#ao3)"/>
+      <line x1="488" y1="98" x2="392" y2="130" stroke="rgba(251,191,36,0.3)" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#ao3)"/>
+    </svg>`
+  },
+  {
+    title: 'Step 3 — Failure: Inventory fails',
+    desc: 'When Inventory Service replies with <strong style="color:#fb7185">StockReservationFailed</strong>, the orchestrator knows exactly what to undo — it just runs the compensations in reverse order: it sends <strong style="color:#fb7185">CancelPayment</strong> then <strong style="color:#fb7185">CancelOrder</strong>.',
+    svg: `<svg viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="ao4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <rect x="240" y="85" width="170" height="55" rx="8" fill="rgba(251,113,133,0.1)" stroke="rgba(251,113,133,0.5)" stroke-width="1.5"/>
+      <text x="325" y="107" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" fill="#fb7185">Orchestrator</text>
+      <text x="325" y="126" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">state: COMPENSATING</text>
+      <!-- Inventory fail -->
+      <rect x="490" y="20" width="155" height="40" rx="6" fill="rgba(251,113,133,0.2)" stroke="rgba(251,113,133,0.6)" stroke-width="1"/>
+      <text x="567" y="44" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#fb7185">Inventory ✗ FAILED</text>
+      <line x1="490" y1="40" x2="412" y2="100" stroke="#fb7185" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#ao4)"/>
+      <text x="445" y="60" text-anchor="middle" font-family="'DM Mono',monospace" font-size="9" fill="#fb7185">StockReservationFailed</text>
+      <!-- Compensations issued -->
+      <rect x="10" y="20" width="150" height="40" rx="6" fill="rgba(167,139,250,0.1)" stroke="rgba(167,139,250,0.3)" stroke-width="1"/>
+      <text x="85" y="44" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#a78bfa">Order Svc</text>
+      <rect x="10" y="80" width="150" height="40" rx="6" fill="rgba(52,211,153,0.1)" stroke="rgba(52,211,153,0.3)" stroke-width="1"/>
+      <text x="85" y="104" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#34d399">Payment Svc</text>
+      <line x1="240" y1="100" x2="162" y2="42" stroke="#fb7185" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#ao4)"/>
+      <text x="190" y="60" text-anchor="middle" font-family="'DM Mono',monospace" font-size="9" fill="#fb7185">CancelOrder cmd</text>
+      <line x1="240" y1="115" x2="162" y2="100" stroke="#fb7185" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#ao4)"/>
+      <text x="185" y="115" text-anchor="middle" font-family="'DM Mono',monospace" font-size="9" fill="#fb7185">CancelPayment cmd</text>
+      <text x="330" y="195" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#7a7891">Orchestrator drives compensations — no service needs to know about others</text>
+    </svg>`
+  },
+  {
+    title: 'Step 4 — Idempotency + at-least-once delivery',
+    desc: 'The orchestrator must handle duplicate replies (network retries). Every participant service must make its handler <strong style="color:var(--text)">idempotent</strong> using an idempotency key. The orchestrator persists its state durably so it can survive crashes and resume from the last committed step.',
+    svg: `<svg viewBox="0 0 660 180" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="ao5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <rect x="10" y="20" width="190" height="140" rx="10" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="4 3"/>
+      <text x="105" y="44" text-anchor="middle" font-family="'Syne',sans-serif" font-size="12" font-weight="600" fill="#e8e6f0">Orchestrator</text>
+      <rect x="25" y="55" width="160" height="30" rx="5" fill="rgba(167,139,250,0.1)" stroke="rgba(167,139,250,0.3)" stroke-width="0.5"/>
+      <text x="105" y="74" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#a78bfa">saga_state (durable DB)</text>
+      <rect x="25" y="95" width="160" height="30" rx="5" fill="rgba(251,191,36,0.1)" stroke="rgba(251,191,36,0.3)" stroke-width="0.5"/>
+      <text x="105" y="114" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#fbbf24">current_step + saga_id</text>
+      <rect x="25" y="135" width="160" height="18" rx="4" fill="rgba(134,239,172,0.1)" stroke="rgba(134,239,172,0.3)" stroke-width="0.5"/>
+      <text x="105" y="148" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#86efac">idempotency_keys[ ]</text>
+      <!-- Arrows -->
+      <rect x="440" y="55" width="200" height="110" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+      <text x="540" y="78" text-anchor="middle" font-family="'Syne',sans-serif" font-size="12" fill="#e8e6f0">Participant Service</text>
+      <rect x="455" y="90" width="170" height="30" rx="5" fill="rgba(96,165,250,0.1)" stroke="rgba(96,165,250,0.3)" stroke-width="0.5"/>
+      <text x="540" y="109" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#60a5fa">check idempotency_key</text>
+      <rect x="455" y="130" width="170" height="26" rx="5" fill="rgba(134,239,172,0.1)" stroke="rgba(134,239,172,0.3)" stroke-width="0.5"/>
+      <text x="540" y="147" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#86efac">if seen → skip, return cached</text>
+      <line x1="202" y1="100" x2="438" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" marker-end="url(#ao5)"/>
+      <text x="320" y="88" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">cmd + sagaId + stepId</text>
+    </svg>`
+  },
+  {
+    title: 'Step 5 — Tooling: orchestration engines',
+    desc: 'Building orchestrators from scratch is hard. Purpose-built engines handle durability, retries, and visibility out of the box.',
+    svg: `<svg viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="20" width="185" height="80" rx="10" fill="rgba(167,139,250,0.1)" stroke="rgba(167,139,250,0.3)" stroke-width="1"/>
+      <text x="102" y="50" text-anchor="middle" font-family="'Syne',sans-serif" font-size="14" font-weight="600" fill="#a78bfa">Temporal</text>
+      <text x="102" y="70" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">Code-first workflows</text>
+      <text x="102" y="87" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">Go, Java, .NET, Python</text>
+      <rect x="240" y="20" width="185" height="80" rx="10" fill="rgba(52,211,153,0.1)" stroke="rgba(52,211,153,0.3)" stroke-width="1"/>
+      <text x="332" y="50" text-anchor="middle" font-family="'Syne',sans-serif" font-size="14" font-weight="600" fill="#34d399">Axon Framework</text>
+      <text x="332" y="70" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">Java / Spring Boot</text>
+      <text x="332" y="87" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">CQRS + Event Sourcing</text>
+      <rect x="470" y="20" width="185" height="80" rx="10" fill="rgba(251,191,36,0.1)" stroke="rgba(251,191,36,0.3)" stroke-width="1"/>
+      <text x="562" y="50" text-anchor="middle" font-family="'Syne',sans-serif" font-size="14" font-weight="600" fill="#fbbf24">AWS Step Functions</text>
+      <text x="562" y="70" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">Managed, serverless</text>
+      <text x="562" y="87" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">ASL (JSON state machine)</text>
+      <!-- Row 2 -->
+      <rect x="125" y="130" width="185" height="60" rx="10" fill="rgba(96,165,250,0.1)" stroke="rgba(96,165,250,0.3)" stroke-width="1"/>
+      <text x="217" y="156" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" fill="#60a5fa">Conductor (Netflix OSS)</text>
+      <text x="217" y="175" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">UI + REST API driven</text>
+      <rect x="350" y="130" width="185" height="60" rx="10" fill="rgba(251,113,133,0.1)" stroke="rgba(251,113,133,0.3)" stroke-width="1"/>
+      <text x="442" y="156" text-anchor="middle" font-family="'Syne',sans-serif" font-size="13" font-weight="600" fill="#fb7185">MassTransit Sagas</text>
+      <text x="442" y="175" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#7a7891">.NET · built-in state persister</text>
+    </svg>`
+  }
+];
+
+let orchIdx = 0;
+
+function renderOrch() {
+  const s = orchSteps[orchIdx];
+  document.getElementById('orch-frame').innerHTML = `
+    <div style="font-size:14px;font-weight:600;margin-bottom:8px;color:#e8e6f0">${s.title}</div>
+    <p style="font-size:13px;color:#7a7891;line-height:1.7;margin-bottom:1rem">${s.desc}</p>
+    ${s.svg}
+  `;
+  document.getElementById('o-counter').textContent = `${orchIdx+1} / ${orchSteps.length}`;
+  document.getElementById('obtn-prev').disabled = orchIdx === 0;
+  document.getElementById('obtn-next').disabled = orchIdx === orchSteps.length - 1;
+  const dots = document.getElementById('o-dots');
+  dots.innerHTML = orchSteps.map((_,i) =>
+    `<div class="step-dot ${i===orchIdx?'active':''}" onclick="orchIdx=${i};renderOrch()"></div>`
+  ).join('');
+}
+
+function orchStep(d) { orchIdx = Math.max(0, Math.min(orchSteps.length-1, orchIdx+d)); renderOrch(); }
+renderOrch();
+
+// ─── Code panels ───
+const CODE = {
+  orchestrator: {
+    label: 'OrderSagaOrchestrator.ts',
+    lang: 'TypeScript',
+    code: `<span class="cm">// Order Saga Orchestrator — Temporal workflow style</span>
+<span class="kw">import</span> { <span class="cls">proxyActivities</span>, <span class="cls">ApplicationFailure</span> } <span class="kw">from</span> <span class="st">'@temporalio/workflow'</span>;
+<span class="kw">import</span> <span class="kw">type</span> * <span class="kw">as</span> activities <span class="kw">from</span> <span class="st">'./activities'</span>;
+
+<span class="kw">const</span> {
+  createOrder, cancelOrder,
+  reservePayment, releasePayment,
+  reserveInventory, releaseInventory,
+  createShipment, cancelShipment,
+} = proxyActivities&lt;typeof activities&gt;({
+  startToCloseTimeout: <span class="st">'10s'</span>,
+  retry: { maximumAttempts: <span class="num">3</span> },
+});
+
+<span class="cm">// The saga workflow — Temporal makes this durable automatically</span>
+<span class="kw">export async function</span> <span class="fn">orderSaga</span>(orderId: <span class="cls">string</span>, payload: <span class="cls">OrderPayload</span>) {
+  <span class="kw">let</span> orderCreated   = <span class="kw">false</span>;
+  <span class="kw">let</span> paymentReserved = <span class="kw">false</span>;
+  <span class="kw">let</span> stockReserved   = <span class="kw">false</span>;
+
+  <span class="kw">try</span> {
+    <span class="cm">// T1 — Create order</span>
+    <span class="kw">await</span> <span class="fn">createOrder</span>({ orderId, ...payload });
+    orderCreated = <span class="kw">true</span>;
+
+    <span class="cm">// T2 — Reserve payment</span>
+    <span class="kw">await</span> <span class="fn">reservePayment</span>({ orderId, amount: payload.total });
+    paymentReserved = <span class="kw">true</span>;
+
+    <span class="cm">// T3 — Reserve inventory</span>
+    <span class="kw">await</span> <span class="fn">reserveInventory</span>({ orderId, items: payload.items });
+    stockReserved = <span class="kw">true</span>;
+
+    <span class="cm">// T4 — Create shipment (pivot — no compensation)</span>
+    <span class="kw">await</span> <span class="fn">createShipment</span>({ orderId, address: payload.address });
+
+    <span class="kw">return</span> { status: <span class="st">'COMPLETED'</span>, orderId };
+
+  } <span class="kw">catch</span> (err) {
+    <span class="cm">// Run compensations in reverse order</span>
+    <span class="kw">if</span> (stockReserved)   <span class="kw">await</span> <span class="fn">releaseInventory</span>({ orderId });
+    <span class="kw">if</span> (paymentReserved) <span class="kw">await</span> <span class="fn">releasePayment</span>({ orderId });
+    <span class="kw">if</span> (orderCreated)    <span class="kw">await</span> <span class="fn">cancelOrder</span>({ orderId });
+
+    <span class="kw">throw</span> ApplicationFailure.create({
+      message: <span class="st">\`Saga failed: \${err.message}\`</span>,
+      nonRetryable: <span class="kw">true</span>,
+    });
+  }
+}`
+  },
+  participant: {
+    label: 'payment.activities.ts',
+    lang: 'TypeScript',
+    code: `<span class="cm">// Participant Service — Activity implementation</span>
+<span class="kw">import</span> { <span class="cls">ActivityInboundCallsInterceptor</span> } <span class="kw">from</span> <span class="st">'@temporalio/worker'</span>;
+<span class="kw">import</span> { <span class="cls">db</span> } <span class="kw">from</span> <span class="st">'./database'</span>;
+
+<span class="kw">export async function</span> <span class="fn">reservePayment</span>({
+  orderId, amount
+}: { orderId: <span class="cls">string</span>; amount: <span class="cls">number</span> }) {
+
+  <span class="cm">// Idempotency: check if already processed</span>
+  <span class="kw">const</span> existing = <span class="kw">await</span> db.payments.findOne({
+    where: { orderId, type: <span class="st">'RESERVATION'</span> }
+  });
+  <span class="kw">if</span> (existing) {
+    <span class="cm">// Already done — return cached result (at-least-once safe)</span>
+    <span class="kw">return</span> { paymentId: existing.id, status: <span class="st">'RESERVED'</span> };
+  }
+
+  <span class="cm">// Check sufficient balance</span>
+  <span class="kw">const</span> account = <span class="kw">await</span> db.accounts.findOne({ where: { customerId: <span class="st">'...'</span> } });
+  <span class="kw">if</span> (account.balance &lt; amount) {
+    <span class="kw">throw new</span> <span class="cls">Error</span>(<span class="st">'Insufficient funds'</span>); <span class="cm">// triggers compensation</span>
+  }
+
+  <span class="cm">// Execute local transaction atomically</span>
+  <span class="kw">return</span> <span class="kw">await</span> db.transaction(<span class="kw">async</span> (trx) => {
+    <span class="kw">await</span> db.accounts.decrement(
+      { balance: amount },
+      { where: { customerId: <span class="st">'...'</span> }, transaction: trx }
+    );
+    <span class="kw">const</span> payment = <span class="kw">await</span> db.payments.create({
+      orderId, amount, type: <span class="st">'RESERVATION'</span>, status: <span class="st">'RESERVED'</span>
+    }, { transaction: trx });
+
+    <span class="kw">return</span> { paymentId: payment.id, status: <span class="st">'RESERVED'</span> };
+  });
+}
+
+<span class="kw">export async function</span> <span class="fn">releasePayment</span>({ orderId }: { orderId: <span class="cls">string</span> }) {
+  <span class="cm">// Compensating transaction — idempotent</span>
+  <span class="kw">const</span> reservation = <span class="kw">await</span> db.payments.findOne({
+    where: { orderId, type: <span class="st">'RESERVATION'</span>, status: <span class="st">'RESERVED'</span> }
+  });
+  <span class="kw">if</span> (!reservation) <span class="kw">return</span>; <span class="cm">// already released or never made</span>
+
+  <span class="kw">await</span> db.transaction(<span class="kw">async</span> (trx) => {
+    <span class="kw">await</span> db.accounts.increment(
+      { balance: reservation.amount },
+      { where: { customerId: <span class="st">'...'</span> }, transaction: trx }
+    );
+    <span class="kw">await</span> reservation.update({ status: <span class="st">'RELEASED'</span> }, { transaction: trx });
+  });
+}`
+  },
+  choreography: {
+    label: 'payment.handler.ts',
+    lang: 'TypeScript — Choreography style',
+    code: `<span class="cm">// Choreography-based Payment Service</span>
+<span class="kw">import</span> { <span class="cls">Kafka</span> } <span class="kw">from</span> <span class="st">'kafkajs'</span>;
+
+<span class="kw">const</span> kafka = <span class="kw">new</span> <span class="cls">Kafka</span>({ brokers: [<span class="st">'kafka:9092'</span>] });
+<span class="kw">const</span> consumer = kafka.consumer({ groupId: <span class="st">'payment-service'</span> });
+<span class="kw">const</span> producer = kafka.producer();
+
+<span class="kw">async function</span> <span class="fn">start</span>() {
+  <span class="kw">await</span> consumer.<span class="fn">subscribe</span>({
+    topics: [<span class="st">'order.created'</span>, <span class="st">'inventory.reservation.failed'</span>]
+  });
+
+  <span class="kw">await</span> consumer.<span class="fn">run</span>({
+    eachMessage: <span class="kw">async</span> ({ topic, message }) => {
+      <span class="kw">const</span> event = <span class="cls">JSON</span>.<span class="fn">parse</span>(message.value.toString());
+
+      <span class="kw">if</span> (topic === <span class="st">'order.created'</span>) {
+        <span class="kw">await</span> <span class="fn">handleOrderCreated</span>(event);
+      }
+      <span class="kw">if</span> (topic === <span class="st">'inventory.reservation.failed'</span>) {
+        <span class="kw">await</span> <span class="fn">handleCompensate</span>(event); <span class="cm">// C2: release funds</span>
+      }
+    }
+  });
+}
+
+<span class="kw">async function</span> <span class="fn">handleOrderCreated</span>(event: <span class="cls">OrderCreatedEvent</span>) {
+  <span class="kw">try</span> {
+    <span class="cm">// T2: local transaction</span>
+    <span class="kw">const</span> paymentId = <span class="kw">await</span> <span class="fn">reserveFunds</span>(event.orderId, event.amount);
+
+    <span class="cm">// Publish success event for next participant</span>
+    <span class="kw">await</span> producer.<span class="fn">send</span>({
+      topic: <span class="st">'payment.reserved'</span>,
+      messages: [{ value: <span class="cls">JSON</span>.<span class="fn">stringify</span>({
+        orderId: event.orderId,
+        paymentId,
+        sagaId: event.sagaId,
+      })}]
+    });
+  } <span class="kw">catch</span> (err) {
+    <span class="cm">// Publish failure event — triggers upstream compensations</span>
+    <span class="kw">await</span> producer.<span class="fn">send</span>({
+      topic: <span class="st">'payment.failed'</span>,
+      messages: [{ value: <span class="cls">JSON</span>.<span class="fn">stringify</span>({
+        orderId: event.orderId,
+        reason: err.message,
+        sagaId: event.sagaId,
+      })}]
+    });
+  }
+}
+
+<span class="cm">// C2: compensating transaction triggered by downstream failure</span>
+<span class="kw">async function</span> <span class="fn">handleCompensate</span>(event: <span class="cls">InventoryFailedEvent</span>) {
+  <span class="kw">await</span> <span class="fn">releaseFunds</span>(event.orderId);
+  <span class="cm">// Order service is listening to payment.released → will run C1</span>
+  <span class="kw">await</span> producer.<span class="fn">send</span>({
+    topic: <span class="st">'payment.released'</span>,
+    messages: [{ value: <span class="cls">JSON</span>.<span class="fn">stringify</span>({ orderId: event.orderId }) }]
+  });
+}`
+  },
+  idempotency: {
+    label: 'idempotency.middleware.ts',
+    lang: 'TypeScript — Idempotency key pattern',
+    code: `<span class="cm">// Idempotency key middleware for saga participants</span>
+<span class="cm">// Ensures at-least-once delivery is safe</span>
+
+<span class="kw">interface</span> <span class="cls">IdempotencyRecord</span> {
+  key: <span class="cls">string</span>;
+  result: <span class="cls">unknown</span>;
+  createdAt: <span class="cls">Date</span>;
+}
+
+<span class="kw">export class</span> <span class="cls">IdempotencyService</span> {
+  <span class="cm">// TTL: keep keys for 24h to handle retries</span>
+  <span class="kw">private</span> TTL_MS = <span class="num">24</span> * <span class="num">60</span> * <span class="num">60</span> * <span class="num">1000</span>;
+
+  <span class="kw">async</span> <span class="fn">execute</span>&lt;T&gt;(
+    key: <span class="cls">string</span>,    <span class="cm">// e.g. \`\${sagaId}:\${stepName}\`</span>
+    handler: () => <span class="cls">Promise</span>&lt;T&gt;
+  ): <span class="cls">Promise</span>&lt;T&gt; {
+
+    <span class="cm">// 1. Check if already processed</span>
+    <span class="kw">const</span> existing = <span class="kw">await</span> <span class="kw">this</span>.store.<span class="fn">get</span>(key);
+    <span class="kw">if</span> (existing) {
+      console.<span class="fn">log</span>(<span class="st">\`[idempotency] returning cached result for \${key}\`</span>);
+      <span class="kw">return</span> existing.result <span class="kw">as</span> T;
+    }
+
+    <span class="cm">// 2. Execute the handler (local transaction)</span>
+    <span class="kw">const</span> result = <span class="kw">await</span> <span class="fn">handler</span>();
+
+    <span class="cm">// 3. Persist result AFTER success (atomic with the business operation ideally)</span>
+    <span class="kw">await</span> <span class="kw">this</span>.store.<span class="fn">set</span>(key, {
+      key, result, createdAt: <span class="kw">new</span> <span class="cls">Date</span>()
+    });
+
+    <span class="kw">return</span> result;
+  }
+}
+
+<span class="cm">// Usage in a participant handler:</span>
+<span class="kw">const</span> idempotency = <span class="kw">new</span> <span class="cls">IdempotencyService</span>();
+
+<span class="kw">export async function</span> <span class="fn">reserveInventory</span>(cmd: <span class="cls">ReserveInventoryCmd</span>) {
+  <span class="kw">return</span> idempotency.<span class="fn">execute</span>(
+    <span class="st">\`\${cmd.sagaId}:reserveInventory\`</span>,  <span class="cm">// deterministic key</span>
+    <span class="kw">async</span> () => {
+      <span class="cm">// This block only runs once per sagaId+step combination</span>
+      <span class="kw">const</span> stock = <span class="kw">await</span> db.inventory.<span class="fn">findByPk</span>(cmd.skuId);
+      <span class="kw">if</span> (stock.available &lt; cmd.quantity) {
+        <span class="kw">throw new</span> <span class="cls">Error</span>(<span class="st">'Out of stock'</span>);
+      }
+      <span class="kw">return</span> db.inventory.<span class="fn">decrement</span>({ available: cmd.quantity }, {
+        where: { skuId: cmd.skuId }
+      });
+    }
+  );
+}`
+  },
+  state: {
+    label: 'saga-state-store.ts',
+    lang: 'TypeScript — Durable saga state (DB-backed)',
+    code: `<span class="cm">// Durable Saga State Store</span>
+<span class="cm">// Allows crash recovery and resume from last step</span>
+
+<span class="kw">type</span> <span class="cls">SagaStatus</span> =
+  | <span class="st">'STARTED'</span> | <span class="st">'ORDER_PLACED'</span>
+  | <span class="st">'PAYMENT_DONE'</span> | <span class="st">'STOCK_RESERVED'</span>
+  | <span class="st">'COMPLETED'</span> | <span class="st">'COMPENSATING'</span> | <span class="st">'FAILED'</span>;
+
+<span class="kw">interface</span> <span class="cls">SagaState</span> {
+  sagaId:    <span class="cls">string</span>;
+  orderId:   <span class="cls">string</span>;
+  status:    <span class="cls">SagaStatus</span>;
+  stepLog:   <span class="cls">string</span>[];       <span class="cm">// audit trail</span>
+  createdAt: <span class="cls">Date</span>;
+  updatedAt: <span class="cls">Date</span>;
+}
+
+<span class="cm">// Persisted state transitions (all writes are durable)</span>
+<span class="kw">export async function</span> <span class="fn">advanceSaga</span>(
+  sagaId: <span class="cls">string</span>,
+  newStatus: <span class="cls">SagaStatus</span>,
+  logEntry: <span class="cls">string</span>
+) {
+  <span class="kw">await</span> db.sagas.<span class="fn">update</span>({
+    status: newStatus,
+    updatedAt: <span class="kw">new</span> <span class="cls">Date</span>(),
+    stepLog: db.<span class="fn">fn</span>(<span class="st">'array_append'</span>, db.<span class="fn">col</span>(<span class="st">'stepLog'</span>), logEntry),
+  }, {
+    where: { sagaId }
+  });
+}
+
+<span class="cm">// Recovery: on startup, find in-progress sagas and resume</span>
+<span class="kw">export async function</span> <span class="fn">recoverInFlightSagas</span>() {
+  <span class="kw">const</span> stuck = <span class="kw">await</span> db.sagas.<span class="fn">findAll</span>({
+    where: {
+      status: [<span class="st">'STARTED'</span>, <span class="st">'ORDER_PLACED'</span>, <span class="st">'PAYMENT_DONE'</span>, <span class="st">'COMPENSATING'</span>],
+      updatedAt: { [Op.lt]: <span class="kw">new</span> <span class="cls">Date</span>(<span class="cls">Date</span>.<span class="fn">now</span>() - <span class="num">30_000</span>) } <span class="cm">// 30s timeout</span>
+    }
+  });
+
+  <span class="kw">for</span> (<span class="kw">const</span> saga <span class="kw">of</span> stuck) {
+    console.<span class="fn">log</span>(<span class="st">\`Resuming saga \${saga.sagaId} from \${saga.status}\`</span>);
+    <span class="kw">await</span> <span class="fn">resumeSaga</span>(saga);     <span class="cm">// re-trigger the orchestrator</span>
+  }
+}
+
+<span class="cm">// Run recovery on startup</span>
+<span class="fn">recoverInFlightSagas</span>().catch(console.error);
+setInterval(<span class="fn">recoverInFlightSagas</span>, <span class="num">30_000</span>);`
+  }
+};
+
+function renderCodePanels() {
+  const container = document.getElementById('code-panels');
+  if (container.dataset.rendered) return;
+  container.dataset.rendered = '1';
+  const keys = Object.keys(CODE);
+  container.innerHTML = keys.map(k => `
+    <div class="code-panel ${k==='orchestrator'?'active':''}" id="cpanel-${k}">
+      <div class="code-block">
+        <div class="code-header">
+          <span>${CODE[k].label}</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="code-lang">${CODE[k].lang}</span>
+            <button class="copy-btn" onclick="copyCode('${k}')">copy</button>
+          </div>
+        </div>${CODE[k].code}</div>
+    </div>
+  `).join('');
+}
+
+function showCodeTab(k) {
+  document.querySelectorAll('.code-tab').forEach((t,i) => {
+    const keys = ['orchestrator','participant','choreography','idempotency','state'];
+    t.classList.toggle('active', keys[i] === k);
+  });
+  document.querySelectorAll('.code-panel').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById('cpanel-' + k);
+  if (el) el.classList.add('active');
+  else { renderCodePanels(); document.getElementById('cpanel-'+k).classList.add('active'); }
+}
+
+function copyCode(k) {
+  const raw = CODE[k].code.replace(/<[^>]+>/g, '');
+  navigator.clipboard.writeText(raw).catch(() => {});
+  const btn = event.target;
+  btn.textContent = 'copied!';
+  btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1800);
+}
+
+// ─── Three.js 3D Visualizer ───
+let threeInitialized = false;
+let threeRenderer, threeScene, threeCamera, animFrameId;
+let threeMode = 'happy';
+let particles = [], connections = [], labels3d = [];
+let isDragging = false, lastX = 0, lastY = 0, rotY = 0.4, rotX = 0.2;
+
+function setMode(m) {
+  threeMode = m;
+  document.querySelectorAll('.three-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  if (threeInitialized) rebuildScene();
+}
+
+function initThree() {
+  if (threeInitialized) return;
+  threeInitialized = true;
+
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+  script.onload = setupThree;
+  document.head.appendChild(script);
+}
+
+function setupThree() {
+  const mount = document.getElementById('three-mount');
+  const W = mount.clientWidth, H = 420;
+
+  threeRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  threeRenderer.setSize(W, H);
+  threeRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  threeRenderer.setClearColor(0x07070e, 1);
+  mount.appendChild(threeRenderer.domElement);
+
+  threeScene = new THREE.Scene();
+  threeCamera = new THREE.PerspectiveCamera(50, W/H, 0.1, 100);
+  threeCamera.position.set(0, 2, 8);
+
+  // Lights
+  const ambient = new THREE.AmbientLight(0xffffff, 0.3);
+  threeScene.add(ambient);
+  const pt = new THREE.PointLight(0xa78bfa, 1.5, 20);
+  pt.position.set(0, 5, 5);
+  threeScene.add(pt);
+
+  // Mouse drag
+  mount.addEventListener('mousedown', e => { isDragging = true; lastX = e.clientX; lastY = e.clientY; });
+  mount.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    rotY += (e.clientX - lastX) * 0.008;
+    rotX += (e.clientY - lastY) * 0.005;
+    rotX = Math.max(-0.8, Math.min(0.8, rotX));
+    lastX = e.clientX; lastY = e.clientY;
+  });
+  mount.addEventListener('mouseup', () => isDragging = false);
+  mount.addEventListener('mouseleave', () => isDragging = false);
+  mount.addEventListener('wheel', e => {
+    threeCamera.position.z = Math.max(4, Math.min(14, threeCamera.position.z + e.deltaY * 0.01));
+    e.preventDefault();
+  }, { passive: false });
+
+  rebuildScene();
+
+  let t = 0;
+  function animate() {
+    animFrameId = requestAnimationFrame(animate);
+    t += 0.016;
+
+    if (!isDragging) { rotY += 0.003; }
+
+    // Rotate scene group
+    if (threeScene.children.length > 3) {
+      threeScene.children.forEach(c => {
+        if (c.userData.isGroup) {
+          c.rotation.y = rotY;
+          c.rotation.x = rotX;
+        }
+      });
+    }
+
+    // Animate particles (flowing along connections)
+    particles.forEach((p, i) => {
+      p.userData.progress = (p.userData.progress + p.userData.speed) % 1;
+      const curve = p.userData.curve;
+      const pos = curve.getPoint(p.userData.progress);
+      p.position.copy(pos);
+      p.material.opacity = Math.sin(p.userData.progress * Math.PI) * 0.9;
+    });
+
+    threeRenderer.render(threeScene, threeCamera);
+  }
+  animate();
+}
+
+function makeSphere(color, radius, pos) {
+  const geo = new THREE.SphereGeometry(radius, 32, 32);
+  const mat = new THREE.MeshPhongMaterial({
+    color, emissive: color, emissiveIntensity: 0.4,
+    transparent: true, opacity: 0.9
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set(...pos);
+  return mesh;
+}
+
+function makeEdge(from, to, color, dashed) {
+  const points = [new THREE.Vector3(...from), new THREE.Vector3(...to)];
+  const geo = new THREE.BufferGeometry().setFromPoints(points);
+  const mat = new THREE.LineBasicMaterial({ color, transparent: true, opacity: dashed ? 0.4 : 0.7 });
+  return new THREE.Line(geo, mat);
+}
+
+function makeParticle(fromV, toV, color, speed = 0.008) {
+  const curve = new THREE.LineCurve3(fromV, toV);
+  const geo = new THREE.SphereGeometry(0.07, 8, 8);
+  const mat = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.9 });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.userData = { curve, progress: Math.random(), speed };
+  return mesh;
+}
+
+function rebuildScene() {
+  // Clear old group
+  threeScene.children = threeScene.children.filter(c => !c.userData.isGroup);
+  particles = []; connections = [];
+
+  const group = new THREE.Group();
+  group.userData.isGroup = true;
+  group.rotation.y = rotY;
+  group.rotation.x = rotX;
+
+  const COLORS = {
+    order: 0xa78bfa,
+    payment: 0x34d399,
+    inventory: 0xfbbf24,
+    shipping: 0x60a5fa,
+    orchestrator: 0xf8f8ff,
+    fail: 0xfb7185,
+  };
+
+  const POS = {
+    order:       [-3,  1,  0],
+    payment:     [ 0,  1,  2],
+    inventory:   [ 3,  1,  0],
+    shipping:    [ 0,  1, -2],
+    orchestrator:[ 0,  2.5, 0],
+  };
+
+  const nodes = {};
+  const addNode = (k, color) => {
+    const s = makeSphere(color, 0.35, POS[k]);
+    group.add(s);
+    nodes[k] = s;
+  };
+
+  if (threeMode === 'happy') {
+    ['order','payment','inventory','shipping'].forEach((k,i) =>
+      addNode(k, Object.values(COLORS)[i]));
+    // Forward flow edges + particles
+    [['order','payment'],['payment','inventory'],['inventory','shipping']].forEach(([a,b]) => {
+      group.add(makeEdge(POS[a], POS[b], COLORS[a]));
+      for (let i = 0; i < 3; i++) {
+        const p = makeParticle(
+          new THREE.Vector3(...POS[a]), new THREE.Vector3(...POS[b]),
+          COLORS[b], 0.005 + i * 0.003
+        );
+        group.add(p); particles.push(p);
+      }
+    });
+  }
+
+  else if (threeMode === 'failure') {
+    ['order','payment','inventory','shipping'].forEach((k,i) =>
+      addNode(k, i === 2 ? COLORS.fail : Object.values(COLORS)[i]));
+
+    // Forward up to inventory
+    [['order','payment']].forEach(([a,b]) => {
+      group.add(makeEdge(POS[a], POS[b], COLORS[a]));
+      for (let i=0;i<2;i++) {
+        const p = makeParticle(new THREE.Vector3(...POS[a]), new THREE.Vector3(...POS[b]), COLORS[b]);
+        group.add(p); particles.push(p);
+      }
+    });
+
+    // Failed edge to inventory
+    group.add(makeEdge(POS['payment'], POS['inventory'], COLORS.fail));
+
+    // Compensation backward
+    [['inventory','payment'],['payment','order']].forEach(([a,b]) => {
+      group.add(makeEdge(POS[a], POS[b], COLORS.fail, true));
+      for (let i=0;i<3;i++) {
+        const p = makeParticle(new THREE.Vector3(...POS[a]), new THREE.Vector3(...POS[b]), COLORS.fail, 0.006+i*0.003);
+        group.add(p); particles.push(p);
+      }
+    });
+  }
+
+  else if (threeMode === 'choreography') {
+    ['order','payment','inventory','shipping'].forEach((k,i) =>
+      addNode(k, Object.values(COLORS)[i]));
+    // All services publish events — mesh-like (but directed)
+    const pairs = [['order','payment'],['payment','inventory'],['inventory','shipping'],['order','shipping']];
+    pairs.forEach(([a,b]) => {
+      group.add(makeEdge(POS[a], POS[b], COLORS[a], true));
+      for (let i=0;i<2;i++) {
+        const p = makeParticle(new THREE.Vector3(...POS[a]), new THREE.Vector3(...POS[b]), COLORS[a], 0.004+i*0.004);
+        group.add(p); particles.push(p);
+      }
+    });
+  }
+
+  else if (threeMode === 'orchestration') {
+    addNode('orchestrator', COLORS.orchestrator);
+    ['order','payment','inventory','shipping'].forEach((k,i) =>
+      addNode(k, Object.values(COLORS)[i]));
+
+    // Hub and spoke
+    ['order','payment','inventory','shipping'].forEach((k) => {
+      group.add(makeEdge(POS['orchestrator'], POS[k], COLORS.orchestrator));
+      // commands out
+      const p1 = makeParticle(new THREE.Vector3(...POS['orchestrator']), new THREE.Vector3(...POS[k]), COLORS.orchestrator, 0.007);
+      group.add(p1); particles.push(p1);
+      // replies back
+      const p2 = makeParticle(new THREE.Vector3(...POS[k]), new THREE.Vector3(...POS['orchestrator']), COLORS[k], 0.005);
+      group.add(p2); particles.push(p2);
+    });
+  }
+
+  // Grid floor
+  const gridGeo = new THREE.PlaneGeometry(12, 12, 12, 12);
+  const gridMat = new THREE.MeshBasicMaterial({ color: 0x1a1a2e, wireframe: true, transparent: true, opacity: 0.15 });
+  const grid = new THREE.Mesh(gridGeo, gridMat);
+  grid.rotation.x = -Math.PI / 2;
+  grid.position.y = -1.5;
+  group.add(grid);
+
+  threeScene.add(group);
+}
+
+// ─── Init code panels on load ───
+setTimeout(() => {
+  renderChoreo();
+  renderOrch();
+}, 50);
+
+window.addEventListener('resize', () => {
+  if (!threeInitialized || !threeRenderer) return;
+  const mount = document.getElementById('three-mount');
+  const W = mount.clientWidth;
+  threeCamera.aspect = W / 420;
+  threeCamera.updateProjectionMatrix();
+  threeRenderer.setSize(W, 420);
+});
+</script>
+</body>
+</html>

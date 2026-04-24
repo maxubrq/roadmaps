@@ -1,0 +1,508 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.container { padding: 1rem 0 2rem; }
+.phase-nav { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.phase-btn {
+  padding: 6px 16px; border-radius: var(--border-radius-md);
+  border: 0.5px solid var(--color-border-secondary);
+  background: transparent; color: var(--color-text-secondary);
+  font-size: 13px; cursor: pointer; font-family: var(--font-sans);
+  transition: all .15s;
+}
+.phase-btn.active {
+  background: var(--color-background-secondary);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-primary);
+  font-weight: 500;
+}
+.phase-panel { display: none; }
+.phase-panel.active { display: block; }
+.phase-header {
+  border-left: 3px solid var(--accent);
+  padding-left: 14px; margin-bottom: 1.5rem;
+}
+.phase-title { font-size: 18px; font-weight: 500; color: var(--color-text-primary); }
+.phase-sub { font-size: 13px; color: var(--color-text-secondary); margin-top: 4px; }
+.transform-box {
+  background: var(--color-background-secondary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  padding: 14px 16px; margin-bottom: 1.5rem;
+}
+.transform-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--color-text-tertiary); margin-bottom: 6px; }
+.transform-text { font-size: 14px; color: var(--color-text-primary); line-height: 1.6; }
+.section-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--color-text-tertiary); margin-bottom: 10px; }
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 8px; margin-bottom: 1.5rem; }
+.skill-card {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 10px 12px;
+}
+.skill-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 3px; }
+.skill-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+.resources { margin-bottom: 1.5rem; }
+.res-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.res-row:last-child { border-bottom: none; }
+.res-tag {
+  font-size: 11px; padding: 2px 7px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-top: 1px;
+  border: 0.5px solid var(--color-border-tertiary);
+}
+.res-name { font-size: 13px; color: var(--color-text-primary); font-weight: 500; }
+.res-note { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+.milestones { margin-bottom: 1.5rem; }
+.milestone { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
+.m-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 5px; }
+.m-text { font-size: 13px; color: var(--color-text-primary); line-height: 1.5; }
+.m-time { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+.checkpoint {
+  background: var(--color-background-secondary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  padding: 14px 16px; margin-bottom: 1.5rem;
+}
+.cp-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 8px; }
+.cp-item { font-size: 13px; color: var(--color-text-secondary); padding: 3px 0; display: flex; gap: 8px; }
+.cp-item::before { content: "→"; color: var(--accent); flex-shrink: 0; }
+.tabs { display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.tab-btn {
+  font-size: 13px; padding: 6px 12px; border: none; background: none;
+  color: var(--color-text-secondary); cursor: pointer; font-family: var(--font-sans);
+  border-bottom: 2px solid transparent; margin-bottom: -0.5px;
+}
+.tab-btn.active { color: var(--color-text-primary); border-bottom-color: var(--accent); font-weight: 500; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.cert-row { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.cert-row:last-child { border-bottom: none; }
+.cert-prio { font-size: 11px; padding: 2px 7px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; }
+.prio-high { background: #FAEEDA; color: #633806; border: 0.5px solid #FAC775; }
+.prio-med  { background: #E6F1FB; color: #0C447C; border: 0.5px solid #B5D4F4; }
+.prio-low  { background: #F1EFE8; color: #444441; border: 0.5px solid #D3D1C7; }
+
+[data-phase="0"] { --accent: #7F77DD; }
+[data-phase="1"] { --accent: #1D9E75; }
+[data-phase="2"] { --accent: #BA7517; }
+.insight-box {
+  border-left: 2px solid var(--accent);
+  padding: 8px 12px; margin-bottom: 1.5rem;
+  background: var(--color-background-secondary);
+  border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+}
+.insight-text { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; font-style: italic; }
+</style>
+
+<div class="container">
+<h2 class="sr-only">Lộ trình trở thành system-thinker & top 1% trong tài chính, đầu tư, vĩ mô/vi mô, toàn cầu & SEA-APAC</h2>
+
+<div class="phase-nav">
+  <button class="phase-btn active" onclick="showPhase(0)">0 → 3 · Nền tảng nhận thức</button>
+  <button class="phase-btn" onclick="showPhase(1)">3 → 6 · Hệ thống tư duy</button>
+  <button class="phase-btn" onclick="showPhase(2)">6 → 9 · Bộ máy phán đoán</button>
+</div>
+
+<!-- PHASE 0→3 -->
+<div class="phase-panel active" data-phase="0">
+  <div class="phase-header">
+    <div class="phase-title">Phase 1 · 0 → 3 · Nền tảng nhận thức</div>
+    <div class="phase-sub">Tháng 0 – 8 · Mục tiêu: thay đổi ngôn ngữ tư duy — bắt đầu nhìn thế giới qua lens kinh tế</div>
+  </div>
+
+  <div class="transform-box">
+    <div class="transform-label">Sự thay đổi không thể đảo ngược</div>
+    <div class="transform-text">Từ người <em>đọc tin tức tài chính thụ động</em> → người <strong>có framework giải thích tại sao</strong> mọi sự kiện xảy ra. Sau phase này, mọi headline kinh tế đều kích hoạt một chuỗi câu hỏi tự động trong đầu: cung cầu nào bị thay đổi? Incentive của ai? Ai chịu chi phí?</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this, 'p0-skills')">Kỹ năng cốt lõi</button>
+    <button class="tab-btn" onclick="switchTab(this, 'p0-res')">Tài nguyên</button>
+    <button class="tab-btn" onclick="switchTab(this, 'p0-cert')">Bằng cấp</button>
+    <button class="tab-btn" onclick="switchTab(this, 'p0-check')">Checkpoint</button>
+  </div>
+
+  <div class="tab-content active" id="p0-skills">
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-name">Kinh tế vi mô cơ bản</div>
+        <div class="skill-desc">Cung cầu, elasticity, market structures, game theory cơ bản, incentive analysis</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Kinh tế vĩ mô cơ bản</div>
+        <div class="skill-desc">GDP, lạm phát, lãi suất, cán cân thương mại, chu kỳ kinh tế, chính sách tiền tệ/tài khóa</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Tài chính doanh nghiệp cơ bản</div>
+        <div class="skill-desc">3 báo cáo tài chính, time value of money, DCF cơ bản, WACC, working capital</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Thị trường tài chính</div>
+        <div class="skill-desc">Equity, fixed income, FX, derivatives cơ bản. Hiểu cách định giá asset, risk-return tradeoff</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Mental models nền tảng</div>
+        <div class="skill-desc">Opportunity cost, margin, compounding, regression to the mean, base rates</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Đọc số liệu macro SEA</div>
+        <div class="skill-desc">Biết đọc và giải thích dữ liệu kinh tế VN, ASEAN-6 — GDP, CPI, PMI, FDI, current account</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="p0-res">
+    <div class="resources">
+      <div class="section-label">Sách — đọc theo thứ tự</div>
+      <div class="res-row">
+        <span class="res-tag">Sách</span>
+        <div><div class="res-name">Principles of Economics — Mankiw</div><div class="res-note">Đang đọc. Đọc hết, làm bài tập end-of-chapter. Đây là nền không thể bỏ qua.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Sách</span>
+        <div><div class="res-name">The Intelligent Investor — Graham</div><div class="res-note">Chương 1–4 và 8, 20. Hình thành tư duy value + margin of safety ngay từ đầu.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Sách</span>
+        <div><div class="res-name">Financial Statements — Thomas Ittelson</div><div class="res-note">Bản mỏng, cực kỳ trực quan. Đọc 3 ngày là xong toàn bộ kế toán cơ bản.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Sách</span>
+        <div><div class="res-name">Poor Charlie's Almanack — Munger</div><div class="res-note">Không đọc tuần tự. Đọc phần mental models và latticework of models trước.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Podcast</span>
+        <div><div class="res-name">Acquired — Ben & David</div><div class="res-note">Bắt đầu từ các episode về Berkshire, LVMH, Costco. Cách phân tích business tốt nhất hiện có.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Podcast</span>
+        <div><div class="res-name">Odd Lots — Bloomberg</div><div class="res-note">Macro từ góc nhìn market practitioner. Nghe 2 ep/tuần, chọn topic đang hot.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Báo / Data</span>
+        <div><div class="res-name">World Bank Open Data + GSO Vietnam</div><div class="res-note">Mỗi tháng download 1 lần, đọc economic indicators của VN và ASEAN. Tập thói quen nhìn số.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Khóa học</span>
+        <div><div class="res-name">Yale Financial Markets — Robert Shiller (Coursera, free)</div><div class="res-note">Tốt nhất để hiểu thị trường tài chính theo nghĩa lịch sử và xã hội học.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="p0-cert">
+    <div class="resources">
+      <div class="section-label">Bằng cấp — ưu tiên theo leverage</div>
+      <div class="cert-row">
+        <span class="cert-prio prio-high">Cao</span>
+        <div><div class="res-name">CFA Level 1</div><div class="res-note">Mục tiêu thi cuối Phase 2 (tháng 12–18). Không cần pass ngay, việc học CFA L1 restructure toàn bộ tư duy tài chính. Đây là "Stanford" signal trong ngành đầu tư.</div></div>
+      </div>
+      <div class="cert-row">
+        <span class="cert-prio prio-med">Trung</span>
+        <div><div class="res-name">Bloomberg Market Concepts (BMC)</div><div class="res-note">10–12 giờ, free nếu dùng Bloomberg terminal (nhiều trường/tổ chức có). Signal nhỏ nhưng nhanh.</div></div>
+      </div>
+      <div class="cert-row">
+        <span class="cert-prio prio-low">Thấp</span>
+        <div><div class="res-name">Financial Modeling (CFI / Wall St Prep)</div><div class="res-note">Chỉ cần nếu muốn vào IB hoặc PE. Nếu mục tiêu là investor/analyst thì CFA đủ rồi.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="p0-check">
+    <div class="checkpoint">
+      <div class="cp-title">Gate criteria — phải pass trước khi lên Phase 2</div>
+      <div class="cp-item">Viết được 1 economic analysis ngắn (500–800 từ) về 1 sự kiện macro SEA trong tuần — có số liệu, có framework, có conclusion riêng</div>
+      <div class="cp-item">Đọc và giải thích được balance sheet + P&L của 1 công ty niêm yết bất kỳ chỉ từ báo cáo thường niên</div>
+      <div class="cp-item">Giải thích được cho người không chuyên: tại sao Fed tăng lãi suất lại ảnh hưởng đến giá nhà ở VN</div>
+      <div class="cp-item">Có ít nhất 10 mental models tài chính được internalize — dùng được tự nhiên trong suy luận hằng ngày</div>
+      <div class="cp-item">Hoàn thành ít nhất 60% CFA L1 curriculum (Ethics + Quant + Econ + Financial Statement)</div>
+    </div>
+
+    <div class="milestones">
+      <div class="section-label">Milestones theo thời gian</div>
+      <div class="milestone"><div class="m-dot"></div><div><div class="m-text">Tháng 1–2: Xong Mankiw + Ittelson. Bắt đầu đọc báo cáo tài chính thực tế (VNM, FPT, Vingroup)</div></div></div>
+      <div class="milestone"><div class="m-dot"></div><div><div class="m-text">Tháng 3–4: Xong Yale Financial Markets. Bắt đầu CFA L1 curriculum tự học. Viết weekly macro note đầu tiên</div></div></div>
+      <div class="milestone"><div class="m-dot"></div><div><div class="m-text">Tháng 5–6: Poor Charlie's Almanack xong. Có 20+ mental models checklist cá nhân hóa</div></div></div>
+      <div class="milestone"><div class="m-dot"></div><div><div class="m-text">Tháng 7–8: Pass gate criteria. Publish 4–6 analysis pieces (blog / LinkedIn / Substack)</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 3→6 -->
+<div class="phase-panel" data-phase="1">
+  <div class="phase-header">
+    <div class="phase-title">Phase 2 · 3 → 6 · Hệ thống tư duy</div>
+    <div class="phase-sub">Tháng 8 – 18 · Mục tiêu: đọc được thị trường như một hệ thống — thấy feedback loops, second-order effects, structural forces</div>
+  </div>
+
+  <div class="transform-box">
+    <div class="transform-label">Sự thay đổi không thể đảo ngược</div>
+    <div class="transform-text">Từ người <em>hiểu từng khái niệm riêng lẻ</em> → người <strong>thấy thị trường như một hệ thống phức hợp</strong>. Sau phase này, khi nhìn một biến động giá, không còn tìm "lý do" — mà tìm <em>hệ thống nào đang vận hành, ai đang phản ứng với ai, loop nào đang khuếch đại</em>.</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this, 'p1-skills')">Kỹ năng cốt lõi</button>
+    <button class="tab-btn" onclick="switchTab(this, 'p1-res')">Tài nguyên</button>
+    <button class="tab-btn" onclick="switchTab(this, 'p1-cert')">Bằng cấp</button>
+    <button class="tab-btn" onclick="switchTab(this, 'p1-check')">Checkpoint</button>
+  </div>
+
+  <div class="tab-content active" id="p1-skills">
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-name">Systems thinking tài chính</div>
+        <div class="skill-desc">Nhận ra stock vs flow, feedback loops, delays trong thị trường tín dụng, bất động sản, FX</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Macro phân tích nâng cao</div>
+        <div class="skill-desc">Debt cycles (Dalio framework), BoP mechanics, currency crisis anatomy, fiscal dominance</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Phân tích đầu tư</div>
+        <div class="skill-desc">Valuation (DCF, comps, LBO basics), competitive moat analysis, capital allocation quality</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Tư duy xác suất</div>
+        <div class="skill-desc">Bayesian updating, base rates, expected value thinking, scenario analysis với probability weights</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">SEA-APAC macro thực chiến</div>
+        <div class="skill-desc">Hiểu sâu cấu trúc kinh tế VN, Indonesia, Thailand, Malaysia — FDI dynamics, commodity exposure, USD dependency</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Geopolitical economy</div>
+        <div class="skill-desc">US-China decoupling implications, supply chain rewiring, ASEAN positioning, trade policy analysis</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="p1-res">
+    <div class="resources">
+      <div class="section-label">Sách — theo priority</div>
+      <div class="res-row">
+        <span class="res-tag">Sách</span>
+        <div><div class="res-name">Thinking in Systems — Donella Meadows</div><div class="res-note">Đọc xong sẽ thấy thị trường tài chính bằng một ngôn ngữ hoàn toàn khác. Đây là bước ngoặt.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Sách</span>
+        <div><div class="res-name">Principles for Navigating Big Debt Crises — Ray Dalio (free PDF)</div><div class="res-note">Template để phân tích mọi cuộc khủng hoảng nợ. Đọc case studies Weimar, Japan, 2008.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Sách</span>
+        <div><div class="res-name">7 Powers — Hamilton Helmer</div><div class="res-note">Framework phân tích competitive moat tốt nhất hiện có. Ứng dụng vào equity analysis.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Sách</span>
+        <div><div class="res-name">The Alchemy of Finance — George Soros</div><div class="res-note">Reflexivity theory — thị trường không phản ánh thực tại mà <em>tạo ra</em> thực tại. Thay đổi toàn bộ cách nhìn.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Sách</span>
+        <div><div class="res-name">When Genius Failed — Roger Lowenstein</div><div class="res-note">LTCM case study. Hiểu tại sao model đúng vẫn có thể sai thảm hại.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Báo / Research</span>
+        <div><div class="res-name">BIS Quarterly Review + IMF World Economic Outlook</div><div class="res-note">Đọc executive summary mỗi quý. Đây là nguồn macro chuẩn nhất thế giới.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Báo / Research</span>
+        <div><div class="res-name">Foreign Affairs + Nikkei Asia</div><div class="res-note">Geo-economics góc nhìn APAC. Ít nhất 3 bài/tuần.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Podcast</span>
+        <div><div class="res-name">Macro Voices + Unchained (Laura Shin cho crypto macro)</div><div class="res-note">Macro practitioners nói chuyện với nhau — nghe để bắt được tư duy thực chiến.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Khóa học</span>
+        <div><div class="res-name">Santa Fe Institute — Complexity Economics (free / audit)</div><div class="res-note">Nền tảng lý thuyết cho systems thinking trong kinh tế. Không có khóa nào như thế này.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="p1-cert">
+    <div class="resources">
+      <div class="section-label">Bằng cấp trong phase này</div>
+      <div class="cert-row">
+        <span class="cert-prio prio-high">Cao</span>
+        <div><div class="res-name">CFA Level 1 — thi và pass</div><div class="res-note">Target tháng 12–14. Sau khi pass L1, leverage signal này vào network trong ngành đầu tư.</div></div>
+      </div>
+      <div class="cert-row">
+        <span class="cert-prio prio-high">Cao</span>
+        <div><div class="res-name">CFA Level 2 — bắt đầu học</div><div class="res-note">L2 equity và fixed income valuation là nơi tư duy đầu tư thực sự được hình thành.</div></div>
+      </div>
+      <div class="cert-row">
+        <span class="cert-prio prio-med">Trung</span>
+        <div><div class="res-name">FRM Part 1 (GARP) — cân nhắc</div><div class="res-note">Nếu muốn sang risk management hoặc macro hedge fund. Không cần thiết nếu focus equity/VC.</div></div>
+      </div>
+      <div class="cert-row">
+        <span class="cert-prio prio-med">Trung</span>
+        <div><div class="res-name">Artifact công khai</div><div class="res-note">Publish Substack macro analysis SEA, 1 bài/2 tuần. Đây là "bằng cấp" thực sự quan trọng hơn cert trong dài hạn.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="p1-check">
+    <div class="checkpoint">
+      <div class="cp-title">Gate criteria — phải pass trước khi lên Phase 3</div>
+      <div class="cp-item">Viết được memo phân tích 1 cuộc khủng hoảng tài chính lịch sử (VD: 1997 Asian Crisis, 2008, Argentina) sử dụng Dalio debt cycle + systems thinking framework</div>
+      <div class="cp-item">Thực hiện DCF valuation một công ty SEA niêm yết, defend được các giả định trước người biết chuyện</div>
+      <div class="cp-item">Giải thích được cơ chế truyền dẫn: từ Fed funds rate → USD/VND → lạm phát VN → chính sách NHNN → thị trường trái phiếu → bất động sản</div>
+      <div class="cp-item">Có 20+ bài phân tích published. Ít nhất 1 bài được người trong ngành chia sẻ hoặc comment substantively</div>
+      <div class="cp-item">Pass CFA Level 1</div>
+    </div>
+
+    <div class="milestones">
+      <div class="section-label">Milestones theo thời gian</div>
+      <div class="milestone"><div class="m-dot"></div><div><div class="m-text">Tháng 8–10: Xong Thinking in Systems + Dalio debt cycles. Bắt đầu apply vào phân tích VN 2022–2024 crisis</div></div></div>
+      <div class="milestone"><div class="m-dot"></div><div><div class="m-text">Tháng 10–12: Ôn CFA L1 intensive. Xong 7 Powers, bắt đầu equity analysis framework cá nhân</div></div></div>
+      <div class="milestone"><div class="m-dot"></div><div><div class="m-text">Tháng 12–14: Thi CFA L1. Publish 10+ Substack bài về SEA macro. Bắt đầu build network trong ngành</div></div></div>
+      <div class="milestone"><div class="m-dot"></div><div><div class="m-text">Tháng 14–18: Bắt đầu CFA L2. Geopolitics + supply chain analysis APAC. Pass gate criteria</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 6→9 -->
+<div class="phase-panel" data-phase="2">
+  <div class="phase-header">
+    <div class="phase-title">Phase 3 · 6 → 9 · Bộ máy phán đoán</div>
+    <div class="phase-sub">Tháng 18 – 36 · Mục tiêu: tích hợp tất cả — kinh tế, địa chính trị, lịch sử, tâm lý học — thành một engine phán đoán độc lập, có track record</div>
+  </div>
+
+  <div class="transform-box">
+    <div class="transform-label">Sự thay đổi không thể đảo ngược</div>
+    <div class="transform-text">Từ người <em>phân tích giỏi</em> → người <strong>có framework phán đoán độc lập và track record để chứng minh</strong>. Sau phase này, không cần consensus để có conviction. Không cần ai xác nhận trước khi đặt cược. Có thể nhìn 5–10 năm và thấy được những gì người khác chưa thấy — không phải vì thông minh hơn, mà vì có <em>hệ thống tư duy sâu hơn</em>.</div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-text">Điểm 6→9 không đến từ đọc thêm sách. Nó đến từ việc phán đoán thực tế, sai, học, phán đoán lại — hàng trăm lần. Sách và khóa học ở phase này chỉ là ammo; trận chiến là trên thực địa: quản lý tiền thật, publish prediction thật, network với người thật.</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this, 'p2-skills')">Kỹ năng cốt lõi</button>
+    <button class="tab-btn" onclick="switchTab(this, 'p2-res')">Tài nguyên</button>
+    <button class="tab-btn" onclick="switchTab(this, 'p2-cert')">Bằng cấp</button>
+    <button class="tab-btn" onclick="switchTab(this, 'p2-check')">Checkpoint</button>
+  </div>
+
+  <div class="tab-content active" id="p2-skills">
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-name">Phán đoán macro toàn cầu</div>
+        <div class="skill-desc">Xây và maintain macro framework riêng — có thesis, có xác suất gán, có cơ chế cập nhật khi sai</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Phân tích địa chính trị kinh tế</div>
+        <div class="skill-desc">Đọc được ý đồ chính sách đằng sau quyết định chính trị. Biết khi nào geopolitics override economics</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Capital allocation</div>
+        <div class="skill-desc">Quản lý danh mục thực tế — position sizing, risk management, drawdown psychology</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Lịch sử tài chính sâu</div>
+        <div class="skill-desc">Đọc được pattern từ 1800s đến nay. Biết đâu là historical anomaly, đâu là structural shift</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Meta-cognition đầu tư</div>
+        <div class="skill-desc">Phân biệt được: tin vào thesis vì bằng chứng hay vì muốn tin. Manage được conviction vs overconfidence</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Truyền thông tư duy</div>
+        <div class="skill-desc">Viết investment memo, pitch idea trong 5 phút, trình bày macro view thuyết phục trước C-suite/investors</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="p2-res">
+    <div class="resources">
+      <div class="section-label">Sách — primary sources, không còn textbook</div>
+      <div class="res-row">
+        <span class="res-tag">Sách</span>
+        <div><div class="res-name">The Power Law — Sebastian Mallaby</div><div class="res-note">Cách VC nghĩ về power law returns, asymmetric bets, và uncertainty. Đọc để hiểu capital allocation logic.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Sách</span>
+        <div><div class="res-name">The Great Transformation — Karl Polanyi</div><div class="res-note">Tại sao thị trường không tự vận hành mà được tạo ra bởi chính trị. Thay đổi hoàn toàn cách nhìn về "thị trường tự do".</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Sách</span>
+        <div><div class="res-name">Good Strategy Bad Strategy — Richard Rumelt</div><div class="res-note">Áp dụng vào macro thesis: kernel of good strategy = diagnosis + guiding policy + coherent actions.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Sách</span>
+        <div><div class="res-name">The Man Who Solved the Market — Gregory Zuckerman</div><div class="res-note">Renaissance Technologies. Không học algorithm — học cách Simons nghĩ về uncertainty và evidence.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Primary sources</span>
+        <div><div class="res-name">Fed minutes + ECB speeches + PBOC policy statements</div><div class="res-note">Đọc trực tiếp, không qua media filter. Tập đọc giữa các dòng chữ của central bankers.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Research</span>
+        <div><div class="res-name">Howard Marks memos (Oaktree) + Druckenmiller interviews archive</div><div class="res-note">Những người đang ở điểm 9/10 tư duy về rủi ro và macro. Đọc hết archive theo thứ tự thời gian.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Network</span>
+        <div><div class="res-name">ASEAN Business Council + CFA Society Vietnam/Singapore</div><div class="res-note">Vào community của người đang làm thật. Conversations với practitioners > đọc sách ở level này.</div></div>
+      </div>
+      <div class="res-row">
+        <span class="res-tag">Practice</span>
+        <div><div class="res-name">Public prediction log — Manifold Markets / personal Substack</div><div class="res-note">Đặt prediction có xác suất, public, track record. Đây là bằng chứng duy nhất của calibration.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="p2-cert">
+    <div class="resources">
+      <div class="section-label">Bằng cấp & credentials</div>
+      <div class="cert-row">
+        <span class="cert-prio prio-high">Cao</span>
+        <div><div class="res-name">CFA Level 2 & 3 — pass</div><div class="res-note">CFA charterholder là hard signal toàn cầu. Đặc biệt mạnh trong APAC fund management environment.</div></div>
+      </div>
+      <div class="cert-row">
+        <span class="cert-prio prio-high">Cao</span>
+        <div><div class="res-name">Track record viết lách — Substack 1,000+ subscribers</div><div class="res-note">Đây là credential thực sự. Tốt hơn mọi bằng cấp nếu muốn vào fund, advisory, hay tự lập.</div></div>
+      </div>
+      <div class="cert-row">
+        <span class="cert-prio prio-med">Trung</span>
+        <div><div class="res-name">Speaking / advisory — CFA Society, startup ecosystems, government advisory panels</div><div class="res-note">Ở level này, được mời nói chuyện hoặc tham gia panel là signal mạnh nhất.</div></div>
+      </div>
+      <div class="cert-row">
+        <span class="cert-prio prio-low">Cân nhắc</span>
+        <div><div class="res-name">MBA (part-time / executive) tại NUS / ADB Institute</div><div class="res-note">Chỉ nếu muốn vào policy role hoặc MNC C-suite. ROI thấp hơn nếu đường đi là investor/advisor độc lập.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="p2-check">
+    <div class="checkpoint">
+      <div class="cp-title">Gate criteria — dấu hiệu đạt 9/10</div>
+      <div class="cp-item">Có macro thesis riêng về ít nhất 2 thị trường (VD: VN rate cycle, USD/CNY trajectory, ASEAN FDI flows) — được viết rõ, có xác suất, có điều kiện để sai</div>
+      <div class="cp-item">Prediction log có ít nhất 50 predictions với track record calibration > 60% accuracy ở predictions được gán 60%+ probability</div>
+      <div class="cp-item">CFA charterholder hoặc đang học L3</div>
+      <div class="cp-item">Được người trong ngành (fund manager, senior analyst, policy maker) tìm đến để hỏi quan điểm — không phải ngược lại</div>
+      <div class="cp-item">Quản lý capital thực tế (cá nhân hoặc được ủy thác) với documented process, không phải gut feeling</div>
+    </div>
+
+    <div class="milestones">
+      <div class="section-label">Milestones theo thời gian</div>
+      <div class="milestone"><div class="m-dot"></div><div><div class="m-text">Tháng 18–20: Xây macro framework cá nhân — viết ra, publish, nhận feedback từ người biết chuyện</div></div></div>
+      <div class="milestone"><div class="m-dot"></div><div><div class="m-text">Tháng 20–24: Bắt đầu prediction log công khai. Deploy capital thực tế theo framework — dù nhỏ</div></div></div>
+      <div class="milestone"><div class="m-dot"></div><div><div class="m-text">Tháng 24–30: CFA L2 pass. Substack 500+ subscribers. Bắt đầu được invite speak hoặc consult</div></div></div>
+      <div class="milestone"><div class="m-dot"></div><div><div class="m-text">Tháng 30–36: CFA L3. Track record đủ dài để prove calibration. Network trong APAC finance solidified</div></div></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+function showPhase(idx) {
+  document.querySelectorAll('.phase-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+  document.querySelectorAll('.phase-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+}
+function switchTab(btn, targetId) {
+  const panel = btn.closest('.phase-panel');
+  panel.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  panel.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(targetId).classList.add('active');
+}
+</script>

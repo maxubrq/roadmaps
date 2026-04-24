@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Svelte Mastery Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #0e0e0f;
+    --bg2: #161618;
+    --bg3: #1e1e21;
+    --bg4: #26262a;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #f0efe8;
+    --text2: #9998a3;
+    --text3: #5e5d68;
+    --accent: #ff5c35;
+    --accent2: #ff8a6a;
+    --accent-bg: rgba(255,92,53,0.1);
+    --green: #3ecf8e;
+    --green-bg: rgba(62,207,142,0.1);
+    --blue: #4f9cf9;
+    --blue-bg: rgba(79,156,249,0.1);
+    --amber: #f5a623;
+    --amber-bg: rgba(245,166,35,0.1);
+    --purple: #9d7df5;
+    --purple-bg: rgba(157,125,245,0.1);
+    --coral: #ff5c35;
+    --coral-bg: rgba(255,92,53,0.08);
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+  .light {
+    --bg: #faf9f6;
+    --bg2: #f2f1ed;
+    --bg3: #e8e7e2;
+    --bg4: #dddcd7;
+    --border: rgba(0,0,0,0.07);
+    --border2: rgba(0,0,0,0.12);
+    --text: #1a1a1c;
+    --text2: #6b6a74;
+    --text3: #a09fa8;
+    --accent: #e03a14;
+    --accent2: #c22e0a;
+    --accent-bg: rgba(224,58,20,0.08);
+    --green: #1a9e68;
+    --green-bg: rgba(26,158,104,0.08);
+    --blue: #2563eb;
+    --blue-bg: rgba(37,99,235,0.08);
+    --amber: #b45309;
+    --amber-bg: rgba(180,83,9,0.08);
+    --purple: #6d3fd4;
+    --purple-bg: rgba(109,63,212,0.08);
+    --coral: #e03a14;
+    --coral-bg: rgba(224,58,20,0.06);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    backdrop-filter: blur(12px);
+  }
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-mark {
+    width: 28px;
+    height: 28px;
+    background: var(--accent);
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .logo-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1px solid var(--border2);
+    background: var(--bg2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text2);
+    transition: all 0.15s;
+    font-size: 15px;
+  }
+  .icon-btn:hover { background: var(--bg3); color: var(--text); }
+  .reset-btn {
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    padding: 0 12px;
+    height: 34px;
+    width: auto;
+    white-space: nowrap;
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 4rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .hero-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-sub {
+    font-size: 16px;
+    color: var(--text2);
+    max-width: 540px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ── PROGRESS OVERVIEW ── */
+  .progress-overview {
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .progress-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+  .progress-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .progress-card:hover { border-color: var(--border2); background: var(--bg3); }
+  .progress-card.current { border-color: var(--accent); }
+  .pc-label {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 4px;
+  }
+  .pc-count {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    line-height: 1.2;
+  }
+  .pc-total { font-size: 13px; color: var(--text3); }
+  .pc-bar {
+    height: 3px;
+    background: var(--bg4);
+    border-radius: 2px;
+    margin-top: 10px;
+    overflow: hidden;
+  }
+  .pc-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--accent);
+    transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .overall-bar-wrap {
+    background: var(--bg3);
+    border-radius: 4px;
+    height: 6px;
+    overflow: hidden;
+  }
+  .overall-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--purple));
+    border-radius: 4px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  .overall-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .overall-label { font-size: 13px; color: var(--text2); }
+  .overall-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* ── NAV TABS ── */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 1.5rem 0 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    padding: 8px 16px;
+    border-radius: 8px 8px 0 0;
+    border: none;
+    background: transparent;
+    color: var(--text3);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    position: relative;
+    bottom: -1px;
+    border-bottom: 2px solid transparent;
+  }
+  .nav-tab:hover { color: var(--text2); }
+  .nav-tab.active {
+    color: var(--text);
+    border-bottom-color: var(--accent);
+    font-weight: 500;
+  }
+  .tab-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    background: var(--bg3);
+    color: var(--text3);
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    margin-left: 6px;
+  }
+  .tab-badge.done { background: var(--green-bg); color: var(--green); }
+
+  /* ── PHASE CONTENT ── */
+  .phase-panel { display: none; padding: 2rem 0 4rem; }
+  .phase-panel.active { display: block; }
+
+  .phase-intro {
+    display: flex;
+    gap: 16px;
+    padding: 1.25rem;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin-bottom: 2rem;
+  }
+  .phase-num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 3rem;
+    line-height: 1;
+    flex-shrink: 0;
+    width: 56px;
+    text-align: center;
+    padding-top: 4px;
+  }
+  .phase-intro-text {}
+  .phase-intro-title {
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+  .phase-intro-desc {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.65;
+    font-weight: 300;
+  }
+  .duration-pill {
+    display: inline-block;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-top: 8px;
+    border: 1px solid;
+  }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 2rem; }
+  .section-title {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── CHECKLIST ── */
+  .checklist { display: flex; flex-direction: column; gap: 6px; }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .check-item:hover { border-color: var(--border2); background: var(--bg3); }
+  .check-item.checked {
+    background: var(--green-bg);
+    border-color: rgba(62,207,142,0.2);
+  }
+  .check-item.checked .check-title { color: var(--text2); text-decoration: line-through; text-decoration-color: var(--text3); }
+  .check-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 1.5px solid var(--border2);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    background: var(--bg);
+  }
+  .check-item.checked .check-box {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .check-icon {
+    width: 11px;
+    height: 8px;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .check-item.checked .check-icon { opacity: 1; }
+  .check-content { flex: 1; min-width: 0; }
+  .check-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 2px;
+    line-height: 1.4;
+    transition: color 0.15s;
+  }
+  .check-desc {
+    font-size: 12px;
+    color: var(--text3);
+    line-height: 1.55;
+    font-weight: 300;
+  }
+  .check-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .tag {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 1px solid;
+  }
+  .tag-easy { color: var(--green); border-color: rgba(62,207,142,0.25); background: var(--green-bg); }
+  .tag-medium { color: var(--amber); border-color: rgba(245,166,35,0.25); background: var(--amber-bg); }
+  .tag-hard { color: var(--coral); border-color: rgba(255,92,53,0.25); background: var(--coral-bg); }
+  .tag-free { color: var(--blue); border-color: rgba(79,156,249,0.25); background: var(--blue-bg); }
+  .tag-paid { color: var(--amber); border-color: rgba(245,166,35,0.25); background: var(--amber-bg); }
+  .tag-lib { color: var(--purple); border-color: rgba(157,125,245,0.25); background: var(--purple-bg); }
+  .tag-milestone { color: var(--accent); border-color: rgba(255,92,53,0.25); background: var(--accent-bg); }
+
+  /* ── CARD GRID ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 10px;
+  }
+  .info-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .info-card-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dot-accent { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .dot-green { background: var(--green); }
+  .dot-amber { background: var(--amber); }
+  .dot-blue { background: var(--blue); }
+  .dot-purple { background: var(--purple); }
+  .info-card-body {
+    font-size: 12.5px;
+    color: var(--text2);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* ── COMPOUND RULE ── */
+  .compound-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .compound-item:last-child { border-bottom: none; }
+  .compound-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 500;
+    margin-top: 1px;
+  }
+  .compound-text { font-size: 14px; color: var(--text); font-weight: 500; margin-bottom: 3px; }
+  .compound-sub { font-size: 12px; color: var(--text3); line-height: 1.5; font-weight: 300; }
+
+  /* ── DIVIDER ── */
+  .divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
+
+  /* ── CONFETTI ── */
+  .confetti-piece {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    pointer-events: none;
+    animation: confettiFall linear forwards;
+    z-index: 9999;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 13px;
+    color: var(--text);
+    z-index: 200;
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .container { padding: 0 1rem; }
+    .header { padding: 0 1rem; }
+    .hero { padding: 2.5rem 0 2rem; }
+    .progress-grid { grid-template-columns: repeat(3, 1fr); }
+    .phase-intro { flex-direction: column; gap: 8px; }
+    .phase-num { font-size: 2rem; width: auto; text-align: left; }
+    .card-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-logo">
+    <div class="logo-mark">S5</div>
+    <span class="logo-text">Svelte Mastery Roadmap</span>
+  </div>
+  <div class="header-actions">
+    <button class="icon-btn reset-btn" onclick="resetProgress()" title="Reset progress">Reset</button>
+    <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme" id="theme-btn">☀</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="container">
+  <div class="hero">
+    <div class="hero-eyebrow">Top 5% → 1% Dev Path</div>
+    <h1 class="hero-title">Svelte Mastery —<br><em>không thể đảo ngược</em></h1>
+    <p class="hero-sub">Một roadmap được thiết kế cho compound learning. Mỗi thứ bạn làm tạo ra asset tồn tại lâu dài. Chỉ có thể tốt hơn, không thể tệ hơn.</p>
+  </div>
+
+  <!-- PROGRESS OVERVIEW -->
+  <div class="progress-overview">
+    <div class="overall-stats">
+      <span class="overall-label">Tổng tiến độ</span>
+      <span class="overall-pct" id="overall-pct">0%</span>
+    </div>
+    <div class="overall-bar-wrap">
+      <div class="overall-bar" id="overall-bar" style="width:0%"></div>
+    </div>
+    <br>
+    <div class="progress-grid" id="progress-grid"></div>
+  </div>
+
+  <!-- NAV TABS -->
+  <div class="nav-tabs" id="nav-tabs"></div>
+</div>
+
+<!-- PHASE PANELS -->
+<div class="container" id="phase-panels"></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const PHASES = [
+  {
+    id: 'p0',
+    label: 'Phase 0',
+    title: 'Prerequisite',
+    color: '#4f9cf9',
+    colorVar: 'var(--blue)',
+    colorBg: 'var(--blue-bg)',
+    duration: '2–4 tuần',
+    desc: 'Nếu bỏ phase này, mọi thứ sau sẽ chỉ là copy-paste. Svelte compiler-first — không có JS/DOM solid thì không dùng được sức mạnh thật sự.',
+    sections: [
+      {
+        title: 'Kiến thức cần vững',
+        items: [
+          { title: 'JavaScript hiện đại', desc: 'Destructuring, spread/rest, modules (import/export), closures, event loop, Promise/async-await, Map/Set, optional chaining.' },
+          { title: 'DOM & Browser API', desc: 'Event bubbling/delegation, CustomEvent, MutationObserver, requestAnimationFrame, CSS Custom Properties.' },
+          { title: 'TypeScript basics', desc: 'Types, interfaces, generics cơ bản, utility types (Partial, Pick, Record). SvelteKit 2.x mặc định TypeScript.' },
+          { title: 'HTML/CSS nâng cao', desc: 'CSS Grid, Flexbox, CSS variables, animations, scoped styles. Hiểu :global() và specificity trong Svelte.' },
+        ]
+      },
+      {
+        title: 'Tài nguyên',
+        items: [
+          { title: 'javascript.info', desc: 'Tốt nhất để học JS hiện đại — đọc toàn bộ phần "JavaScript language" và "Browser"', tags: ['free'] },
+          { title: 'TypeScript Handbook (typescriptlang.org)', desc: 'Chỉ cần đọc: Basics, Everyday Types, Object Types, Generics', tags: ['free'] },
+          { title: 'CSS-Tricks: Guide to Grid/Flexbox', desc: 'Reference chuẩn nhất, bookmark để tra', tags: ['free'] },
+          { title: 'You Don\'t Know JS (Kyle Simpson)', desc: 'Hiểu sâu JS engine, scope, closure, async — cần cho compiler mental model', tags: ['free'] },
+        ]
+      },
+      {
+        title: 'Milestones để chuyển phase',
+        items: [
+          { title: 'Build vanilla JS mini-app không dùng framework', desc: 'Todo, timer, hoặc quiz. Mục đích: hiểu DOM manipulation thật sự.', tags: ['milestone'] },
+          { title: 'Giải thích closure, event loop, Promise chain không tra Google', desc: 'Test bản thân bằng cách dạy lại cho người khác.', tags: ['milestone'] },
+          { title: 'TypeScript: annotate đầy đủ một module nhỏ', desc: 'Functions, interfaces, generics — không dùng any.', tags: ['milestone'] },
+        ]
+      }
+    ]
+  },
+  {
+    id: 'p1',
+    label: 'Phase 1',
+    title: 'Core Svelte 5',
+    color: '#3ecf8e',
+    colorVar: 'var(--green)',
+    colorBg: 'var(--green-bg)',
+    duration: '4–8 tuần',
+    desc: 'Svelte 5 với Runes là paradigm shift lớn. Mục tiêu: hiểu WHY Svelte compile ra gì, không chỉ HOW viết component. Mở Output tab trong REPL và đọc mọi thứ.',
+    sections: [
+      {
+        title: 'Core topics — theo thứ tự này',
+        items: [
+          { title: 'Svelte compiler mental model', desc: 'Mở REPL → xem Output tab. Đây là bí mật top 1% — hiểu compiled output để debug và optimize.' },
+          { title: 'Runes: $state, $derived, $effect', desc: 'Svelte 5 thay đổi hoàn toàn reactivity. $state = signal-based, $derived = computed, $effect = side-effect.' },
+          { title: 'Component patterns & $props()', desc: 'Props, event handling, snippets (Svelte 5 thay slots), component composition, render logic.' },
+          { title: 'Stores & Context API', desc: 'Writable/readable/derived stores, custom stores, setContext/getContext. Biết phân biệt khi nào dùng cái gì.' },
+          { title: 'Transitions & Animations', desc: 'Built-in transitions (fade, fly, slide, scale), custom transitions, animate directive, FLIP animations.' },
+          { title: 'Actions (use:)', desc: 'Custom actions cho DOM manipulation — tooltip, click-outside, intersection observer. Superpower của Svelte.' },
+        ]
+      },
+      {
+        title: 'Tài nguyên',
+        items: [
+          { title: 'learn.svelte.dev — Official Tutorial', desc: 'Làm HẾT, không skip. Sau mỗi bài đọc compiled output trong REPL.', tags: ['free'] },
+          { title: 'svelte.dev/docs (Svelte 5)', desc: 'Đọc toàn bộ reference — ngắn hơn React docs rất nhiều. Svelte docs rất tốt.', tags: ['free'] },
+          { title: 'Svelte Society YouTube', desc: 'SvelteHack talks, Svelte Summit recordings — xem bài của Rich Harris.', tags: ['free'] },
+          { title: 'Frontend Masters: Svelte Fundamentals', desc: 'Scott Tolinski — best structured video course cho Svelte 5.', tags: ['paid'] },
+        ]
+      },
+      {
+        title: 'Bài tập thực hành',
+        items: [
+          { title: 'Clone Svelte REPL output', desc: 'Viết component → xem compiled JS → tự viết lại bằng tay. Làm 5–10 lần với components phức tạp dần.', tags: ['medium'] },
+          { title: 'Custom store từ scratch', desc: 'Build writable store không dùng svelte/store — chỉ dùng subscribe/set/update pattern.', tags: ['medium'] },
+          { title: 'Animation showcase page', desc: 'Demo tất cả transitions + FLIP animations + custom transitions. Làm đẹp nhất có thể.', tags: ['easy'] },
+          { title: 'Action library nhỏ (5 actions)', desc: 'clickOutside, longPress, intersectionObserver, tooltip, draggable. Publish lên GitHub.', tags: ['hard'] },
+        ]
+      },
+      {
+        title: 'Milestones để chuyển phase',
+        items: [
+          { title: 'Giải thích Svelte reactivity system tại compile time', desc: 'Không cần nhìn tài liệu — vẽ được sơ đồ.', tags: ['milestone'] },
+          { title: 'Build component library nhỏ (5–10 components) với TypeScript', desc: 'Full types, props, events, slots/snippets.', tags: ['milestone'] },
+          { title: 'Phân biệt và chọn đúng: runes vs stores vs context', desc: 'Explain được tradeoffs của từng approach cho từng use case.', tags: ['milestone'] },
+        ]
+      }
+    ]
+  },
+  {
+    id: 'p2',
+    label: 'Phase 2',
+    title: 'SvelteKit',
+    color: '#f5a623',
+    colorVar: 'var(--amber)',
+    colorBg: 'var(--amber-bg)',
+    duration: '6–10 tuần',
+    desc: 'SvelteKit là framework đầy đủ nhất cho Svelte. Phase này đưa bạn từ "viết component" lên "build real products". Top 5% đều sống ở đây.',
+    sections: [
+      {
+        title: 'Core topics',
+        items: [
+          { title: 'Routing & Layouts', desc: 'File-based routing, nested layouts, (groups), +layout.svelte, +error.svelte, +page.ts vs +page.server.ts.' },
+          { title: 'Data loading patterns', desc: 'Universal load vs server load, streaming với deferred data, invalidation, depends(), prefetch. Đây là chỗ SvelteKit shine nhất.' },
+          { title: 'Form Actions', desc: 'Progressive enhancement với use:enhance, named actions, validation, optimistic UI.' },
+          { title: 'API Routes & Hooks', desc: '+server.ts endpoints, hooks.server.ts (handle, handleFetch), error handling, auth middleware pattern.' },
+          { title: 'Rendering strategies', desc: 'SSR, CSR, SSG (prerender), ISR-equivalent. Khi nào dùng cái gì — câu hỏi architect level.' },
+          { title: 'Deployment & Adapters', desc: 'adapter-node, adapter-vercel, adapter-cloudflare, adapter-static. Edge runtime với Cloudflare Workers.' },
+        ]
+      },
+      {
+        title: 'Tài nguyên',
+        items: [
+          { title: 'kit.svelte.dev — Official Docs', desc: 'Đọc toàn bộ, đặc biệt "Core concepts" và "Reference". SvelteKit docs rất chi tiết.', tags: ['free'] },
+          { title: 'Joy of Code (joyofcode.xyz)', desc: 'Bài viết sâu về SvelteKit patterns — series data loading và authentication.', tags: ['free'] },
+          { title: 'Huntabyte YouTube channel', desc: 'Best SvelteKit tutorials — build real projects, không toy examples.', tags: ['free'] },
+          { title: 'Fullstack SvelteKit — Syntax.fm', desc: 'Wes Bos + Scott Tolinski — practical, production-focused.', tags: ['paid'] },
+        ]
+      },
+      {
+        title: 'Bài tập thực hành — build real things',
+        items: [
+          { title: 'Full-stack blog với SvelteKit + Postgres', desc: 'Auth (JWT/session), CRUD posts, image upload, SSR với streaming, SEO metadata, RSS feed. Deploy lên Vercel/Fly.io.', tags: ['hard'] },
+          { title: 'Real-time dashboard', desc: 'SvelteKit + Supabase Realtime hoặc WebSocket. Server-sent events. Charts với LayerChart/D3.', tags: ['hard'] },
+          { title: 'E-commerce store (stripped)', desc: 'Product listing (SSG), cart (stores), checkout (form actions), payment intent (Stripe). Progressive enhancement — hoạt động khi tắt JS.', tags: ['hard'] },
+        ]
+      },
+      {
+        title: 'Milestones để chuyển phase',
+        items: [
+          { title: 'Deploy 1 full-stack app với auth, DB, và proper error handling', desc: 'Production URL. Real users có thể dùng được.', tags: ['milestone'] },
+          { title: 'Giải thích load function lifecycle, khi nào re-run, khi nào cache', desc: 'Explain được data flow từ server → client.', tags: ['milestone'] },
+          { title: 'App hoạt động đúng khi tắt JavaScript', desc: 'Progressive enhancement — form submissions, navigation vẫn work.', tags: ['milestone'] },
+        ]
+      }
+    ]
+  },
+  {
+    id: 'p3',
+    label: 'Phase 3',
+    title: 'Advanced',
+    color: '#9d7df5',
+    colorVar: 'var(--purple)',
+    colorBg: 'var(--purple-bg)',
+    duration: '8–16 tuần',
+    desc: 'Đây là chỗ hầu hết dev dừng lại. Những người đi tiếp sẽ là người được gọi khi team cần giải quyết vấn đề khó. Performance, architecture, ecosystem mastery.',
+    sections: [
+      {
+        title: 'Advanced topics',
+        items: [
+          { title: 'Performance engineering', desc: 'Bundle analysis (vite-bundle-visualizer), code splitting, lazy loading, virtual lists, image optimization pipeline. Lighthouse không nói dối.' },
+          { title: 'Component library creation', desc: 'Design system với Svelte: accessibility (aria), keyboard navigation, focus management, CSS variables API cho theming. Publish lên npm.' },
+          { title: 'Testing strategy', desc: 'Vitest cho unit tests, Playwright cho E2E, @testing-library/svelte cho component tests. TDD cho critical paths.' },
+          { title: 'State management patterns', desc: 'XState cho complex state machines, Tanstack Query cho server state. Biết khi nào cần gì.' },
+          { title: 'Svelte compiler internals', desc: 'Đọc svelte/src/compiler. Hiểu parse → analyze → transform → generate. Viết một Svelte preprocessor đơn giản.' },
+          { title: 'Vite & build tooling', desc: 'Vite plugins, vite-plugin-svelte options, custom preprocessors (mdsvex), monorepo setup với pnpm workspaces.' },
+        ]
+      },
+      {
+        title: 'Tài nguyên',
+        items: [
+          { title: 'Svelte source code (github.com/sveltejs/svelte)', desc: 'Đọc compiler source. Bắt đầu từ packages/svelte/src/compiler/phases/', tags: ['free'] },
+          { title: 'Web.dev Performance guides', desc: 'Core Web Vitals, rendering patterns, INP optimization — apply vào SvelteKit apps.', tags: ['free'] },
+          { title: 'Testing Library + Playwright docs', desc: 'Học qua examples — docs của 2 tool này rất tốt.', tags: ['free'] },
+          { title: 'Threlte, LayerChart, Bits UI source code', desc: 'Đọc source của thư viện Svelte nổi tiếng — học patterns từ code thật.', tags: ['free'] },
+        ]
+      },
+      {
+        title: 'Bài tập thực hành',
+        items: [
+          { title: 'Build + publish Svelte component library', desc: 'Minimum 10 components, full accessibility, TypeScript, npm publish. Calendar, combobox, data table với sorting/filtering.', tags: ['hard'] },
+          { title: 'Viết một Svelte preprocessor', desc: 'Auto-import components, i18n preprocessor, hoặc markdown-in-template. Đọc svelte-preprocess source trước.', tags: ['hard'] },
+          { title: '100% test coverage cho một SvelteKit app', desc: 'Unit, component, E2E tests. CI/CD pipeline với GitHub Actions.', tags: ['medium'] },
+        ]
+      },
+      {
+        title: 'Ecosystem để master',
+        items: [
+          { title: 'Threlte (3D với Three.js)', desc: 'Svelte + 3D là combination rất ít người làm tốt — niche mạnh với demand cao.', tags: ['lib'] },
+          { title: 'LayerChart / Pancake', desc: 'Data visualization trong Svelte — niche có demand cao.', tags: ['lib'] },
+          { title: 'Bits UI / Melt UI', desc: 'Headless component patterns — học để build accessible components đúng cách.', tags: ['lib'] },
+          { title: 'mdsvex', desc: 'MDX-equivalent cho Svelte — content-heavy sites, documentation sites.', tags: ['lib'] },
+        ]
+      }
+    ]
+  },
+  {
+    id: 'p4',
+    label: 'Phase 4',
+    title: 'Top 1%',
+    color: '#ff5c35',
+    colorVar: 'var(--accent)',
+    colorBg: 'var(--accent-bg)',
+    duration: '12–24 tháng từ Phase 0',
+    desc: 'Top 1% không phải là người biết nhiều nhất. Là người tạo ra giá trị cho ecosystem, định hình cách người khác build, và có track record không thể giả mạo.',
+    sections: [
+      {
+        title: 'Những gì phân biệt top 1%',
+        items: [
+          { title: 'Open source contributions', desc: 'Contribute vào svelte, sveltekit, vite-plugin-svelte. Bắt đầu từ bug fixes, docs, sau đó features. Mỗi merged PR là signal không thể làm giả.' },
+          { title: 'Teach publicly', desc: 'Blog technical sâu, YouTube/livestream, Discord/forum answers. Khi dạy được người khác mới thực sự hiểu — và bạn build reputation.' },
+          { title: 'Cross-framework knowledge', desc: 'Hiểu React, Solid, Qwik internals đủ để so sánh tradeoffs. Không phải để dùng, mà để biết Svelte đang giải quyết gì.' },
+          { title: 'Build things people use', desc: 'Một npm package với 1000+ weekly downloads > mọi certificate. Track record thực tế là filter mạnh nhất.' },
+          { title: 'Community presence', desc: 'Svelte Discord, GitHub Discussions, Twitter/X. Trả lời câu hỏi người khác là cách học nhanh nhất.' },
+          { title: 'Ship production-scale', desc: 'Lead một project Svelte thật, team thật, traffic thật. Architecture decisions khi cost thật sự = trường học tốt nhất.' },
+        ]
+      },
+      {
+        title: 'Compound growth rules — daily/weekly/monthly',
+        compound: true,
+        items: [
+          { num: '1d', title: 'Mỗi ngày: trả lời 1 câu hỏi trong Svelte Discord', sub: 'Sai → được correct → học. Đúng → confirm knowledge + reputation.' },
+          { num: '1w', title: 'Mỗi tuần: 1 blog post/note về thứ bạn học được', sub: 'Viết để dạy, không phải để prove. Ngắn ổn — 5 phút đọc là đủ.' },
+          { num: '1m', title: 'Mỗi tháng: 1 issue hoặc PR lên Svelte ecosystem repos', sub: 'Bắt đầu từ docs fixes. Mọi merged contribution đều count.' },
+          { num: '1q', title: 'Mỗi quý: release/update 1 public project', sub: 'Package, template, hoặc tool. Compound: mỗi release dạy thêm về API design, user feedback.' },
+        ]
+      },
+      {
+        title: 'Milestones top 1%',
+        items: [
+          { title: 'Có ít nhất 1 npm package với 500+ weekly downloads', desc: 'Không nhất thiết phải lớn — quality over quantity.', tags: ['milestone'] },
+          { title: 'Merged PR vào official Svelte/SvelteKit repos', desc: 'Dù nhỏ — docs fix cũng count.', tags: ['milestone'] },
+          { title: 'Được gắn tag "Svelte team member" hoặc "Helper" trong Discord', desc: 'Recognition từ community.', tags: ['milestone'] },
+          { title: 'Có thể onboard một junior Svelte dev từ zero', desc: 'Teaching fluency = deepest knowledge test.', tags: ['milestone'] },
+        ]
+      }
+    ]
+  }
+];
+
+let state = {};
+
+function loadState() {
+  try { state = JSON.parse(localStorage.getItem('svelte-roadmap-v2') || '{}'); }
+  catch(e) { state = {}; }
+}
+
+function saveState() {
+  localStorage.setItem('svelte-roadmap-v2', JSON.stringify(state));
+}
+
+function toggleItem(id) {
+  state[id] = !state[id];
+  saveState();
+  renderAll();
+  if (state[id]) maybeConfetti();
+}
+
+function resetProgress() {
+  if (!confirm('Reset tất cả progress?')) return;
+  state = {};
+  saveState();
+  renderAll();
+  showToast('Progress đã được reset');
+}
+
+function getAllItemIds() {
+  const ids = [];
+  PHASES.forEach(p => {
+    p.sections.forEach(s => {
+      if (!s.compound) {
+        s.items.forEach((item, i) => {
+          ids.push(`${p.id}-${s.title}-${i}`);
+        });
+      }
+    });
+  });
+  return ids;
+}
+
+function getPhaseItemIds(phase) {
+  const ids = [];
+  phase.sections.forEach(s => {
+    if (!s.compound) {
+      s.items.forEach((_, i) => {
+        ids.push(`${phase.id}-${s.title}-${i}`);
+      });
+    }
+  });
+  return ids;
+}
+
+function renderAll() {
+  renderProgressGrid();
+  renderNavTabs();
+  renderPanels();
+  renderOverall();
+}
+
+function renderOverall() {
+  const all = getAllItemIds();
+  const done = all.filter(id => state[id]).length;
+  const pct = all.length ? Math.round(done / all.length * 100) : 0;
+  document.getElementById('overall-pct').textContent = pct + '%';
+  document.getElementById('overall-bar').style.width = pct + '%';
+}
+
+function renderProgressGrid() {
+  const grid = document.getElementById('progress-grid');
+  grid.innerHTML = PHASES.map(p => {
+    const ids = getPhaseItemIds(p);
+    const done = ids.filter(id => state[id]).length;
+    const total = ids.length;
+    const pct = total ? Math.round(done / total * 100) : 0;
+    return `<div class="progress-card" onclick="switchTab('${p.id}')">
+      <div class="pc-label">${p.label}</div>
+      <div class="pc-count">${done}<span class="pc-total">/${total}</span></div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">${p.title}</div>
+      <div class="pc-bar"><div class="pc-bar-fill" style="width:${pct}%;background:${p.color}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderNavTabs() {
+  const nav = document.getElementById('nav-tabs');
+  const active = nav.querySelector('.nav-tab.active')?.dataset?.phase || PHASES[0].id;
+  nav.innerHTML = PHASES.map(p => {
+    const ids = getPhaseItemIds(p);
+    const done = ids.filter(id => state[id]).length;
+    const total = ids.length;
+    const allDone = done === total && total > 0;
+    return `<button class="nav-tab ${active === p.id ? 'active' : ''}" data-phase="${p.id}" onclick="switchTab('${p.id}')">
+      ${p.label} · ${p.title}
+      <span class="tab-badge ${allDone ? 'done' : ''}">${done}/${total}</span>
+    </button>`;
+  }).join('');
+}
+
+function switchTab(phaseId) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.phase === phaseId));
+  document.querySelectorAll('.phase-panel').forEach(p => p.classList.toggle('active', p.id === phaseId));
+  document.querySelectorAll('.progress-card').forEach((c, i) => c.classList.toggle('current', PHASES[i].id === phaseId));
+}
+
+function getTagHtml(tags) {
+  if (!tags || !tags.length) return '';
+  return `<div class="check-tags">${tags.map(t => `<span class="tag tag-${t}">${t}</span>`).join('')}</div>`;
+}
+
+function renderPanels() {
+  const container = document.getElementById('phase-panels');
+  const activeId = document.querySelector('.nav-tab.active')?.dataset?.phase || PHASES[0].id;
+
+  container.innerHTML = PHASES.map(p => {
+    const sections = p.sections.map(s => {
+      if (s.compound) {
+        return `<div class="section">
+          <div class="section-title">${s.title}</div>
+          <div class="info-card">
+            ${s.items.map(item => `
+              <div class="compound-item">
+                <div class="compound-num">${item.num}</div>
+                <div>
+                  <div class="compound-text">${item.title}</div>
+                  <div class="compound-sub">${item.sub}</div>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>`;
+      }
+
+      const checkItems = s.items.map((item, i) => {
+        const id = `${p.id}-${s.title}-${i}`;
+        const checked = !!state[id];
+        return `<div class="check-item ${checked ? 'checked' : ''}" onclick="toggleItem('${id}')">
+          <div class="check-box">
+            <svg class="check-icon" viewBox="0 0 11 8" fill="none">
+              <path d="M1 4L4 7L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="check-content">
+            <div class="check-title">${item.title}</div>
+            ${item.desc ? `<div class="check-desc">${item.desc}</div>` : ''}
+            ${getTagHtml(item.tags)}
+          </div>
+        </div>`;
+      }).join('');
+
+      return `<div class="section">
+        <div class="section-title">${s.title}</div>
+        <div class="checklist">${checkItems}</div>
+      </div>`;
+    }).join('');
+
+    return `<div class="phase-panel ${activeId === p.id ? 'active' : ''}" id="${p.id}">
+      <div class="phase-intro">
+        <div class="phase-num" style="color:${p.color}">${p.id.replace('p','')}</div>
+        <div class="phase-intro-text">
+          <div class="phase-intro-title">${p.title}</div>
+          <div class="phase-intro-desc">${p.desc}</div>
+          <span class="duration-pill" style="color:${p.color};border-color:${p.color}33;background:${p.color}11">${p.duration}</span>
+        </div>
+      </div>
+      ${sections}
+    </div>`;
+  }).join('');
+}
+
+let lastConfetti = 0;
+function maybeConfetti() {
+  const now = Date.now();
+  if (now - lastConfetti < 500) return;
+  lastConfetti = now;
+  const colors = ['#ff5c35','#3ecf8e','#4f9cf9','#9d7df5','#f5a623'];
+  for (let i = 0; i < 18; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.cssText = `
+      left:${30 + Math.random()*40}%;
+      top:${Math.random()*30}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${0.8 + Math.random()*0.8}s;
+      animation-delay:${Math.random()*0.2}s;
+      transform:rotate(${Math.random()*360}deg);
+      width:${5+Math.random()*6}px;
+      height:${5+Math.random()*6}px;
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1200);
+  }
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  const btn = document.getElementById('theme-btn');
+  btn.textContent = document.body.classList.contains('light') ? '☽' : '☀';
+  localStorage.setItem('svelte-roadmap-theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+// Init
+loadState();
+const savedTheme = localStorage.getItem('svelte-roadmap-theme');
+if (savedTheme === 'light') {
+  document.body.classList.add('light');
+  document.getElementById('theme-btn').textContent = '☽';
+}
+renderAll();
+</script>
+</body>
+</html>
