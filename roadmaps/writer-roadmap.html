@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writer Mastery Roadmap</title>
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --bg2: #161616;
+    --bg3: #1e1e1e;
+    --bg4: #252525;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8e6df;
+    --text2: #9a9790;
+    --text3: #5e5d59;
+    --accent1: #378ADD;
+    --accent2: #9B59B6;
+    --accent3: #1D9E75;
+    --accent4: #D85A30;
+    --p1: #1a2a3a;
+    --p2: #2a1a3a;
+    --p3: #0f2d20;
+    --p4: #2d1a0f;
+    --font: 'Georgia', 'Times New Roman', serif;
+    --mono: 'Courier New', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .site-header {
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 0 2.5rem;
+    text-align: center;
+    position: relative;
+  }
+  .site-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent1), var(--accent2), var(--accent3), var(--accent4), transparent);
+  }
+  .site-header h1 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: normal;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .site-header p {
+    font-size: 0.95rem;
+    color: var(--text2);
+    max-width: 560px;
+    margin: 0 auto 1.5rem;
+    font-style: italic;
+  }
+  .progress-bar-wrap {
+    max-width: 360px;
+    margin: 0 auto;
+  }
+  .progress-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text3);
+    font-family: var(--mono);
+    margin-bottom: 6px;
+  }
+  .progress-bar-bg {
+    height: 3px;
+    background: var(--bg4);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* NAV */
+  .phase-nav {
+    display: flex;
+    gap: 2px;
+    padding: 1.5rem 0 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .phase-nav::-webkit-scrollbar { height: 0; }
+  .phase-btn {
+    padding: 0.65rem 1.25rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    background: none;
+    border: none;
+    color: var(--text3);
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+    transition: color 0.2s;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+  .phase-btn:hover { color: var(--text2); }
+  .phase-btn.active { color: var(--text); border-bottom-color: currentColor; }
+  .phase-btn[data-p="1"].active { color: var(--accent1); }
+  .phase-btn[data-p="2"].active { color: var(--accent2); }
+  .phase-btn[data-p="3"].active { color: var(--accent3); }
+  .phase-btn[data-p="4"].active { color: var(--accent4); }
+  .phase-btn[data-p="5"].active { color: #c8a96e; }
+  .phase-check-count {
+    font-size: 0.65rem;
+    opacity: 0.6;
+    margin-left: 5px;
+  }
+
+  /* PHASE CONTENT */
+  .phase {
+    display: none;
+    padding: 2.5rem 0 4rem;
+  }
+  .phase.active { display: block; }
+
+  .phase-hero {
+    padding: 1.75rem 2rem;
+    border: 1px solid var(--border);
+    border-left: 3px solid;
+    background: var(--bg2);
+    border-radius: 2px;
+    margin-bottom: 2.5rem;
+  }
+  .phase-hero[data-p="1"] { border-left-color: var(--accent1); }
+  .phase-hero[data-p="2"] { border-left-color: var(--accent2); }
+  .phase-hero[data-p="3"] { border-left-color: var(--accent3); }
+  .phase-hero[data-p="4"] { border-left-color: var(--accent4); }
+  .phase-hero[data-p="5"] { border-left-color: #c8a96e; }
+
+  .phase-title {
+    font-size: 1.3rem;
+    font-weight: normal;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+  .phase-meta {
+    font-size: 0.8rem;
+    color: var(--text3);
+    font-family: var(--mono);
+    margin-bottom: 1rem;
+  }
+  .transform-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 0.9rem 1.1rem;
+    border-radius: 2px;
+  }
+  .transform-label {
+    font-size: 0.68rem;
+    font-family: var(--mono);
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .transform-text {
+    font-size: 0.9rem;
+    color: var(--text2);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  /* SECTION */
+  .section-title {
+    font-size: 0.7rem;
+    font-family: var(--mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin: 2rem 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* SKILLS GRID */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  .skill-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 1rem 1.1rem;
+    border-radius: 2px;
+    transition: border-color 0.2s;
+  }
+  .skill-card:hover { border-color: var(--border2); }
+  .skill-name {
+    font-size: 0.88rem;
+    font-weight: bold;
+    color: var(--text);
+    margin-bottom: 4px;
+    font-family: var(--mono);
+  }
+  .skill-desc { font-size: 0.82rem; color: var(--text2); line-height: 1.5; }
+
+  /* CHECKLIST */
+  .checklist { display: flex; flex-direction: column; gap: 6px; }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 12px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .check-item:hover { border-color: var(--border2); background: var(--bg3); }
+  .check-item.done { opacity: 0.45; }
+  .check-item.done .check-text { text-decoration: line-through; color: var(--text3); }
+  .check-box {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--border2);
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: transparent;
+    transition: all 0.15s;
+    background: var(--bg4);
+  }
+  .check-item.done .check-box {
+    background: var(--accent3);
+    border-color: var(--accent3);
+    color: white;
+  }
+  .check-tag {
+    font-size: 0.68rem;
+    font-family: var(--mono);
+    padding: 1px 7px;
+    border-radius: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .tag-book { background: rgba(55,138,221,0.15); color: #6ab0f5; border: 1px solid rgba(55,138,221,0.2); }
+  .tag-practice { background: rgba(29,158,117,0.15); color: #52c4a0; border: 1px solid rgba(29,158,117,0.2); }
+  .tag-study { background: rgba(155,89,182,0.15); color: #c39ae0; border: 1px solid rgba(155,89,182,0.2); }
+  .tag-model { background: rgba(216,90,48,0.15); color: #f0956a; border: 1px solid rgba(216,90,48,0.2); }
+  .tag-tool { background: rgba(200,169,110,0.15); color: #c8a96e; border: 1px solid rgba(200,169,110,0.2); }
+  .tag-vi { background: rgba(220,38,38,0.12); color: #f87171; border: 1px solid rgba(220,38,38,0.18); }
+  .tag-en { background: rgba(37,99,235,0.12); color: #93c5fd; border: 1px solid rgba(37,99,235,0.18); }
+  .check-text { font-size: 0.85rem; color: var(--text); line-height: 1.5; }
+  .check-note { font-size: 0.78rem; color: var(--text3); display: block; margin-top: 3px; font-style: italic; }
+
+  /* MILESTONES */
+  .milestone-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 1.25rem 1.5rem;
+    border-radius: 2px;
+    margin-bottom: 10px;
+  }
+  .milestone-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .milestone-name { font-size: 0.95rem; color: var(--text); }
+  .milestone-time {
+    font-size: 0.72rem;
+    font-family: var(--mono);
+    color: var(--text3);
+    background: var(--bg4);
+    padding: 2px 10px;
+    border-radius: 10px;
+  }
+  .milestone-tests { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .milestone-tests .check-item { background: var(--bg3); }
+
+  /* READING SECTION */
+  .reading-intro {
+    font-size: 0.88rem;
+    color: var(--text2);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-style: italic;
+  }
+  .author-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+  }
+  .author-card:hover { border-color: var(--border2); }
+  .author-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .author-name {
+    font-size: 1rem;
+    color: var(--text);
+    font-weight: bold;
+  }
+  .author-lang {
+    font-size: 0.7rem;
+    font-family: var(--mono);
+    padding: 1px 8px;
+    border-radius: 10px;
+  }
+  .author-genre {
+    font-size: 0.75rem;
+    color: var(--text3);
+    font-family: var(--mono);
+  }
+  .author-why {
+    font-size: 0.83rem;
+    color: var(--text2);
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  .author-start {
+    font-size: 0.78rem;
+    color: var(--text3);
+    font-family: var(--mono);
+  }
+  .author-start strong { color: var(--text2); }
+
+  /* RESET BTN */
+  .reset-wrap {
+    text-align: center;
+    padding: 2rem 0 1rem;
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+  .reset-btn {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text3);
+    background: none;
+    border: 1px solid var(--border);
+    padding: 6px 16px;
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { color: var(--text2); border-color: var(--border2); }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 2rem 0;
+  }
+
+  @media (max-width: 600px) {
+    .site-header { padding: 2rem 0 1.5rem; }
+    .phase-hero { padding: 1.25rem 1.25rem; }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+    .author-head { gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <h1>Writer Mastery Roadmap</h1>
+    <p>Mỗi phase là một transformation không thể đảo ngược — không phải checklist kỹ năng.</p>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-label">
+        <span>Tiến độ tổng</span>
+        <span id="progress-pct">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <nav class="phase-nav">
+    <button class="phase-btn active" data-p="1" onclick="showPhase(1)">01 · Nền tảng <span class="phase-check-count" id="cnt-1"></span></button>
+    <button class="phase-btn" data-p="2" onclick="showPhase(2)">02 · Tư duy <span class="phase-check-count" id="cnt-2"></span></button>
+    <button class="phase-btn" data-p="3" onclick="showPhase(3)">03 · Phong cách <span class="phase-check-count" id="cnt-3"></span></button>
+    <button class="phase-btn" data-p="4" onclick="showPhase(4)">04 · Ảnh hưởng <span class="phase-check-count" id="cnt-4"></span></button>
+    <button class="phase-btn" data-p="5" onclick="showPhase(5)">Đọc để viết <span class="phase-check-count" id="cnt-5"></span></button>
+  </nav>
+
+  <!-- PHASE 1 -->
+  <section class="phase active" id="phase-1">
+    <div class="phase-hero" data-p="1">
+      <div class="phase-title">Phase 1 — Sentence Mastery</div>
+      <div class="phase-meta">3–6 tháng · từ viết được → viết đúng → viết rõ</div>
+      <div class="transform-box">
+        <div class="transform-label">Transformation</div>
+        <div class="transform-text">Bạn không còn cần nghĩ "câu này đúng chưa" — câu đúng trở thành bản năng. Mọi sự chú ý đổ vào ý tưởng, không phải mechanics.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Kỹ năng cốt lõi</div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-name">Sentence rhythm</div>
+        <div class="skill-desc">Kiểm soát nhịp dài-ngắn, nặng-nhẹ. Người đọc cảm nhận trước khi hiểu.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Clarity under pressure</div>
+        <div class="skill-desc">Nói điều phức tạp trong 1 câu. Không dùng jargon để che sự mơ hồ.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Tight editing</div>
+        <div class="skill-desc">Cắt 30% mà không mất ý. Mọi từ phải trả phí tồn tại.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Opening hooks</div>
+        <div class="skill-desc">Câu đầu tiên quyết định có đọc tiếp không. Viết 10 bản, chọn 1.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Tài nguyên & Thực hành</div>
+    <div class="checklist">
+      <div class="check-item" onclick="toggle(this)" data-id="1-r1">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-book">sách</span>
+        <div><span class="check-text">On Writing Well — William Zinsser</span><span class="check-note">Kinh thánh của clarity. Đọc lần đầu để hiểu, lần hai để học kỹ thuật cụ thể.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="1-r2">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-book">sách</span>
+        <div><span class="check-text">The Elements of Style — Strunk & White</span><span class="check-note">Mỏng nhưng dense. Mỗi quy tắc là một thứ bạn sẽ vi phạm trước khi hiểu tại sao.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="1-p1">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-practice">hàng ngày</span>
+        <div><span class="check-text">Viết 500 từ trong 20 phút không chỉnh sửa</span><span class="check-note">Luyện fluency, không luyện perfectionism. Timer bắt buộc.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="1-p2">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-practice">hàng ngày</span>
+        <div><span class="check-text">Lấy 1 đoạn đã viết, cắt 30% — chỉ cắt không thêm</span><span class="check-note">Kỹ năng này cải thiện nhanh hơn bất kỳ thứ gì bạn nghĩ.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="1-p3">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-study">hàng tuần</span>
+        <div><span class="check-text">Chép tay 1 trang văn xuôi xuất sắc từ tác giả bạn ngưỡng mộ</span><span class="check-note">Chép tay, không paste. Cơ thể học rhythm theo cách não không làm được.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="1-p4">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-practice">hàng tuần</span>
+        <div><span class="check-text">Đọc to tất cả những gì bạn viết trước khi publish</span><span class="check-note">Tai nghe lỗi mà mắt bỏ qua. Không tùy chọn — bắt buộc.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="1-p5">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-practice">hàng tuần</span>
+        <div><span class="check-text">Viết lại 1 bài tệ của người khác (hoặc của mình 6 tháng trước)</span><span class="check-note">Đây là bài tập tư duy, không chỉ kỹ thuật.</span></div>
+      </div>
+    </div>
+
+    <div class="section-title">Milestones</div>
+    <div class="milestone-card">
+      <div class="milestone-head">
+        <span class="milestone-name">Tháng 3 — Checkpoint</span>
+        <span class="milestone-time">3 months</span>
+      </div>
+      <div class="checklist milestone-tests">
+        <div class="check-item" onclick="toggle(this)" data-id="1-m1">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Người khác đọc bài bạn viết và không hỏi "ý bạn là gì?" ở bất kỳ đoạn nào</span></div>
+        </div>
+        <div class="check-item" onclick="toggle(this)" data-id="1-m2">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Bạn có thể giải thích concept phức tạp trong 3 câu không dùng thuật ngữ chuyên môn</span></div>
+        </div>
+        <div class="check-item" onclick="toggle(this)" data-id="1-m3">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Draft đầu tiên của bạn chỉ cần cắt dưới 20% khi edit</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="milestone-card">
+      <div class="milestone-head">
+        <span class="milestone-name">Tháng 6 — Phase end</span>
+        <span class="milestone-time">6 months</span>
+      </div>
+      <div class="checklist milestone-tests">
+        <div class="check-item" onclick="toggle(this)" data-id="1-m4">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Bạn đọc lại bài từ 3 tháng trước và thấy rõ nó yếu ở đâu — đây là tiến bộ thật</span></div>
+        </div>
+        <div class="check-item" onclick="toggle(this)" data-id="1-m5">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Câu mở đầu của bạn có thể đứng độc lập như một quote</span></div>
+        </div>
+        <div class="check-item" onclick="toggle(this)" data-id="1-m6">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Bạn nghe nhịp điệu của câu trước khi nghe nghĩa</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 2 -->
+  <section class="phase" id="phase-2">
+    <div class="phase-hero" data-p="2">
+      <div class="phase-title">Phase 2 — Thinking On Paper</div>
+      <div class="phase-meta">6–12 tháng · từ viết rõ → viết sâu → viết đa tầng</div>
+      <div class="transform-box">
+        <div class="transform-label">Transformation</div>
+        <div class="transform-text">Bạn ngừng viết những gì đã nghĩ. Bạn dùng việc viết để khám phá những gì chưa nghĩ được. Bài viết trở thành công cụ nhận thức, không phải output.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Kỹ năng cốt lõi</div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-name">Cross-domain synthesis</div>
+        <div class="skill-desc">Kết nối 2 lĩnh vực không liên quan để tạo insight mới. Đây là nguồn gốc của originality thật sự.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Layered argumentation</div>
+        <div class="skill-desc">Lập luận có surface claim, supporting logic, và underlying assumption — mỗi tầng defend độc lập.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Steel-manning</div>
+        <div class="skill-desc">Viết phía đối lập mạnh hơn chính họ viết. Dấu hiệu của tư duy trưởng thành.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Non-obvious insight</div>
+        <div class="skill-desc">Nếu bất kỳ ai cũng có thể nghĩ ra ý đó, nó chưa đáng viết. Train bản năng này.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Tài nguyên & Thực hành</div>
+    <div class="checklist">
+      <div class="check-item" onclick="toggle(this)" data-id="2-r1">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-book">sách</span>
+        <div><span class="check-text">The Sense of Style — Steven Pinker</span><span class="check-note">Cognitive science của writing. Tại sao expert writers khó đọc, và cách thoát.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="2-r2">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-book">sách</span>
+        <div><span class="check-text">They Say / I Say — Graff & Birkenstein</span><span class="check-note">Template cho intellectual discourse. Đọc để hiểu argument structure từ gốc.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="2-r3">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-model">nghiên cứu mẫu</span>
+        <div><span class="check-text">Đọc phân tích 10 essays của Paul Graham (paulgraham.com)</span><span class="check-note">Không đọc để thưởng thức — phân tích structure: thesis đặt ở đâu? Handle objection thế nào?</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="2-r4">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-model">nghiên cứu mẫu</span>
+        <div><span class="check-text">The Psychology of Money — Morgan Housel</span><span class="check-note">Master class viết liên ngành: tài chính × tâm lý × lịch sử. Mỗi chương là 1 essay hoàn chỉnh.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="2-p1">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-practice">hàng ngày</span>
+        <div><span class="check-text">Đọc 1 bài từ lĩnh vực xa lạ — tìm 1 pattern áp dụng được cho lĩnh vực bạn quen</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="2-p2">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-practice">hàng ngày</span>
+        <div><span class="check-text">Viết 1 "contrarian take" về điều mọi người coi là hiển nhiên trong ngành bạn biết</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="2-p3">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-practice">hàng tuần</span>
+        <div><span class="check-text">Sau mỗi bài viết: viết 300 từ tấn công mạnh nhất vào luận điểm của chính mình</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="2-p4">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-practice">hàng tuần</span>
+        <div><span class="check-text">Viết "explain like I'm 10" về một topic kỹ thuật bạn nắm vững</span><span class="check-note">Kiểm tra mức độ hiểu thực sự. Nếu không giải thích được cho trẻ em, bạn chưa hiểu.</span></div>
+      </div>
+    </div>
+
+    <div class="section-title">Milestones</div>
+    <div class="milestone-card">
+      <div class="milestone-head">
+        <span class="milestone-name">Tháng 9 — Checkpoint</span>
+        <span class="milestone-time">9 months</span>
+      </div>
+      <div class="checklist milestone-tests">
+        <div class="check-item" onclick="toggle(this)" data-id="2-m1">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Bạn viết 1 bài và trong quá trình viết, bạn thay đổi ý kiến của chính mình ít nhất 1 lần</span></div>
+        </div>
+        <div class="check-item" onclick="toggle(this)" data-id="2-m2">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Người trong ngành khác đọc bài của bạn và nói "tôi chưa nghĩ theo hướng này"</span></div>
+        </div>
+        <div class="check-item" onclick="toggle(this)" data-id="2-m3">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Bạn có thể identify "hidden assumption" trong bất kỳ luận điểm nào trong 30 giây</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="milestone-card">
+      <div class="milestone-head">
+        <span class="milestone-name">Tháng 12 — Phase end</span>
+        <span class="milestone-time">12 months</span>
+      </div>
+      <div class="checklist milestone-tests">
+        <div class="check-item" onclick="toggle(this)" data-id="2-m4">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Ít nhất 5 bài được forward cho người thứ ba — vì ý tưởng, không vì bạn hay</span></div>
+        </div>
+        <div class="check-item" onclick="toggle(this)" data-id="2-m5">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Bạn có thể viết 2 phía của 1 argument và cả hai đều convincing như nhau</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 3 -->
+  <section class="phase" id="phase-3">
+    <div class="phase-hero" data-p="3">
+      <div class="phase-title">Phase 3 — Voice & Authority</div>
+      <div class="phase-meta">12–24 tháng · từ viết đúng → viết có tiếng nói riêng</div>
+      <div class="transform-box">
+        <div class="transform-label">Transformation</div>
+        <div class="transform-text">Người đọc nhận ra bạn qua 1 đoạn văn mà không thấy tên. Bạn không còn viết như bạn nghĩ người khác muốn đọc — bạn viết như chính bạn phải nói.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Kỹ năng cốt lõi</div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-name">Tonal range</div>
+        <div class="skill-desc">Chuyển giữa technical, intimate, authoritative, playful trong cùng bài mà không vỡ giọng.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Signature moves</div>
+        <div class="skill-desc">2–3 kỹ thuật rhetoric đặc trưng bạn chủ động xây dựng và dùng có chủ đích.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Executive communication</div>
+        <div class="skill-desc">Viết cho người không có thời gian: BLUF, pyramid structure, decisions over details.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Narrative control</div>
+        <div class="skill-desc">Dẫn người đọc đến kết luận mà họ tưởng họ tự tới — không thấy bàn tay tác giả.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Tài nguyên & Thực hành</div>
+    <div class="checklist">
+      <div class="check-item" onclick="toggle(this)" data-id="3-r1">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-book">sách</span>
+        <div><span class="check-text">Bird by Bird — Anne Lamott</span><span class="check-note">Về việc tìm giọng văn thật sự — không phải giọng bạn nghĩ mình nên có.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="3-r2">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-book">sách</span>
+        <div><span class="check-text">Several Short Sentences About Writing — Verlyn Klinkenborg</span><span class="check-note">Radical. Tấn công mọi thứ bạn nghĩ mình biết về writing. Đọc 2 lần.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="3-p1">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-practice">hàng ngày</span>
+        <div><span class="check-text">Viết 1 đoạn bất kỳ → viết lại theo giọng của tác giả bạn ngưỡng mộ nhất → so sánh</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="3-p2">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-practice">hàng tuần</span>
+        <div><span class="check-text">Publish 1 piece — bất kể tốt hay xấu. Ship, không perfect mãi.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="3-p3">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-practice">viết cùng 1 topic theo 3 giọng</span>
+        <div><span class="check-text">Technical brief · Personal essay · Persuasive op-ed</span><span class="check-note">Cùng 1 nội dung, 3 register khác nhau. Nhận ra cái nào là "bạn" nhất.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="3-p4">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-tool">thiết lập</span>
+        <div><span class="check-text">Build public writing habit — Substack, blog, LinkedIn</span><span class="check-note">Không quan trọng platform. Quan trọng là commitment to public thinking. Feedback loop không thể fake.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="3-p5">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-practice">hàng tháng</span>
+        <div><span class="check-text">Đọc lại 10 bài cũ nhất — viết về "pattern tôi thấy trong writing của mình mà tôi không biết mình đang làm"</span></div>
+      </div>
+    </div>
+
+    <div class="section-title">Milestones</div>
+    <div class="milestone-card">
+      <div class="milestone-head">
+        <span class="milestone-name">Tháng 18 — Checkpoint</span>
+        <span class="milestone-time">18 months</span>
+      </div>
+      <div class="checklist milestone-tests">
+        <div class="check-item" onclick="toggle(this)" data-id="3-m1">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Người bạn biết nhưng không biết bạn đang viết, nhận ra giọng bạn qua đoạn trích ẩn danh</span></div>
+        </div>
+        <div class="check-item" onclick="toggle(this)" data-id="3-m2">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Bạn có thể viết 1-page brief mà senior leader không cần hỏi thêm câu nào</span></div>
+        </div>
+        <div class="check-item" onclick="toggle(this)" data-id="3-m3">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Bài viết của bạn được share bởi người bạn chưa từng gặp</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="milestone-card">
+      <div class="milestone-head">
+        <span class="milestone-name">Tháng 24 — Phase end</span>
+        <span class="milestone-time">24 months</span>
+      </div>
+      <div class="checklist milestone-tests">
+        <div class="check-item" onclick="toggle(this)" data-id="3-m4">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Bạn có thể describe "voice của mình" trong 2 câu — và người khác đồng ý khi đọc bài bạn</span></div>
+        </div>
+        <div class="check-item" onclick="toggle(this)" data-id="3-m5">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">50+ bài published — nhìn lại thấy sự tiến hóa rõ ràng từ bài đầu đến bài mới nhất</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 4 -->
+  <section class="phase" id="phase-4">
+    <div class="phase-hero" data-p="4">
+      <div class="phase-title">Phase 4 — Influence & Legacy</div>
+      <div class="phase-meta">24 tháng+ · từ viết hay → viết thay đổi cách người khác nghĩ</div>
+      <div class="transform-box">
+        <div class="transform-label">Transformation</div>
+        <div class="transform-text">Bạn không còn chỉ là writer — bạn là người tạo ra framework mà người khác dùng để hiểu thế giới. Bài viết của bạn trở thành reference, không phải content.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Kỹ năng cốt lõi</div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-name">Framework creation</div>
+        <div class="skill-desc">Đặt tên cho thứ người khác đang cảm nhận nhưng chưa có từ để gọi. Đây là leverage tối thượng.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Intellectual courage</div>
+        <div class="skill-desc">Viết điều unpopular khi bạn tin nó đúng. Không hedge, không "some would argue".</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Long-form depth</div>
+        <div class="skill-desc">Giữ người đọc qua 5,000+ từ không bằng drama, mà bằng progression of insight thực sự.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Teaching through writing</div>
+        <div class="skill-desc">Người đọc rời bài với mental model mới — không chỉ information mới.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Tài nguyên & Thực hành</div>
+    <div class="checklist">
+      <div class="check-item" onclick="toggle(this)" data-id="4-r1">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-book">sách</span>
+        <div><span class="check-text">Draft No. 4 — John McPhee</span><span class="check-note">Bậc thầy long-form nonfiction. Structure, reporting, và cách organize complexity.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="4-r2">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-book">sách</span>
+        <div><span class="check-text">Thinking, Fast and Slow — Daniel Kahneman</span><span class="check-note">Không phải sách về writing — nhưng là model về cách người đọc process information và ra quyết định.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="4-p1">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-practice">hàng tuần</span>
+        <div><span class="check-text">Viết 1 bài medium-form (1000–2000 từ): 1 idea → explore tận cùng → unexpected implication</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="4-p2">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-practice">hàng tháng</span>
+        <div><span class="check-text">Viết 1 bài dài (3000+ từ) muốn còn giá trị sau 5 năm</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="4-p3">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-model">nghiên cứu mẫu</span>
+        <div><span class="check-text">Đọc gwern.net, LessWrong essays, The Prepared</span><span class="check-note">Các writer xây intellectual authority không qua mainstream. Path ngoài traditional media.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="4-p4">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-practice">hàng quý</span>
+        <div><span class="check-text">Review: bài nào được forward/cited nhiều nhất? Tại sao? Double down vào pattern đó.</span></div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="4-p5">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-tool">chiến lược</span>
+        <div><span class="check-text">Viết "definitive guide" về topic bạn biết nhất</span><span class="check-note">Benchmark: người trong ngành thấy nó accurate đến mức họ link tới khi giải thích topic đó.</span></div>
+      </div>
+    </div>
+
+    <div class="section-title">Milestones</div>
+    <div class="milestone-card">
+      <div class="milestone-head">
+        <span class="milestone-name">Năm 3 — Checkpoint</span>
+        <span class="milestone-time">3 years</span>
+      </div>
+      <div class="checklist milestone-tests">
+        <div class="check-item" onclick="toggle(this)" data-id="4-m1">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Ít nhất 3 bài được cite bởi người viết khác — người không biết bạn personally</span></div>
+        </div>
+        <div class="check-item" onclick="toggle(this)" data-id="4-m2">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Người trong ngành biết bạn qua writing trước khi biết bạn qua work</span></div>
+        </div>
+        <div class="check-item" onclick="toggle(this)" data-id="4-m3">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Bạn có 1 framework hoặc concept tự đặt tên — người khác dùng tên đó</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="milestone-card">
+      <div class="milestone-head">
+        <span class="milestone-name">Top 1% — Không có deadline</span>
+        <span class="milestone-time">ongoing</span>
+      </div>
+      <div class="checklist milestone-tests">
+        <div class="check-item" onclick="toggle(this)" data-id="4-m4">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Người đọc nói "bài này thay đổi cách tôi nghĩ về X" — không phải "bài này hay"</span></div>
+        </div>
+        <div class="check-item" onclick="toggle(this)" data-id="4-m5">
+          <div class="check-box">✓</div>
+          <div><span class="check-text">Writing của bạn mở ra cơ hội mà bạn không cần chủ động tìm kiếm</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 5: READING LIST -->
+  <section class="phase" id="phase-5">
+    <div class="phase-hero" data-p="5">
+      <div class="phase-title">Đọc để viết — Reading List cá nhân hóa</div>
+      <div class="phase-meta">Tiếng Việt · Tiếng Anh · Song ngữ</div>
+      <div class="transform-box">
+        <div class="transform-label">Nguyên tắc</div>
+        <div class="transform-text">Người viết giỏi là người đọc rộng nhưng chọn lọc. Bạn không đọc để tiêu thụ — bạn đọc để nạp vào unconscious những pattern mà sau này tự trồi ra khi viết. Đọc tác giả bạn muốn giống, nhưng cũng đọc những người bạn không muốn giống — để biết tại sao.</div>
+      </div>
+    </div>
+
+    <div class="reading-intro">
+      Danh sách dưới được chọn dựa trên profile của bạn: full-stack developer với tư duy phân tích, hướng đến viết liên ngành (tech, AI/ML, leadership), song ngữ Việt-Anh, và mục tiêu là ảnh hưởng — không phải viral. Mỗi tác giả được giới thiệu không chỉ là "hay" mà là "tại sao phù hợp với hướng đi của bạn."
+    </div>
+
+    <div class="section-title">Tiếng Anh — Tư duy & Lập luận</div>
+    <div class="checklist">
+      <div class="check-item" onclick="toggle(this)" data-id="5-en1">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-en">EN</span>
+        <div class="author-card" style="background:none;border:none;padding:0;margin:0;">
+          <div class="author-head">
+            <span class="author-name">George Orwell</span>
+            <span class="author-genre">essays · nonfiction</span>
+          </div>
+          <div class="author-why">Chuẩn mực của clarity và intellectual honesty. "Politics and the English Language" là bài essay về writing quan trọng nhất từng được viết. Orwell không bao giờ dùng từ lớn để che ý nhỏ — và ông tấn công những người làm vậy một cách không thương tiếc.</div>
+          <div class="author-start"><strong>Bắt đầu:</strong> "Politics and the English Language" (1946) → "Why I Write" → tập Essays</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="5-en2">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-en">EN</span>
+        <div class="author-card" style="background:none;border:none;padding:0;margin:0;">
+          <div class="author-head">
+            <span class="author-name">Joan Didion</span>
+            <span class="author-genre">essays · personal narrative</span>
+          </div>
+          <div class="author-why">Master của sentence rhythm và emotional precision. Didion viết về sự hỗn loạn của thế giới với một giọng điệu lạnh lùng, kiểm soát tuyệt đối — tương phản tạo ra tension không tác giả nào làm được. Đặc biệt phù hợp nếu bạn muốn viết về tech/AI có chiều sâu cảm xúc mà không sến.</div>
+          <div class="author-start"><strong>Bắt đầu:</strong> "The Year of Magical Thinking" → "Slouching Towards Bethlehem"</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="5-en3">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-en">EN</span>
+        <div class="author-card" style="background:none;border:none;padding:0;margin:0;">
+          <div class="author-head">
+            <span class="author-name">Paul Graham</span>
+            <span class="author-genre">essays · tech · thinking</span>
+          </div>
+          <div class="author-why">Template tốt nhất cho kiểu viết bạn muốn làm: technical background + original thinking + accessible prose. Graham tìm ra cách biến "suy nghĩ lớn" thành prose mà kỹ sư lẫn CEO đều đọc được. Nghiên cứu cách ông đặt thesis, xử lý counterargument, và kết thúc bài.</div>
+          <div class="author-start"><strong>Bắt đầu:</strong> "Hackers and Painters" → "What You'll Wish You'd Known" → bất kỳ essay nào trên paulgraham.com</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="5-en4">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-en">EN</span>
+        <div class="author-card" style="background:none;border:none;padding:0;margin:0;">
+          <div class="author-head">
+            <span class="author-name">Morgan Housel</span>
+            <span class="author-genre">finance · psychology · narrative</span>
+          </div>
+          <div class="author-why">Nhà văn liên ngành xuất sắc nhất hiện tại viết bằng tiếng Anh. Kỹ năng chính của ông: lấy historical anecdote cụ thể → rút ra principle phổ quát → áp dụng vào context mà độc giả quan tâm. Pattern này hoạt động trong mọi lĩnh vực — bao gồm tech và AI.</div>
+          <div class="author-start"><strong>Bắt đầu:</strong> "The Psychology of Money" → blog tại collabfund.com</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="5-en5">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-en">EN</span>
+        <div class="author-card" style="background:none;border:none;padding:0;margin:0;">
+          <div class="author-head">
+            <span class="author-name">David Foster Wallace</span>
+            <span class="author-genre">essays · long-form · voice</span>
+          </div>
+          <div class="author-why">Không phải để bắt chước — để hiểu giới hạn của voice. DFW đẩy sentence-level writing đến cực đoan: footnotes trong footnotes, digressions có cấu trúc, intimacy với độc giả ở mức không ai khác làm. Đọc để học tonal range và cách một writer có thể "ở trong đầu người đọc".</div>
+          <div class="author-start"><strong>Bắt đầu:</strong> "Consider the Lobster" (essays) → "This Is Water" (speech)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Tiếng Anh — Khoa học & Công nghệ có chiều sâu</div>
+    <div class="checklist">
+      <div class="check-item" onclick="toggle(this)" data-id="5-en6">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-en">EN</span>
+        <div class="author-card" style="background:none;border:none;padding:0;margin:0;">
+          <div class="author-head">
+            <span class="author-name">Richard Feynman</span>
+            <span class="author-genre">science writing · explanation</span>
+          </div>
+          <div class="author-why">Standard vàng của "explain hard things simply without dumbing them down." Feynman không simplify physics — ông tìm analogy thực sự chính xác. Kỹ thuật này trực tiếp áp dụng cho bạn khi viết về AI/ML cho non-technical audience.</div>
+          <div class="author-start"><strong>Bắt đầu:</strong> "Surely You're Joking, Mr. Feynman" → "The Feynman Lectures" (xem cách ông setup problems)</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="5-en7">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-en">EN</span>
+        <div class="author-card" style="background:none;border:none;padding:0;margin:0;">
+          <div class="author-head">
+            <span class="author-name">Andrej Karpathy</span>
+            <span class="author-genre">AI · technical writing · blog</span>
+          </div>
+          <div class="author-why">Mẫu hình của technical writing có personality. Blog của Karpathy là proof rằng bạn có thể vừa cực kỳ rigorous về kỹ thuật vừa có giọng văn riêng biệt không nhàm chán. Đặc biệt relevant với AI/ML path của bạn.</div>
+          <div class="author-start"><strong>Bắt đầu:</strong> karpathy.github.io → "The Unreasonable Effectiveness of RNNs" → "Software 2.0"</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="5-en8">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-en">EN</span>
+        <div class="author-card" style="background:none;border:none;padding:0;margin:0;">
+          <div class="author-head">
+            <span class="author-name">James Clear</span>
+            <span class="author-genre">behavior · habit · clarity</span>
+          </div>
+          <div class="author-why">Ít được coi trọng về mặt literary nhưng xuất sắc về một kỹ năng: biến abstract principle thành concrete, actionable prose. Pattern của ông — concept → mechanism → application → implication — là template mạnh cho bất kỳ ai viết về behavior, systems, hay productivity.</div>
+          <div class="author-start"><strong>Bắt đầu:</strong> "Atomic Habits" → newsletter tại jamesclear.com/articles</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Tiếng Việt — Nền tảng văn xuôi</div>
+    <div class="checklist">
+      <div class="check-item" onclick="toggle(this)" data-id="5-vi1">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-vi">VI</span>
+        <div class="author-card" style="background:none;border:none;padding:0;margin:0;">
+          <div class="author-head">
+            <span class="author-name">Nguyễn Ngọc Tư</span>
+            <span class="author-genre">truyện ngắn · văn xuôi miền Nam</span>
+          </div>
+          <div class="author-why">Chuẩn mực của tiếng Việt trong sáng, giàu cảm xúc mà không sến. Bà có khả năng nói điều phức tạp bằng câu rất đơn giản — ngược hoàn toàn với xu hướng dùng từ hoa mỹ để tạo vẻ "sâu sắc." Đọc để cảm nhận nhịp điệu tiếng Việt đúng nghĩa.</div>
+          <div class="author-start"><strong>Bắt đầu:</strong> "Cánh đồng bất tận" → "Giao thừa" → "Không ai qua sông"</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="5-vi2">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-vi">VI</span>
+        <div class="author-card" style="background:none;border:none;padding:0;margin:0;">
+          <div class="author-head">
+            <span class="author-name">Nguyễn Huy Thiệp</span>
+            <span class="author-genre">truyện ngắn · đương đại</span>
+          </div>
+          <div class="author-why">Giọng văn lạnh, kinh tế tối đa từng từ, không có câu thừa. Thiệp viết về con người mà không phán xét — một kỹ năng hiếm. Đọc để học cách "show, don't tell" trong tiếng Việt và cách giữ emotional distance mà vẫn tạo impact.</div>
+          <div class="author-start"><strong>Bắt đầu:</strong> "Tướng về hưu" → "Những ngọn gió Hua Tát"</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="5-vi3">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-vi">VI</span>
+        <div class="author-card" style="background:none;border:none;padding:0;margin:0;">
+          <div class="author-head">
+            <span class="author-name">Phan Việt</span>
+            <span class="author-genre">hồi ký · tản văn · liên ngành</span>
+          </div>
+          <div class="author-why">Hiếm có tác giả Việt nào kết hợp được tư duy học thuật phương Tây với cảm xúc thuần Việt như Phan Việt. Bà viết về văn hóa, bản sắc, và transition giữa hai thế giới — relevant trực tiếp với bạn là người viết song ngữ về tech nhưng muốn giữ giọng Việt thật.</div>
+          <div class="author-start"><strong>Bắt đầu:</strong> "Bất hạnh là một tài sản" → "Một mình ở châu Âu"</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="5-vi4">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-vi">VI</span>
+        <div class="author-card" style="background:none;border:none;padding:0;margin:0;">
+          <div class="author-head">
+            <span class="author-name">Nam Quốc Chánh (Spiderum)</span>
+            <span class="author-genre">essays · tư duy · tự sự</span>
+          </div>
+          <div class="author-why">Đại diện tốt nhất hiện tại cho kiểu writing bạn đang hướng tới trong tiếng Việt: analytical, personal, và có intellectual backbone. Không hoa mỹ, không cliché motivational — đọc để calibrate "tiêu chuẩn hiện tại" của long-form thinking tiếng Việt.</div>
+          <div class="author-start"><strong>Bắt đầu:</strong> Spiderum.com → filter bài của NQC và các tác giả verified</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Tiếng Việt — Tư duy & Phi hư cấu</div>
+    <div class="checklist">
+      <div class="check-item" onclick="toggle(this)" data-id="5-vi5">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-vi">VI</span>
+        <div class="author-card" style="background:none;border:none;padding:0;margin:0;">
+          <div class="author-head">
+            <span class="author-name">Yuval Noah Harari (bản dịch)</span>
+            <span class="author-genre">lịch sử · liên ngành · đại chúng</span>
+          </div>
+          <div class="author-why">Bản dịch tiếng Việt của Sapiens và Homo Deus được dịch rất tốt. Đọc không chỉ để học nội dung mà để phân tích cấu trúc: Harari bắt đầu mỗi chương bằng câu hỏi kỳ lạ → xây tension → giải quyết bằng perspective lịch sử. Pattern này cực kỳ reusable.</div>
+          <div class="author-start"><strong>Bắt đầu:</strong> "Sapiens: Lược sử loài người" (bản tiếng Việt)</div>
+        </div>
+      </div>
+      <div class="check-item" onclick="toggle(this)" data-id="5-vi6">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-vi">VI</span>
+        <div class="author-card" style="background:none;border:none;padding:0;margin:0;">
+          <div class="author-head">
+            <span class="author-name">Đọc báo nước ngoài bằng tiếng Việt</span>
+            <span class="author-genre">journalism · prose thực hành</span>
+          </div>
+          <div class="author-why">The Atlantic, Aeon, Vox — nhiều bài được dịch sang tiếng Việt bởi các nhóm dịch thuật chất lượng. So sánh bản gốc và bản dịch để hiểu: đâu là chỗ tiếng Việt mạnh hơn, đâu là chỗ tiếng Anh cố hữu khó dịch. Điều này giúp bạn viết song ngữ chứ không chỉ "dịch" suy nghĩ.</div>
+          <div class="author-start"><strong>Bắt đầu:</strong> Vietcetera, The Interpreter (Lowy Institute), Noahpinion (bản dịch)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Meta-reading: Sách về cách đọc & cách học từ đọc</div>
+    <div class="checklist">
+      <div class="check-item" onclick="toggle(this)" data-id="5-meta1">
+        <div class="check-box">✓</div>
+        <span class="check-tag tag-book">sách</span>
+        <div class="author-card" style="background:none;border:none;padding:0;margin:0;">
+          <div class="author-head">
+            <span class="author-name">How to Read a Book — Mortimer Adler</span>
+            <span class="author-genre">meta · đọc chủ động</span>
+          </div>
+          <div class="author-why">Đọc để viết ≠ đọc để thưởng thức. Adler dạy cách đọc "analytically" — đặt câu hỏi với tác giả, phản bác trong khi đọc, tổng hợp ý từ nhiều nguồn. Kỹ năng này là multiplier cho tất cả các reading bên trên.</div>
+          <div class="author-start"><strong>Bắt đầu:</strong> Chỉ cần đọc Part II (Analytical Reading) — đủ để thay đổi cách bạn đọc mọi thứ</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div style="padding:1rem 0; font-size:0.82rem; color:var(--text3); font-style:italic; line-height:1.7;">
+      Ghi chú: Tick các mục bạn đã hoàn thành. Progress được lưu trong trình duyệt của bạn và không mất khi reload trang.
+    </div>
+  </section>
+
+  <div class="reset-wrap">
+    <button class="reset-btn" onclick="resetAll()">↺ reset tất cả progress</button>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'writer-roadmap-v1';
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
+}
+
+function saveState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function toggle(el) {
+  const id = el.dataset.id;
+  const state = loadState();
+  const done = !el.classList.contains('done');
+  if (done) { state[id] = true; } else { delete state[id]; }
+  saveState(state);
+  el.classList.toggle('done', done);
+  updateProgress();
+}
+
+function updateProgress() {
+  const state = loadState();
+  const allItems = document.querySelectorAll('.check-item[data-id]');
+  const total = allItems.length;
+  const done = Object.keys(state).length;
+  const pct = total > 0 ? Math.round(done / total * 100) : 0;
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+
+  [1,2,3,4,5].forEach(p => {
+    const phase = document.getElementById('phase-' + p);
+    if (!phase) return;
+    const pItems = phase.querySelectorAll('.check-item[data-id]');
+    const pDone = Array.from(pItems).filter(i => state[i.dataset.id]).length;
+    const cnt = document.getElementById('cnt-' + p);
+    if (cnt) cnt.textContent = pDone > 0 ? pDone + '/' + pItems.length : '';
+  });
+}
+
+function initState() {
+  const state = loadState();
+  document.querySelectorAll('.check-item[data-id]').forEach(el => {
+    if (state[el.dataset.id]) el.classList.add('done');
+  });
+  updateProgress();
+}
+
+function showPhase(n) {
+  document.querySelectorAll('.phase').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.phase-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('phase-' + n).classList.add('active');
+  document.querySelector('[data-p="' + n + '"]').classList.add('active');
+}
+
+function resetAll() {
+  if (!confirm('Reset tất cả progress? Không thể hoàn tác.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  document.querySelectorAll('.check-item.done').forEach(el => el.classList.remove('done'));
+  updateProgress();
+}
+
+initState();
+</script>
+</body>
+</html>
