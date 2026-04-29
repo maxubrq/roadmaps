@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>90 Ngày Trở Thành Authentic Writer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0d0b;
+  --bg2: #161410;
+  --bg3: #1e1b17;
+  --bg4: #252118;
+  --line: rgba(255,255,255,0.07);
+  --line2: rgba(255,255,255,0.12);
+  --text: #e8e3d8;
+  --text2: #9e9a8e;
+  --text3: #5e5a52;
+  --gold: #c9a84c;
+  --gold2: #e8c97a;
+  --gold-dim: rgba(201,168,76,0.12);
+  --purple: #8b7fd4;
+  --purple-dim: rgba(139,127,212,0.12);
+  --teal: #4a9e8c;
+  --teal-dim: rgba(74,158,140,0.12);
+  --coral: #c96b4a;
+  --coral-dim: rgba(201,107,74,0.12);
+  --radius: 10px;
+  --radius-lg: 16px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* NOISE TEXTURE */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+.wrapper { position: relative; z-index: 1; }
+
+/* HEADER */
+header {
+  padding: 80px 40px 60px;
+  max-width: 900px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--line);
+}
+
+.eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.eyebrow::after {
+  content: '';
+  display: block;
+  height: 1px;
+  width: 60px;
+  background: var(--gold);
+  opacity: 0.4;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+h1 em {
+  font-style: italic;
+  color: var(--gold2);
+}
+
+.subtitle {
+  font-size: 16px;
+  color: var(--text2);
+  max-width: 540px;
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+/* PROGRESS OVERVIEW */
+.progress-overview {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.progress-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.progress-stat .num {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--gold2);
+}
+
+.progress-stat .label {
+  font-size: 12px;
+  color: var(--text3);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.progress-bar-wrap {
+  margin-top: 20px;
+  background: var(--bg3);
+  border-radius: 100px;
+  height: 4px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 540px;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold2));
+  border-radius: 100px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* MAIN LAYOUT */
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 40px 80px;
+}
+
+/* PHASE TABS */
+.phase-nav {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin: 48px 0 40px;
+  background: var(--bg2);
+}
+
+.phase-btn {
+  flex: 1;
+  padding: 18px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  border-right: 1px solid var(--line2);
+  transition: background 0.2s;
+  position: relative;
+}
+.phase-btn:last-child { border-right: none; }
+.phase-btn:hover { background: var(--bg3); }
+
+.phase-btn.active { background: var(--bg3); }
+.phase-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+}
+.phase-btn.p1.active::after { background: var(--purple); }
+.phase-btn.p2.active::after { background: var(--teal); }
+.phase-btn.p3.active::after { background: var(--coral); }
+
+.phase-btn .p-days {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.phase-btn .p-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+.phase-btn .p-sub {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 2px;
+}
+.phase-btn.p1 .p-name { }
+.phase-btn.p1.active .p-name { color: var(--purple); }
+.phase-btn.p2.active .p-name { color: var(--teal); }
+.phase-btn.p3.active .p-name { color: var(--coral); }
+
+/* CONTENT SECTIONS */
+.phase-content { display: none; animation: fadeIn 0.3s ease; }
+.phase-content.visible { display: block; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* TRANSFORMATION BANNER */
+.transform-banner {
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 36px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  border: 1px solid;
+}
+.transform-banner.p1 { background: var(--purple-dim); border-color: rgba(139,127,212,0.25); }
+.transform-banner.p2 { background: var(--teal-dim); border-color: rgba(74,158,140,0.25); }
+.transform-banner.p3 { background: var(--coral-dim); border-color: rgba(201,107,74,0.25); }
+
+.transform-icon {
+  font-size: 20px;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.transform-body .transform-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.p1 .transform-label { color: var(--purple); }
+.p2 .transform-label { color: var(--teal); }
+.p3 .transform-label { color: var(--coral); }
+
+.transform-body p {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.65;
+}
+
+/* SECTION TITLE */
+.section-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* WEEK GRID */
+.week-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.week-card {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  transition: border-color 0.2s;
+}
+.week-card:hover { border-color: var(--line2); }
+
+.week-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--text3);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.week-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+
+.week-tasks { display: flex; flex-direction: column; gap: 8px; }
+
+.task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  padding: 6px 8px;
+  margin: -6px -8px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+.task-item:hover { background: var(--bg4); }
+
+.task-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--line2);
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  background: transparent;
+}
+.task-item.done .task-checkbox {
+  border-color: var(--gold);
+  background: var(--gold-dim);
+}
+.task-item.done .task-checkbox::after {
+  content: '';
+  width: 8px;
+  height: 5px;
+  border-left: 1.5px solid var(--gold);
+  border-bottom: 1.5px solid var(--gold);
+  transform: rotate(-45deg) translateY(-1px);
+}
+
+.task-text {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.5;
+  transition: color 0.2s;
+}
+.task-item.done .task-text {
+  color: var(--text3);
+  text-decoration: line-through;
+  text-decoration-color: var(--text3);
+}
+
+/* RESOURCES */
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.resource-card {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+
+.resource-type {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 5px;
+}
+
+.resource-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.resource-why {
+  font-size: 11px;
+  color: var(--text3);
+  line-height: 1.4;
+}
+
+/* MILESTONES */
+.milestones { margin-bottom: 40px; }
+
+.milestone-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+.milestone-item:last-child { border-bottom: none; }
+
+.milestone-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  flex-shrink: 0;
+  border: 1px solid;
+  transition: all 0.2s;
+}
+.p1-milestone .milestone-badge { border-color: var(--purple); color: var(--purple); }
+.p2-milestone .milestone-badge { border-color: var(--teal); color: var(--teal); }
+.p3-milestone .milestone-badge { border-color: var(--coral); color: var(--coral); }
+
+.milestone-item.done .milestone-badge {
+  background: var(--gold-dim) !important;
+  border-color: var(--gold) !important;
+  color: var(--gold) !important;
+}
+
+.milestone-body { flex: 1; }
+.milestone-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 4px;
+  transition: color 0.2s;
+}
+.milestone-item.done .milestone-title { color: var(--text3); text-decoration: line-through; text-decoration-color: var(--text3); }
+.milestone-desc {
+  font-size: 12px;
+  color: var(--text3);
+  line-height: 1.55;
+}
+
+/* DAILY RHYTHM */
+.rhythm-table {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.rhythm-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border-bottom: 1px solid var(--line);
+}
+.rhythm-row:last-child { border-bottom: none; }
+
+.rhythm-time {
+  width: 120px;
+  flex-shrink: 0;
+  padding: 14px 20px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.06em;
+  border-right: 1px solid var(--line);
+}
+
+.rhythm-act {
+  padding: 14px 20px;
+  font-size: 13px;
+  color: var(--text2);
+}
+
+/* JOURNAL */
+.journal-section {
+  margin-top: 48px;
+  padding-top: 40px;
+  border-top: 1px solid var(--line);
+}
+
+.journal-entry {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.journal-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.journal-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.08em;
+}
+
+.journal-delete {
+  background: transparent;
+  border: none;
+  color: var(--text3);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s;
+}
+.journal-delete:hover { color: var(--coral); }
+
+.journal-text {
+  padding: 16px 20px;
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.journal-add {
+  margin-top: 16px;
+}
+
+.journal-textarea {
+  width: 100%;
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  line-height: 1.7;
+  resize: vertical;
+  min-height: 100px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.journal-textarea:focus { border-color: var(--line2); }
+.journal-textarea::placeholder { color: var(--text3); }
+
+.btn-primary {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: var(--gold-dim);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: var(--radius);
+  color: var(--gold2);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary:hover { background: rgba(201,168,76,0.2); border-color: var(--gold); }
+
+/* RESET BTN */
+.reset-section {
+  margin-top: 60px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+.btn-reset {
+  background: transparent;
+  border: 1px solid var(--line2);
+  border-radius: var(--radius);
+  color: var(--text3);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-reset:hover { border-color: var(--coral); color: var(--coral); }
+
+/* RESPONSIVE */
+@media (max-width: 640px) {
+  header, main { padding-left: 20px; padding-right: 20px; }
+  header { padding-top: 48px; padding-bottom: 36px; }
+  .week-grid { grid-template-columns: 1fr; }
+  .resources-grid { grid-template-columns: 1fr 1fr; }
+  .phase-btn .p-sub { display: none; }
+  h1 { font-size: 32px; }
+}
+
+@media (max-width: 420px) {
+  .resources-grid { grid-template-columns: 1fr; }
+  .phase-nav { flex-direction: column; border-radius: var(--radius); }
+  .phase-btn { border-right: none; border-bottom: 1px solid var(--line2); }
+  .phase-btn:last-child { border-bottom: none; }
+  .phase-btn.active::after { right: 0; width: 2px; height: 100%; top: 0; bottom: auto; left: auto; }
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+<header>
+  <div class="eyebrow">90-Day Challenge</div>
+  <h1>Trở thành<br><em>Authentic Writer</em></h1>
+  <p class="subtitle">Không chỉ viết văn — mà tư duy đa tầng, liên ngành, giao tiếp lãnh đạo. Mỗi bước tiến là transformation không thể đảo ngược.</p>
+
+  <div class="progress-overview">
+    <div class="progress-stat">
+      <span class="num" id="stat-done">0</span>
+      <span class="label">Tasks done</span>
+    </div>
+    <div class="progress-stat">
+      <span class="num" id="stat-total">0</span>
+      <span class="label">Total tasks</span>
+    </div>
+    <div class="progress-stat">
+      <span class="num" id="stat-pct">0%</span>
+      <span class="label">Progress</span>
+    </div>
+    <div class="progress-stat">
+      <span class="num" id="stat-ms">0</span>
+      <span class="label">Milestones</span>
+    </div>
+  </div>
+  <div class="progress-bar-wrap" style="margin-top:20px">
+    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+</header>
+
+<main>
+
+  <div class="phase-nav">
+    <button class="phase-btn p1 active" onclick="showPhase(1)">
+      <div class="p-days">Ngày 1–30</div>
+      <div class="p-name">Phá vỡ cái tôi cũ</div>
+      <div class="p-sub">Foundation & Deconstruction</div>
+    </button>
+    <button class="phase-btn p2" onclick="showPhase(2)">
+      <div class="p-days">Ngày 31–60</div>
+      <div class="p-name">Xây dựng giọng nói</div>
+      <div class="p-sub">Voice & Cross-domain</div>
+    </button>
+    <button class="phase-btn p3" onclick="showPhase(3)">
+      <div class="p-days">Ngày 61–90</div>
+      <div class="p-name">Khuếch đại & Ảnh hưởng</div>
+      <div class="p-sub">Influence & System</div>
+    </button>
+  </div>
+
+  <!-- ======== PHASE 1 ======== -->
+  <div id="phase1" class="phase-content visible">
+
+    <div class="transform-banner p1">
+      <div class="transform-icon">⟳</div>
+      <div class="transform-body">
+        <div class="transform-label">Chuyển hoá cốt lõi</div>
+        <p>Từ "viết để thông báo" → "viết để thay đổi tư duy của người đọc". Bạn chưa cần hay — bạn cần thật.</p>
+      </div>
+    </div>
+
+    <div class="section-title">Tuần 1 — Đọc như một nhà văn</div>
+    <div class="week-grid">
+      <div class="week-card">
+        <div class="week-num">Tuần 1</div>
+        <div class="week-title">Đọc như một nhà văn</div>
+        <div class="week-tasks" id="tasks-w1"></div>
+      </div>
+      <div class="week-card">
+        <div class="week-num">Tuần 2</div>
+        <div class="week-title">Tư duy liên ngành</div>
+        <div class="week-tasks" id="tasks-w2"></div>
+      </div>
+      <div class="week-card">
+        <div class="week-num">Tuần 3</div>
+        <div class="week-title">Câu văn và nhịp điệu</div>
+        <div class="week-tasks" id="tasks-w3"></div>
+      </div>
+      <div class="week-card">
+        <div class="week-num">Tuần 4</div>
+        <div class="week-title">Lập luận có tầng</div>
+        <div class="week-tasks" id="tasks-w4"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Tài nguyên thiết yếu</div>
+    <div class="resources-grid">
+      <div class="resource-card">
+        <div class="resource-type">Sách nền</div>
+        <div class="resource-name">On Writing Well — Zinsser</div>
+        <div class="resource-why">Bộ lọc đầu tiên: gọn gàng và rõ ràng</div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-type">Sách tư duy</div>
+        <div class="resource-name">The Sense of Style — Pinker</div>
+        <div class="resource-why">Vì sao văn viết tốt dựa trên cognition</div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-type">Thực hành</div>
+        <div class="resource-name">750words.com</div>
+        <div class="resource-why">Stream of consciousness hàng ngày, private</div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-type">Đọc mẫu</div>
+        <div class="resource-name">Paul Graham Essays</div>
+        <div class="resource-why">Liên ngành, dày insight, giọng rất riêng</div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-type">Kỹ thuật</div>
+        <div class="resource-name">Hemingway App</div>
+        <div class="resource-why">Audit độ phức tạp câu văn</div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-type">Mẫu văn VN</div>
+        <div class="resource-name">Tản văn Phan Việt</div>
+        <div class="resource-why">Tư duy sâu bằng tiếng Việt hiện đại</div>
+      </div>
+    </div>
+
+    <div class="section-title">Milestones giai đoạn 1</div>
+    <div class="milestones" id="milestones-p1"></div>
+
+  </div>
+
+  <!-- ======== PHASE 2 ======== -->
+  <div id="phase2" class="phase-content">
+
+    <div class="transform-banner p2">
+      <div class="transform-icon">◈</div>
+      <div class="transform-body">
+        <div class="transform-label">Chuyển hoá cốt lõi</div>
+        <p>Từ "viết tốt" → "viết có phong cách riêng". Đây là giai đoạn nguy hiểm nhất — nhiều người mắc kẹt ở đây vì sợ khác biệt.</p>
+      </div>
+    </div>
+
+    <div class="week-grid">
+      <div class="week-card">
+        <div class="week-num">Tuần 5</div>
+        <div class="week-title">Tìm giọng nói thật</div>
+        <div class="week-tasks" id="tasks-w5"></div>
+      </div>
+      <div class="week-card">
+        <div class="week-num">Tuần 6</div>
+        <div class="week-title">Giao tiếp đa tầng</div>
+        <div class="week-tasks" id="tasks-w6"></div>
+      </div>
+      <div class="week-card">
+        <div class="week-num">Tuần 7</div>
+        <div class="week-title">Viết lãnh đạo</div>
+        <div class="week-tasks" id="tasks-w7"></div>
+      </div>
+      <div class="week-card">
+        <div class="week-num">Tuần 8</div>
+        <div class="week-title">Liên ngành sâu</div>
+        <div class="week-tasks" id="tasks-w8"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Tài nguyên giai đoạn 2</div>
+    <div class="resources-grid">
+      <div class="resource-card">
+        <div class="resource-type">Tư duy sâu</div>
+        <div class="resource-name">Essays of Montaigne</div>
+        <div class="resource-why">Cha đẻ của essay cá nhân — cực kỳ honest</div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-type">Giọng văn</div>
+        <div class="resource-name">David Foster Wallace</div>
+        <div class="resource-why">Complexity và sự thật trong văn viết</div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-type">Lãnh đạo</div>
+        <div class="resource-name">The Pyramid Principle</div>
+        <div class="resource-why">Cấu trúc tư duy cho executive communication</div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-type">Liên ngành</div>
+        <div class="resource-name">The Innovator's Dilemma</div>
+        <div class="resource-why">Học viết business + concept phức tạp</div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-type">Podcast</div>
+        <div class="resource-name">The Tim Ferriss Show</div>
+        <div class="resource-why">Phỏng vấn writers về process của họ</div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-type">Newsletter</div>
+        <div class="resource-name">Stratechery — Ben Thompson</div>
+        <div class="resource-why">Tech + strategy viết sắc, có POV riêng</div>
+      </div>
+    </div>
+
+    <div class="section-title">Milestones giai đoạn 2</div>
+    <div class="milestones" id="milestones-p2"></div>
+
+  </div>
+
+  <!-- ======== PHASE 3 ======== -->
+  <div id="phase3" class="phase-content">
+
+    <div class="transform-banner p3">
+      <div class="transform-icon">◎</div>
+      <div class="transform-body">
+        <div class="transform-label">Chuyển hoá cốt lõi</div>
+        <p>Từ "writer tốt" → "writer có ảnh hưởng". Không còn về kỹ thuật — mà về hệ thống, nhất quán, và để tư duy bạn lan ra ngoài vùng kiểm soát.</p>
+      </div>
+    </div>
+
+    <div class="week-grid">
+      <div class="week-card">
+        <div class="week-num">Tuần 9</div>
+        <div class="week-title">Xây dựng canon cá nhân</div>
+        <div class="week-tasks" id="tasks-w9"></div>
+      </div>
+      <div class="week-card">
+        <div class="week-num">Tuần 10</div>
+        <div class="week-title">Format đa dạng</div>
+        <div class="week-tasks" id="tasks-w10"></div>
+      </div>
+      <div class="week-card">
+        <div class="week-num">Tuần 11</div>
+        <div class="week-title">Writing as leadership</div>
+        <div class="week-tasks" id="tasks-w11"></div>
+      </div>
+      <div class="week-card">
+        <div class="week-num">Tuần 12</div>
+        <div class="week-title">Tổng kết & Hệ thống hoá</div>
+        <div class="week-tasks" id="tasks-w12"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Tài nguyên giai đoạn 3</div>
+    <div class="resources-grid">
+      <div class="resource-card">
+        <div class="resource-type">Ảnh hưởng</div>
+        <div class="resource-name">Show Your Work — Kleon</div>
+        <div class="resource-why">Cách share thinking, không chỉ output</div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-type">Hệ thống</div>
+        <div class="resource-name">Building a Second Brain</div>
+        <div class="resource-why">Tổ chức knowledge → writing pipeline</div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-type">Lãnh đạo</div>
+        <div class="resource-name">Working Backwards — Amazon</div>
+        <div class="resource-why">Writing-first leadership culture</div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-type">Giọng Việt</div>
+        <div class="resource-name">Kỹ thuật kể chuyện Nguyễn Nhật Ánh</div>
+        <div class="resource-why">Nhịp điệu tiếng Việt hiện đại</div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-type">Cộng đồng</div>
+        <div class="resource-name">Every.to / Substack</div>
+        <div class="resource-why">Quan sát writer-thinker thế hệ mới</div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-type">Essay mẫu</div>
+        <div class="resource-name">"This Is Water" — DFW</div>
+        <div class="resource-why">Viết hay = thay đổi nhận thức người đọc</div>
+      </div>
+    </div>
+
+    <div class="section-title">Milestones giai đoạn 3</div>
+    <div class="milestones" id="milestones-p3"></div>
+
+    <div class="section-title" style="margin-top:40px">Nhịp sinh hoạt hàng ngày (cả 90 ngày)</div>
+    <div class="rhythm-table">
+      <div class="rhythm-row">
+        <div class="rhythm-time">Sáng sớm</div>
+        <div class="rhythm-act">20 phút đọc — không phải scroll. Đọc thật sự.</div>
+      </div>
+      <div class="rhythm-row">
+        <div class="rhythm-time">Buổi sáng</div>
+        <div class="rhythm-act">Deep work block: viết bản draft thô, không edit.</div>
+      </div>
+      <div class="rhythm-row">
+        <div class="rhythm-time">Buổi tối</div>
+        <div class="rhythm-act">200 từ journal: quan sát của ngày hôm nay.</div>
+      </div>
+      <div class="rhythm-row">
+        <div class="rhythm-time">Cuối tuần</div>
+        <div class="rhythm-act">1 bài hoàn chỉnh — từ rough draft đến published.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JOURNAL -->
+  <div class="journal-section">
+    <div class="section-title">Journal — ghi chú hành trình</div>
+    <div id="journal-entries"></div>
+    <div class="journal-add">
+      <textarea class="journal-textarea" id="journal-input" placeholder="Ghi lại insight của hôm nay, bài học, hoặc đoạn văn hay nhất bạn đọc được..."></textarea>
+      <button class="btn-primary" onclick="addJournalEntry()">Lưu ghi chú →</button>
+    </div>
+  </div>
+
+  <div class="reset-section">
+    <button class="btn-reset" onclick="confirmReset()">Xoá tất cả progress</button>
+  </div>
+
+</main>
+</div>
+
+<script>
+const DATA = {
+  tasks: {
+    'w1': [
+      {id:'w1t1', text:'Đọc 1 bài hay mỗi ngày, phân tích cấu trúc lập luận'},
+      {id:'w1t2', text:'Viết journal 200 từ mỗi tối — không chỉnh, không xoá'},
+      {id:'w1t3', text:'Bài tập: Rewrite 1 đoạn nhàm thành sống động'},
+    ],
+    'w2': [
+      {id:'w2t1', text:'Viết 1 bài kết nối 2 lĩnh vực hoàn toàn khác nhau'},
+      {id:'w2t2', text:'Bài tập Plato: Giải thích 1 concept kỹ thuật bằng triết học'},
+      {id:'w2t3', text:'Map mental models từ các ngành vào văn viết'},
+    ],
+    'w3': [
+      {id:'w3t1', text:'Học cách kiểm soát nhịp: ngắn—dài—ngắn'},
+      {id:'w3t2', text:'Copy-work: Tay viết lại 3 đoạn văn từ writer bạn ngưỡng mộ'},
+      {id:'w3t3', text:'Eliminate filler words trong tất cả bản draft'},
+    ],
+    'w4': [
+      {id:'w4t1', text:'Cấu trúc bài: hook → tension → insight → implication'},
+      {id:'w4t2', text:'Viết 1 bài hoàn chỉnh 500 từ — publish hoặc share'},
+      {id:'w4t3', text:'Nhận feedback từ 3 người đọc khác nhau'},
+    ],
+    'w5': [
+      {id:'w5t1', text:'Viết cùng một chủ đề theo 3 phong cách: academic, casual, polemic'},
+      {id:'w5t2', text:'Xác định: bạn muốn nghe ai nói chuyện về bạn?'},
+      {id:'w5t3', text:'Audit: gạch chân mọi câu "không ai ngoài bạn viết được"'},
+    ],
+    'w6': [
+      {id:'w6t1', text:'Viết cho 3 nhóm độc giả khác nhau về cùng một insight'},
+      {id:'w6t2', text:'Học layered writing: surface story + deeper meaning'},
+      {id:'w6t3', text:'Bài tập: ẩn dụ mở đầu → logic giữa → gợi mở cuối'},
+    ],
+    'w7': [
+      {id:'w7t1', text:'Cấu trúc bài brief/memo/argument có sức thuyết phục'},
+      {id:'w7t2', text:'Viết bài thể hiện quan điểm mạnh — có thể gây tranh cãi'},
+      {id:'w7t3', text:'Học Pyramid Principle của Barbara Minto'},
+    ],
+    'w8': [
+      {id:'w8t1', text:'Viết essay kiểu "Plato là Tech Lead" — triết học + chuyên môn'},
+      {id:'w8t2', text:'Chọn một nhân vật lịch sử, đặt vào một context hiện đại'},
+      {id:'w8t3', text:'Workshop: nhờ người kỹ thuật và phi kỹ thuật đọc, xem ai hiểu hơn'},
+    ],
+    'w9': [
+      {id:'w9t1', text:'Identify 3–5 "recurring themes" chỉ bạn mới viết được'},
+      {id:'w9t2', text:'Tạo bộ khung tư duy riêng: đặt tên, diễn giải, ví dụ'},
+      {id:'w9t3', text:'Viết "manifesto" ngắn về thế giới quan của bạn'},
+    ],
+    'w10': [
+      {id:'w10t1', text:'Viết thread, long-form essay, và memo — cùng 1 idea'},
+      {id:'w10t2', text:'Thử viết cho publication bên ngoài lần đầu tiên'},
+      {id:'w10t3', text:'Học cách edit xuống còn 50% mà không mất insight'},
+    ],
+    'w11': [
+      {id:'w11t1', text:'Viết 1 piece dùng thực tế: proposal, strategy doc, pitch'},
+      {id:'w11t2', text:'Thực hành viết dưới áp lực: 48h từ ý tưởng đến publish'},
+      {id:'w11t3', text:'Build feedback loop: ai là độc giả lý tưởng của bạn?'},
+    ],
+    'w12': [
+      {id:'w12t1', text:'Viết "State of my writing" — nhìn lại 90 ngày'},
+      {id:'w12t2', text:'Xây dựng writing system cho 12 tháng tiếp theo'},
+      {id:'w12t3', text:'Publish bài best-of-90-days: cái hay nhất bạn có'},
+    ],
+  },
+  milestones: {
+    'p1': [
+      {id:'ms1', text:'Publish bài viết "hybrid" đầu tiên', desc:'Kết nối ít nhất 2 lĩnh vực, có lập luận rõ, dài 600–800 từ. Đây là bằng chứng bạn có thể nghĩ liên ngành bằng văn viết.'},
+      {id:'ms2', text:'30 ngày journal không gián đoạn', desc:'Streak này tạo ra habit neurological. Sau ngày 30 bạn không còn cảm thấy "chưa sẵn sàng để viết".'},
+    ],
+    'p2': [
+      {id:'ms3', text:'Viết xong bài "Plato là Tech Lead" của bạn', desc:'Signature piece: thể hiện tư duy liên ngành, giọng văn riêng, và khả năng giải thích phức tạp qua ẩn dụ lịch sử. Ai đọc xong cũng phải nhớ bạn là ai.'},
+      {id:'ms4', text:'5 người không quen chia sẻ bài của bạn', desc:'Không phải like — share với comment giải thích tại sao. Đây là proof of resonance đầu tiên.'},
+    ],
+    'p3': [
+      {id:'ms5', text:'10 bài published, ít nhất 1 bài được cited/shared rộng', desc:'Không phải viral — mà được người trong ngành nhắc đến, dùng làm reference, hoặc forward cho người khác với lý do cụ thể.'},
+      {id:'ms6', text:'Có "writing identity" rõ ràng', desc:'Khi ai đọc bài không biết tên tác giả vẫn có thể đoán ra là bạn. Đây là dấu hiệu của style đã chín.'},
+      {id:'ms7', text:'Được nhờ viết hoặc nhận offer từ writing', desc:'Reputation theo sau chất lượng. Nếu milestone này chưa xảy ra sau 90 ngày, cần review lại khâu distribution.'},
+    ],
+  }
+};
+
+// STATE
+let state = loadState();
+
+function loadState() {
+  try {
+    const s = localStorage.getItem('writer90_state');
+    return s ? JSON.parse(s) : { done: {}, journal: [] };
+  } catch(e) {
+    return { done: {}, journal: [] };
+  }
+}
+
+function saveState() {
+  localStorage.setItem('writer90_state', JSON.stringify(state));
+}
+
+// RENDER TASKS
+function renderTasks() {
+  Object.entries(DATA.tasks).forEach(([week, tasks]) => {
+    const el = document.getElementById('tasks-' + week);
+    if (!el) return;
+    el.innerHTML = '';
+    tasks.forEach(task => {
+      const done = state.done[task.id];
+      const div = document.createElement('div');
+      div.className = 'task-item' + (done ? ' done' : '');
+      div.onclick = () => toggleTask(task.id);
+      div.innerHTML = `<div class="task-checkbox"></div><div class="task-text">${task.text}</div>`;
+      el.appendChild(div);
+    });
+  });
+}
+
+// RENDER MILESTONES
+function renderMilestones() {
+  Object.entries(DATA.milestones).forEach(([phase, mss]) => {
+    const el = document.getElementById('milestones-' + phase);
+    if (!el) return;
+    el.innerHTML = '';
+    mss.forEach((ms, i) => {
+      const done = state.done[ms.id];
+      const div = document.createElement('div');
+      div.className = `milestone-item ${phase}-milestone` + (done ? ' done' : '');
+      div.onclick = () => toggleTask(ms.id);
+      const num = phase === 'p1' ? i+1 : phase === 'p2' ? i+3 : i+5;
+      div.innerHTML = `
+        <div class="milestone-badge">${done ? '✓' : '0'+num}</div>
+        <div class="milestone-body">
+          <div class="milestone-title">${ms.text}</div>
+          <div class="milestone-desc">${ms.desc}</div>
+        </div>`;
+      el.appendChild(div);
+    });
+  });
+}
+
+function toggleTask(id) {
+  state.done[id] = !state.done[id];
+  saveState();
+  renderTasks();
+  renderMilestones();
+  updateStats();
+}
+
+function updateStats() {
+  const allTasks = Object.values(DATA.tasks).flat();
+  const allMs = Object.values(DATA.milestones).flat();
+  const totalTasks = allTasks.length;
+  const doneTasks = allTasks.filter(t => state.done[t.id]).length;
+  const doneMs = allMs.filter(m => state.done[m.id]).length;
+  const pct = totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
+
+  document.getElementById('stat-done').textContent = doneTasks;
+  document.getElementById('stat-total').textContent = totalTasks;
+  document.getElementById('stat-pct').textContent = pct + '%';
+  document.getElementById('stat-ms').textContent = doneMs + '/' + allMs.length;
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+// JOURNAL
+function renderJournal() {
+  const el = document.getElementById('journal-entries');
+  el.innerHTML = '';
+  if (!state.journal || state.journal.length === 0) return;
+  state.journal.slice().reverse().forEach((entry, ri) => {
+    const i = state.journal.length - 1 - ri;
+    const div = document.createElement('div');
+    div.className = 'journal-entry';
+    div.innerHTML = `
+      <div class="journal-header">
+        <div class="journal-date">${entry.date}</div>
+        <button class="journal-delete" onclick="deleteJournal(${i})" title="Xoá">×</button>
+      </div>
+      <div class="journal-text">${escapeHtml(entry.text)}</div>`;
+    el.appendChild(div);
+  });
+}
+
+function addJournalEntry() {
+  const input = document.getElementById('journal-input');
+  const text = input.value.trim();
+  if (!text) return;
+  if (!state.journal) state.journal = [];
+  const now = new Date();
+  const date = now.toLocaleDateString('vi-VN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  state.journal.push({ text, date });
+  saveState();
+  input.value = '';
+  renderJournal();
+}
+
+function deleteJournal(i) {
+  state.journal.splice(i, 1);
+  saveState();
+  renderJournal();
+}
+
+function escapeHtml(text) {
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+// PHASE SWITCHING
+function showPhase(n) {
+  document.querySelectorAll('.phase-btn').forEach((b, i) => b.classList.toggle('active', i+1===n));
+  document.querySelectorAll('.phase-content').forEach((c, i) => c.classList.toggle('visible', i+1===n));
+}
+
+// RESET
+function confirmReset() {
+  if (confirm('Xoá tất cả progress và journal? Hành động này không thể hoàn tác.')) {
+    state = { done: {}, journal: [] };
+    saveState();
+    renderTasks();
+    renderMilestones();
+    renderJournal();
+    updateStats();
+  }
+}
+
+// INIT
+renderTasks();
+renderMilestones();
+renderJournal();
+updateStats();
+
+// Enter to save journal
+document.getElementById('journal-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && e.ctrlKey) addJournalEntry();
+});
+</script>
+</body>
+</html>
