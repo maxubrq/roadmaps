@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lộ trình $1B+ — Kế hoạch chuyển hóa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a08;
+    --bg2: #111110;
+    --bg3: #1a1a17;
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #e8e6df;
+    --text2: #8a8880;
+    --text3: #5a5855;
+    --accent: #c9a96e;
+    --accent2: #e8c887;
+    --phase0: #4a7c5f;
+    --phase0-bg: rgba(74,124,95,0.08);
+    --phase1: #b87333;
+    --phase1-bg: rgba(184,115,51,0.08);
+    --phase2: #5b7fa6;
+    --phase2-bg: rgba(91,127,166,0.08);
+    --serif: 'Instrument Serif', Georgia, serif;
+    --mono: 'DM Mono', monospace;
+    --sans: 'Geist', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* Header */
+  .header {
+    padding: 80px 48px 60px;
+    max-width: 900px;
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s ease forwards 0.1s;
+  }
+
+  .header-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .header h1 {
+    font-family: var(--serif);
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  .header h1 em {
+    font-style: italic;
+    color: var(--accent2);
+  }
+
+  .header-desc {
+    font-size: 16px;
+    color: var(--text2);
+    max-width: 560px;
+    line-height: 1.7;
+    border-left: 1px solid var(--border-hover);
+    padding-left: 20px;
+  }
+
+  /* Nav tabs */
+  .phase-nav {
+    display: flex;
+    gap: 2px;
+    padding: 0 48px;
+    max-width: 900px;
+    margin: 0 auto 48px;
+    border-bottom: 1px solid var(--border);
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.3s;
+  }
+
+  .phase-btn {
+    padding: 14px 28px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text3);
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: -1px;
+    white-space: nowrap;
+  }
+
+  .phase-btn:hover { color: var(--text2); }
+
+  .phase-btn.active {
+    color: var(--text);
+    border-bottom-color: var(--accent);
+  }
+
+  .phase-btn .score {
+    font-family: var(--mono);
+    font-size: 10px;
+    margin-left: 8px;
+    opacity: 0.5;
+  }
+
+  /* Phase content */
+  .phase-content { display: none; }
+  .phase-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @keyframes fadeUp { to { opacity: 1; transform: none; } }
+
+  .phase-wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 48px 80px;
+  }
+
+  /* Phase header */
+  .phase-header {
+    padding: 32px 36px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .phase-header::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+  }
+
+  .p0 .phase-header::before { background: var(--phase0); }
+  .p1 .phase-header::before { background: var(--phase1); }
+  .p2 .phase-header::before { background: var(--phase2); }
+
+  .phase-number {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .p0 .phase-number { color: var(--phase0); }
+  .p1 .phase-number { color: var(--phase1); }
+  .p2 .phase-number { color: var(--phase2); }
+
+  .phase-header h2 {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 400;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .phase-header p {
+    color: var(--text2);
+    font-size: 14px;
+    line-height: 1.7;
+    max-width: 620px;
+  }
+
+  .timeline-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    background: var(--bg3);
+    padding: 6px 12px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+  }
+
+  /* Identity shift */
+  .identity-block {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 48px;
+    padding: 28px 32px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+  }
+
+  .identity-from, .identity-to {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .identity-from { color: var(--text3); }
+  .identity-from::before {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 8px;
+    content: 'Từ';
+  }
+
+  .identity-to { color: var(--text); font-weight: 500; }
+  .identity-to::before {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    content: 'Thành';
+  }
+
+  .identity-arrow {
+    font-size: 20px;
+    color: var(--text3);
+    text-align: center;
+  }
+
+  /* Section titles */
+  .section { margin-bottom: 40px; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Skill cards */
+  .skill-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+
+  .skill-card {
+    padding: 20px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    transition: border-color 0.2s;
+  }
+
+  .skill-card:hover { border-color: var(--border-hover); }
+
+  .skill-domain {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 8px;
+  }
+
+  .skill-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .skill-desc {
+    font-size: 12px;
+    color: var(--text3);
+    line-height: 1.5;
+  }
+
+  /* Milestones */
+  .milestone-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .milestone {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 16px 20px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .milestone:hover { border-color: var(--border-hover); }
+  .milestone.done { opacity: 0.5; }
+  .milestone.done .milestone-text { text-decoration: line-through; color: var(--text3); }
+
+  .milestone-check {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid var(--border-hover);
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    font-size: 10px;
+    color: transparent;
+  }
+
+  .milestone.done .milestone-check {
+    background: var(--phase0);
+    border-color: var(--phase0);
+    color: white;
+  }
+
+  .p1 .milestone.done .milestone-check { background: var(--phase1); border-color: var(--phase1); }
+  .p2 .milestone.done .milestone-check { background: var(--phase2); border-color: var(--phase2); }
+
+  .milestone-body { flex: 1; }
+  .milestone-text { font-size: 14px; color: var(--text); line-height: 1.5; }
+  .milestone-when {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 4px;
+  }
+
+  /* Resources */
+  .resource-list { display: flex; flex-direction: column; gap: 6px; }
+
+  .resource {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 12px 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    transition: border-color 0.15s;
+  }
+
+  .resource:hover { border-color: var(--border-hover); }
+
+  .resource-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .tag-book { background: rgba(184,115,51,0.15); color: #c9823a; }
+  .tag-pod  { background: rgba(91,127,166,0.15); color: #7aa0c8; }
+  .tag-course { background: rgba(74,124,95,0.15); color: #6aaa82; }
+  .tag-action { background: rgba(255,255,255,0.05); color: var(--text3); }
+  .tag-network { background: rgba(201,169,110,0.1); color: var(--accent); }
+
+  .resource-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .resource-desc { font-size: 12px; color: var(--text3); margin-left: 6px; }
+
+  /* Checkpoints */
+  .checkpoint-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .checkpoint {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 20px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+  }
+
+  .p0 .checkpoint { background: var(--phase0-bg); }
+  .p1 .checkpoint { background: var(--phase1-bg); }
+  .p2 .checkpoint { background: var(--phase2-bg); }
+
+  .cp-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .cp-text { font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .cp-text strong { color: var(--text); font-weight: 500; }
+
+  /* Progress tracker */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--border);
+    z-index: 100;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--phase0), var(--accent), var(--phase2));
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  /* Footer note */
+  .footer-note {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 48px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .footer-note p {
+    font-size: 12px;
+    color: var(--text3);
+    max-width: 500px;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .progress-stats {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .progress-stats span {
+    display: block;
+    color: var(--text2);
+    font-size: 20px;
+    font-weight: 300;
+    margin-bottom: 2px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 2px; }
+
+  @media (max-width: 640px) {
+    .header, .phase-nav, .phase-wrap, .footer-note { padding-left: 20px; padding-right: 20px; }
+    .header { padding-top: 48px; padding-bottom: 40px; }
+    .identity-block { grid-template-columns: 1fr; }
+    .identity-arrow { display: none; }
+    .phase-btn { padding: 12px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+
+<header class="header">
+  <div class="header-eyebrow">Personal Roadmap · Confidential</div>
+  <h1>Con đường đến<br><em>$1 Billion</em></h1>
+  <p class="header-desc">Ba giai đoạn chuyển hóa không thể đảo ngược — từ developer đến người kiến tạo category. Mỗi giai đoạn thay đổi cách bạn nhìn tiền, tạo giá trị, và vận hành trong thế giới.</p>
+</header>
+
+<nav class="phase-nav">
+  <button class="phase-btn active" onclick="switchPhase(0)">
+    Giai đoạn 1 <span class="score">0 → 3</span>
+  </button>
+  <button class="phase-btn" onclick="switchPhase(1)">
+    Giai đoạn 2 <span class="score">3 → 6</span>
+  </button>
+  <button class="phase-btn" onclick="switchPhase(2)">
+    Giai đoạn 3 <span class="score">6 → 9</span>
+  </button>
+</nav>
+
+<!-- PHASE 0→3 -->
+<div class="phase-content p0 active" id="phase-0">
+  <div class="phase-wrap">
+
+    <div class="phase-header">
+      <div class="phase-number">Giai đoạn 01 · Nền tảng</div>
+      <h2>Từ developer → người tạo ra giá trị độc lập</h2>
+      <p>Giai đoạn này không phải về tiền. Đây là về việc xây dựng nền tảng không thể bị phá vỡ: kỹ năng thật, network thật, và sản phẩm đầu tiên chứng minh bạn có thể tạo ra thứ người ta trả tiền.</p>
+      <div class="timeline-tag">⏱ 12–24 tháng &nbsp;·&nbsp; Target: $10k–$100k ARR đầu tiên</div>
+    </div>
+
+    <div class="identity-block">
+      <div class="identity-from">"Tôi là developer, tôi làm những gì người khác yêu cầu."</div>
+      <div class="identity-arrow">→</div>
+      <div class="identity-to">"Tôi là người giải quyết vấn đề. Code là công cụ, không phải sản phẩm."</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Kỹ năng cốt lõi (80/20)</div>
+      <div class="skill-grid">
+        <div class="skill-card">
+          <div class="skill-domain">Technical</div>
+          <div class="skill-name">Full-stack + AI integration</div>
+          <div class="skill-desc">Làm được sản phẩm end-to-end không cần team</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-domain">Business</div>
+          <div class="skill-name">Customer discovery</div>
+          <div class="skill-desc">Nói chuyện 50+ potential customers trước khi code</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-domain">Writing</div>
+          <div class="skill-name">Copywriting cơ bản</div>
+          <div class="skill-desc">Landing page, cold email, pitch ngắn</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-domain">Finance</div>
+          <div class="skill-name">Unit economics</div>
+          <div class="skill-desc">CAC, LTV, margin — hiểu số trước khi scale</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Milestones không thể đảo ngược</div>
+      <div class="milestone-list">
+        <div class="milestone" onclick="toggleDone(this)">
+          <div class="milestone-check">✓</div>
+          <div class="milestone-body">
+            <div class="milestone-text">Ship sản phẩm đầu tiên và có người lạ trả tiền (dù chỉ $10)</div>
+            <div class="milestone-when">Month 3–6</div>
+          </div>
+        </div>
+        <div class="milestone" onclick="toggleDone(this)">
+          <div class="milestone-check">✓</div>
+          <div class="milestone-body">
+            <div class="milestone-text">Đạt $1,000 MRR từ side project (không phải freelance)</div>
+            <div class="milestone-when">Month 6–12</div>
+          </div>
+        </div>
+        <div class="milestone" onclick="toggleDone(this)">
+          <div class="milestone-check">✓</div>
+          <div class="milestone-body">
+            <div class="milestone-text">Xây được audience 1,000+ người thực sự quan tâm đến domain của mình</div>
+            <div class="milestone-when">Month 6–18</div>
+          </div>
+        </div>
+        <div class="milestone" onclick="toggleDone(this)">
+          <div class="milestone-check">✓</div>
+          <div class="milestone-body">
+            <div class="milestone-text">Quyết định: freelance full-time hoặc build startup — không còn "vừa làm vừa tính"</div>
+            <div class="milestone-when">Month 12–24</div>
+          </div>
+        </div>
+        <div class="milestone" onclick="toggleDone(this)">
+          <div class="milestone-check">✓</div>
+          <div class="milestone-body">
+            <div class="milestone-text">Có 1 mentor thực sự đã làm được điều bạn muốn làm</div>
+            <div class="milestone-when">Month 6–18</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Tài nguyên thiết yếu</div>
+      <div class="resource-list">
+        <div class="resource"><span class="resource-tag tag-book">Sách</span><span class="resource-name">The Mom Test</span><span class="resource-desc">— Rob Fitzpatrick · Validate idea mà không bị lie</span></div>
+        <div class="resource"><span class="resource-tag tag-book">Sách</span><span class="resource-name">Zero to One</span><span class="resource-desc">— Peter Thiel · Tư duy về monopoly và secrets</span></div>
+        <div class="resource"><span class="resource-tag tag-book">Sách</span><span class="resource-name">The Lean Startup</span><span class="resource-desc">— Eric Ries · Build-measure-learn loop</span></div>
+        <div class="resource"><span class="resource-tag tag-pod">Podcast</span><span class="resource-name">My First Million</span><span class="resource-desc">— Sam Parr & Shaan Puri · Ideas, businesses, frameworks</span></div>
+        <div class="resource"><span class="resource-tag tag-pod">Podcast</span><span class="resource-name">How I Built This</span><span class="resource-desc">— Guy Raz · Stories của real founders</span></div>
+        <div class="resource"><span class="resource-tag tag-action">Làm ngay</span><span class="resource-name">YC Startup Library</span><span class="resource-desc">— ycombinator.com/library · Free, dense, practical</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Checkpoint — bạn đã qua giai đoạn 1 khi</div>
+      <div class="checkpoint-list">
+        <div class="checkpoint"><div class="cp-icon">💰</div><div class="cp-text"><strong>Có recurring revenue</strong> từ sản phẩm bạn tự build — dù nhỏ</div></div>
+        <div class="checkpoint"><div class="cp-icon">🧠</div><div class="cp-text"><strong>Tư duy thay đổi:</strong> bạn thấy "problems" ở khắp nơi và tự hỏi "ai đang trả tiền để giải quyết cái này?"</div></div>
+        <div class="checkpoint"><div class="cp-icon">🌐</div><div class="cp-text"><strong>Network mở rộng:</strong> bạn biết ít nhất 5 người đang build startup và có thể gọi điện cho họ</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 3→6 -->
+<div class="phase-content p1" id="phase-1">
+  <div class="phase-wrap">
+
+    <div class="phase-header">
+      <div class="phase-number">Giai đoạn 02 · Scale</div>
+      <h2>Từ người tạo sản phẩm → founder thực thụ</h2>
+      <p>Giai đoạn này về scale và leverage. Bạn không còn đổi thời gian lấy tiền. Bạn build hệ thống, team, và moat. Đây là nơi hầu hết người dừng lại — vì nó đòi hỏi từ bỏ control để đổi lấy leverage.</p>
+      <div class="timeline-tag">⏱ 2–5 năm &nbsp;·&nbsp; Target: $1M–$10M ARR · Series A hoặc profitable</div>
+    </div>
+
+    <div class="identity-block">
+      <div class="identity-from">"Tôi build sản phẩm và bán nó."</div>
+      <div class="identity-arrow">→</div>
+      <div class="identity-to">"Tôi build công ty — gồm người, hệ thống, và vị thế cạnh tranh không thể bị copy."</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Kỹ năng cốt lõi cần đạt</div>
+      <div class="skill-grid">
+        <div class="skill-card">
+          <div class="skill-domain">Leadership</div>
+          <div class="skill-name">Hire người giỏi hơn mình</div>
+          <div class="skill-desc">Biết tuyển, biết trust, biết fire khi cần</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-domain">Capital</div>
+          <div class="skill-name">Fundraising hoặc bootstrapping</div>
+          <div class="skill-desc">Hiểu VC game hoặc chọn không chơi — phải chọn có ý thức</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-domain">Strategy</div>
+          <div class="skill-name">Competitive moat</div>
+          <div class="skill-desc">Network effects, data flywheel, switching cost — chọn 1 và double down</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-domain">Sales</div>
+          <div class="skill-name">Enterprise B2B hoặc PLG</div>
+          <div class="skill-desc">Biết close deal $50k–$500k hoặc build viral loop</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Milestones không thể đảo ngược</div>
+      <div class="milestone-list">
+        <div class="milestone" onclick="toggleDone(this)">
+          <div class="milestone-check">✓</div>
+          <div class="milestone-body">
+            <div class="milestone-text">Hire full-time employee đầu tiên và công ty vẫn tốt hơn sau 6 tháng</div>
+            <div class="milestone-when">Năm 2–3</div>
+          </div>
+        </div>
+        <div class="milestone" onclick="toggleDone(this)">
+          <div class="milestone-check">✓</div>
+          <div class="milestone-body">
+            <div class="milestone-text">Đạt $100k ARR mà không cần bạn personally bán từng deal</div>
+            <div class="milestone-when">Năm 2–4</div>
+          </div>
+        </div>
+        <div class="milestone" onclick="toggleDone(this)">
+          <div class="milestone-check">✓</div>
+          <div class="milestone-body">
+            <div class="milestone-text">Raise funding hoặc quyết định có chủ đích là không raise — không phải "chưa nghĩ tới"</div>
+            <div class="milestone-when">Năm 2–3</div>
+          </div>
+        </div>
+        <div class="milestone" onclick="toggleDone(this)">
+          <div class="milestone-check">✓</div>
+          <div class="milestone-body">
+            <div class="milestone-text">Có customer trả $10k+/năm và churn rate dưới 10%/năm</div>
+            <div class="milestone-when">Năm 3–5</div>
+          </div>
+        </div>
+        <div class="milestone" onclick="toggleDone(this)">
+          <div class="milestone-check">✓</div>
+          <div class="milestone-body">
+            <div class="milestone-text">Được peer-recognized trong industry: speak tại conference hoặc được competitor nhắc đến</div>
+            <div class="milestone-when">Năm 3–5</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Tài nguyên thiết yếu</div>
+      <div class="resource-list">
+        <div class="resource"><span class="resource-tag tag-book">Sách</span><span class="resource-name">High Output Management</span><span class="resource-desc">— Andy Grove · Kinh điển về running a team</span></div>
+        <div class="resource"><span class="resource-tag tag-book">Sách</span><span class="resource-name">7 Powers</span><span class="resource-desc">— Hamilton Helmer · Framework về competitive moat rõ ràng nhất</span></div>
+        <div class="resource"><span class="resource-tag tag-book">Sách</span><span class="resource-name">Venture Deals</span><span class="resource-desc">— Brad Feld · Hiểu term sheet trước khi ký</span></div>
+        <div class="resource"><span class="resource-tag tag-pod">Podcast</span><span class="resource-name">Acquired</span><span class="resource-desc">— Ben & David · Deep dives vào những công ty lớn nhất thế giới</span></div>
+        <div class="resource"><span class="resource-tag tag-pod">Podcast</span><span class="resource-name">20VC / Tim Ferriss Show</span><span class="resource-desc">— Mental models từ top founders và investors</span></div>
+        <div class="resource"><span class="resource-tag tag-course">Program</span><span class="resource-name">YC / On Deck / Entrepreneur First</span><span class="resource-desc">— Vào đúng network, không phải để học</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Checkpoint — bạn đã qua giai đoạn 2 khi</div>
+      <div class="checkpoint-list">
+        <div class="checkpoint"><div class="cp-icon">🏢</div><div class="cp-text"><strong>Công ty hoạt động khi bạn đi nghỉ 2 tuần</strong> — không có gì sập</div></div>
+        <div class="checkpoint"><div class="cp-icon">📈</div><div class="cp-text"><strong>Revenue predictable:</strong> bạn biết tháng sau sẽ khoảng bao nhiêu với độ chính xác ±20%</div></div>
+        <div class="checkpoint"><div class="cp-icon">🤝</div><div class="cp-text"><strong>Được gọi là expert</strong> trong domain của mình bởi người ngoài tự nguyện</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 6→9 -->
+<div class="phase-content p2" id="phase-2">
+  <div class="phase-wrap">
+
+    <div class="phase-header">
+      <div class="phase-number">Giai đoạn 03 · Category</div>
+      <h2>Từ founder → người kiến tạo category</h2>
+      <p>Đây là nơi $1B trở nên khả thi — nhưng không phải vì bạn "cố gắng hơn". Ở giai đoạn này, bạn không còn compete trong game của người khác. Bạn định nghĩa lại game. Đây là về timing, capital, và founder-market fit ở cấp độ cao nhất.</p>
+      <div class="timeline-tag">⏱ 5–15 năm &nbsp;·&nbsp; Target: $100M+ ARR → IPO / strategic acquisition</div>
+    </div>
+
+    <div class="identity-block">
+      <div class="identity-from">"Tôi đang build công ty tốt nhất trong category X."</div>
+      <div class="identity-arrow">→</div>
+      <div class="identity-to">"Tôi đang định nghĩa category X — hoặc tạo ra category mới mà chưa ai đặt tên."</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Kỹ năng cốt lõi cần đạt</div>
+      <div class="skill-grid">
+        <div class="skill-card">
+          <div class="skill-domain">Vision</div>
+          <div class="skill-name">10-year narrative</div>
+          <div class="skill-desc">Thuyết phục được người thông minh rằng tương lai bạn thấy là thật</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-domain">Capital</div>
+          <div class="skill-name">Large-scale capital allocation</div>
+          <div class="skill-desc">M&A, Series C+, secondary markets — tiền là công cụ chiến lược</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-domain">Politics</div>
+          <div class="skill-name">Ecosystem building</div>
+          <div class="skill-desc">Partner, acquire, influence — không thể scale alone</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-domain">Legacy</div>
+          <div class="skill-name">Talent magnet</div>
+          <div class="skill-desc">Top 1% talent muốn làm việc cho bạn vì mission, không chỉ vì tiền</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Milestones không thể đảo ngược</div>
+      <div class="milestone-list">
+        <div class="milestone" onclick="toggleDone(this)">
+          <div class="milestone-check">✓</div>
+          <div class="milestone-body">
+            <div class="milestone-text">Công ty được định giá $100M+ và bạn vẫn là controlling shareholder</div>
+            <div class="milestone-when">Năm 5–10</div>
+          </div>
+        </div>
+        <div class="milestone" onclick="toggleDone(this)">
+          <div class="milestone-check">✓</div>
+          <div class="milestone-body">
+            <div class="milestone-text">Tên bạn gắn với một idea hoặc movement — không phải chỉ với một sản phẩm</div>
+            <div class="milestone-when">Năm 7–12</div>
+          </div>
+        </div>
+        <div class="milestone" onclick="toggleDone(this)">
+          <div class="milestone-check">✓</div>
+          <div class="milestone-body">
+            <div class="milestone-text">Đã từng thất bại lớn (product kill, down round, co-founder split) và rebuild được</div>
+            <div class="milestone-when">Sẽ xảy ra — phải vượt qua</div>
+          </div>
+        </div>
+        <div class="milestone" onclick="toggleDone(this)">
+          <div class="milestone-check">✓</div>
+          <div class="milestone-body">
+            <div class="milestone-text">Có liquidity event đầu tiên — đủ để không bao giờ phải làm gì vì tiền nữa</div>
+            <div class="milestone-when">Năm 7–15</div>
+          </div>
+        </div>
+        <div class="milestone" onclick="toggleDone(this)">
+          <div class="milestone-check">✓</div>
+          <div class="milestone-body">
+            <div class="milestone-text">Đã angel invest vào ít nhất 10 startup và có 1 cái trở thành unicorn</div>
+            <div class="milestone-when">Năm 8–15</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Tài nguyên thiết yếu</div>
+      <div class="resource-list">
+        <div class="resource"><span class="resource-tag tag-book">Sách</span><span class="resource-name">Poor Charlie's Almanack</span><span class="resource-desc">— Charlie Munger · Mental models để ra quyết định ở scale lớn</span></div>
+        <div class="resource"><span class="resource-tag tag-book">Sách</span><span class="resource-name">The Innovator's Dilemma</span><span class="resource-desc">— Clayton Christensen · Tại sao incumbent chết và disruptor thắng</span></div>
+        <div class="resource"><span class="resource-tag tag-book">Sách</span><span class="resource-name">No Rules Rules</span><span class="resource-desc">— Reed Hastings · Build culture cho high-performance company</span></div>
+        <div class="resource"><span class="resource-tag tag-pod">Podcast</span><span class="resource-name">Invest Like the Best</span><span class="resource-desc">— Patrick O'Shaughnessy · Capital allocation, business quality</span></div>
+        <div class="resource"><span class="resource-tag tag-action">Làm ngay</span><span class="resource-name">Đọc S-1 filings</span><span class="resource-desc">— Airbnb, Stripe, Figma, Canva · Học cách họ kể story và structure business</span></div>
+        <div class="resource"><span class="resource-tag tag-network">Network</span><span class="resource-name">Vào đúng rooms</span><span class="resource-desc">— YC alumni, Founders Forum, Southeast Asia founders circle</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Checkpoint — bạn đang ở giai đoạn 3 khi</div>
+      <div class="checkpoint-list">
+        <div class="checkpoint"><div class="cp-icon">🎯</div><div class="cp-text"><strong>Người ta nói tên công ty bạn</strong> khi describe một category — không phải ngược lại</div></div>
+        <div class="checkpoint"><div class="cp-icon">🔒</div><div class="cp-text"><strong>Khách hàng rất khó rời đi</strong> — switching cost cao hoặc network effect đã lock-in</div></div>
+        <div class="checkpoint"><div class="cp-icon">🌍</div><div class="cp-text"><strong>Bạn đang giải quyết vấn đề toàn cầu</strong> — market size không còn là constraint</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="footer-note">
+  <p>Lộ trình này không đảm bảo $1B — không ai có thể. Nó được thiết kế để nếu bạn đi đúng path, tệ nhất bạn cũng đạt $10M–$100M. Đó là asymmetric bet xứng đáng.</p>
+  <div class="progress-stats">
+    <span id="done-count">0</span>
+    milestones hoàn thành
+  </div>
+</footer>
+
+<script>
+  function switchPhase(idx) {
+    document.querySelectorAll('.phase-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+    document.querySelectorAll('.phase-content').forEach((c, i) => c.classList.toggle('active', i === idx));
+  }
+
+  function toggleDone(el) {
+    el.classList.toggle('done');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const total = document.querySelectorAll('.milestone').length;
+    const done = document.querySelectorAll('.milestone.done').length;
+    document.getElementById('done-count').textContent = done;
+    document.getElementById('prog').style.width = (done / total * 100) + '%';
+  }
+
+  // Scroll progress
+  window.addEventListener('scroll', () => {
+    const el = document.documentElement;
+    const scrolled = el.scrollTop / (el.scrollHeight - el.clientHeight);
+    if (!document.querySelectorAll('.milestone.done').length) {
+      document.getElementById('prog').style.width = (scrolled * 15) + '%';
+    }
+  });
+</script>
+</body>
+</html>
