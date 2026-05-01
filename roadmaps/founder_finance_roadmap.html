@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lộ Trình Tài Chính — Founder → Chairman</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0d0b;
+  --bg2: #141412;
+  --bg3: #1a1a17;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8e6df;
+  --muted: #7a7870;
+  --faint: #3a3a35;
+  --p1: #c8a96e;
+  --p1bg: rgba(200,169,110,0.08);
+  --p1border: rgba(200,169,110,0.2);
+  --p2: #7eb89a;
+  --p2bg: rgba(126,184,154,0.08);
+  --p2border: rgba(126,184,154,0.2);
+  --p3: #9b8fd4;
+  --p3bg: rgba(155,143,212,0.08);
+  --p3border: rgba(155,143,212,0.2);
+  --tag-must: rgba(200,169,110,0.15);
+  --tag-must-text: #c8a96e;
+  --tag-own: rgba(126,184,154,0.15);
+  --tag-own-text: #7eb89a;
+  --tag-del: rgba(122,120,112,0.2);
+  --tag-del-text: #7a7870;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  min-height: 100vh;
+}
+
+/* NOISE TEXTURE */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* LAYOUT */
+.page { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 0 24px 120px; }
+
+/* HEADER */
+.hero {
+  padding: 80px 0 60px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 60px;
+}
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .15em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.hero-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(36px, 6vw, 58px);
+  line-height: 1.1;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.hero-title em { font-style: italic; color: var(--p1); }
+.hero-sub {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 520px;
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+.hero-meta {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.hero-stat-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: var(--text);
+}
+.hero-stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+}
+
+/* PROGRESS BAR */
+.progress-section {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 48px;
+}
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.progress-label-text { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: .05em; }
+.progress-pct { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--text); }
+.progress-track {
+  height: 3px;
+  background: var(--faint);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--p1), var(--p2), var(--p3));
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  width: 0%;
+}
+.phase-progress { display: flex; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
+.phase-prog-item {
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.phase-prog-bar-wrap { flex: 1; height: 2px; background: var(--faint); border-radius: 1px; overflow: hidden; }
+.phase-prog-bar { height: 100%; border-radius: 1px; transition: width .5s ease; width: 0%; }
+.pp1 { background: var(--p1); }
+.pp2 { background: var(--p2); }
+.pp3 { background: var(--p3); }
+.phase-prog-label { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; white-space: nowrap; }
+.phase-prog-pct { font-size: 11px; font-family: 'DM Mono', monospace; }
+.ppc1 { color: var(--p1); }
+.ppc2 { color: var(--p2); }
+.ppc3 { color: var(--p3); }
+
+/* NAV TABS */
+.phase-nav {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 40px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+}
+.pnav {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-family: 'Instrument Sans', sans-serif;
+  cursor: pointer;
+  transition: all .2s;
+  text-align: center;
+  line-height: 1.3;
+}
+.pnav .pnav-score { font-family: 'DM Serif Display', serif; font-size: 16px; display: block; }
+.pnav .pnav-name { font-size: 11px; display: block; opacity: .7; }
+.pnav.on { background: var(--bg3); color: var(--text); }
+.pnav.on.n1 .pnav-score { color: var(--p1); }
+.pnav.on.n2 .pnav-score { color: var(--p2); }
+.pnav.on.n3 .pnav-score { color: var(--p3); }
+
+/* PANEL */
+.panel { display: none; animation: fadeUp .3s ease; }
+.panel.on { display: block; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* PHASE HEADER */
+.ph {
+  border-radius: 10px;
+  padding: 24px 28px;
+  margin-bottom: 28px;
+  border: 1px solid;
+}
+.p1 .ph { border-color: var(--p1border); background: var(--p1bg); }
+.p2 .ph { border-color: var(--p2border); background: var(--p2bg); }
+.p3 .ph { border-color: var(--p3border); background: var(--p3bg); }
+.ph-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.p1 .ph-badge { color: var(--p1); }
+.p2 .ph-badge { color: var(--p2); }
+.p3 .ph-badge { color: var(--p3); }
+.ph-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--text); margin-bottom: 4px; line-height: 1.25; }
+.ph-meta { font-size: 13px; color: var(--muted); }
+
+/* INSIGHT BOX */
+.insight {
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 32px;
+  border-left: 2px solid;
+  background: var(--bg2);
+}
+.p1 .insight { border-color: var(--p1); }
+.p2 .insight { border-color: var(--p2); }
+.p3 .insight { border-color: var(--p3); }
+.insight-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.p1 .insight-label { color: var(--p1); }
+.p2 .insight-label { color: var(--p2); }
+.p3 .insight-label { color: var(--p3); }
+.insight-text { font-size: 14px; color: #c8c5bc; line-height: 1.75; font-style: italic; }
+
+/* SECTION TITLE */
+.stitle {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 32px 0 14px;
+}
+
+/* LEGEND */
+.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+.leg { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.leg-dot { width: 6px; height: 6px; border-radius: 1px; }
+
+/* SKILL GRID */
+.skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px; }
+.sc {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  transition: border-color .2s;
+}
+.sc:hover { border-color: var(--border2); }
+.sc-top { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 5px; }
+.sc-name { font-size: 13px; font-weight: 500; color: var(--text); flex: 1; }
+.sc-tag {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.tag-must { background: var(--tag-must); color: var(--tag-must-text); }
+.tag-own { background: var(--tag-own); color: var(--tag-own-text); }
+.tag-del { background: var(--tag-del); color: var(--tag-del-text); }
+.sc-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+/* RESOURCES */
+.res-list { display: flex; flex-direction: column; gap: 6px; }
+.ri {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: border-color .2s;
+}
+.ri:hover { border-color: var(--border2); }
+.rt {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .04em;
+}
+.rt-book { background: rgba(200,169,110,.15); color: var(--p1); }
+.rt-do { background: rgba(126,184,154,.15); color: var(--p2); }
+.rt-cert { background: rgba(155,143,212,.15); color: var(--p3); }
+.rt-net { background: rgba(122,120,112,.15); color: var(--muted); }
+.rn { font-size: 13px; color: var(--text); font-weight: 500; margin-bottom: 3px; }
+.rnote { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* MILESTONE + CHECKBOX */
+.ms-list { display: flex; flex-direction: column; gap: 0; }
+.mi {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.mi:last-child { border-bottom: none; }
+.mi-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1.5px solid var(--faint);
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+  cursor: pointer;
+}
+.mi.done .mi-check { border-color: var(--p2); background: var(--p2); }
+.mi.done .mi-check::after {
+  content: '';
+  width: 10px;
+  height: 6px;
+  border-left: 1.5px solid var(--bg);
+  border-bottom: 1.5px solid var(--bg);
+  transform: rotate(-45deg) translateY(-1px);
+  display: block;
+}
+.mi.done .mtext { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--faint); }
+.mtext { font-size: 13px; color: var(--text); line-height: 1.55; transition: color .2s; flex: 1; }
+.mwhen {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* CHECKPOINT */
+.cpbox {
+  background: var(--bg2);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-top: 32px;
+  border: 1px solid var(--border);
+}
+.cptitle { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 12px; }
+.cpq {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+  padding: 10px 14px;
+  border-left: 2px solid var(--faint);
+  margin-bottom: 8px;
+  border-radius: 0 6px 6px 0;
+  background: rgba(255,255,255,.02);
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  transition: background .2s, border-color .2s;
+}
+.cpq:last-child { margin-bottom: 0; }
+.cpq:hover { background: rgba(255,255,255,.04); }
+.cpq.done { border-left-color: var(--p2); background: rgba(126,184,154,.05); color: var(--muted); }
+.cpq.done .cpq-text { text-decoration: line-through; text-decoration-color: var(--faint); }
+.cpq-check {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid var(--faint);
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+}
+.cpq.done .cpq-check { border-color: var(--p2); background: var(--p2); }
+.cpq.done .cpq-check::after {
+  content: '';
+  width: 8px;
+  height: 4px;
+  border-left: 1px solid var(--bg);
+  border-bottom: 1px solid var(--bg);
+  transform: rotate(-45deg) translateY(-1px);
+  display: block;
+}
+.cpq-text { flex: 1; }
+
+/* NOTES SECTION */
+.notes-section {
+  margin-top: 80px;
+  padding-top: 48px;
+  border-top: 1px solid var(--border);
+}
+.notes-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+.notes-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
+.note-cards { display: flex; flex-direction: column; gap: 12px; }
+.note-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 24px;
+}
+.note-card-head {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.note-card-text {
+  font-size: 14px;
+  color: #c8c5bc;
+  line-height: 1.75;
+  font-style: italic;
+}
+.note-card-text strong {
+  font-style: normal;
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* FOOTER */
+footer {
+  margin-top: 80px;
+  padding: 32px 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: gap;
+  gap: 12px;
+}
+.footer-text { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; }
+.reset-btn {
+  font-size: 12px;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-family: 'DM Mono', monospace;
+  transition: all .2s;
+}
+.reset-btn:hover { border-color: var(--border2); color: var(--text); }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .phase-nav { flex-direction: column; }
+  .hero-meta { gap: 16px; }
+  .skill-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">Lộ trình cá nhân · Founder → Chairman → Holding</div>
+    <h1 class="hero-title">Làm chủ<br><em>dòng tiền</em></h1>
+    <p class="hero-sub">Không phải để trở thành CFO giỏi nhất phòng. Mà để không bao giờ bị qua mặt về số — và biết chính xác khi nào giữ, khi nào mua, khi nào bán.</p>
+    <div class="hero-meta">
+      <div class="hero-stat"><span class="hero-stat-val">3</span><span class="hero-stat-label">Giai đoạn</span></div>
+      <div class="hero-stat"><span class="hero-stat-val">~4 năm</span><span class="hero-stat-label">Full journey</span></div>
+      <div class="hero-stat"><span class="hero-stat-val">2 năm</span><span class="hero-stat-label">80/20 core</span></div>
+      <div class="hero-stat"><span class="hero-stat-val">0 → 9</span><span class="hero-stat-label">Thang điểm</span></div>
+    </div>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-section">
+    <div class="progress-label">
+      <span class="progress-label-text">Tiến độ tổng thể</span>
+      <span class="progress-pct" id="total-pct">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="phase-progress">
+      <div class="phase-prog-item">
+        <span class="phase-prog-label ppc1">0→3</span>
+        <div class="phase-prog-bar-wrap"><div class="phase-prog-bar pp1" id="bar1"></div></div>
+        <span class="phase-prog-label ppc1" id="pct1">0%</span>
+      </div>
+      <div class="phase-prog-item">
+        <span class="phase-prog-label ppc2">3→6</span>
+        <div class="phase-prog-bar-wrap"><div class="phase-prog-bar pp2" id="bar2"></div></div>
+        <span class="phase-prog-label ppc2" id="pct2">0%</span>
+      </div>
+      <div class="phase-prog-item">
+        <span class="phase-prog-label ppc3">6→9</span>
+        <div class="phase-prog-bar-wrap"><div class="phase-prog-bar pp3" id="bar3"></div></div>
+        <span class="phase-prog-label ppc3" id="pct3">0%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <nav class="phase-nav">
+    <button class="pnav n1 on" onclick="show('p1')"><span class="pnav-score">0 → 3</span><span class="pnav-name">Ngôn ngữ số</span></button>
+    <button class="pnav n2" onclick="show('p2')"><span class="pnav-score">3 → 6</span><span class="pnav-name">Phân bổ vốn</span></button>
+    <button class="pnav n3" onclick="show('p3')"><span class="pnav-score">6 → 9</span><span class="pnav-name">Kiến trúc sư holding</span></button>
+  </nav>
+
+  <!-- ====== PHASE 1 ====== -->
+  <div class="panel p1 on" id="p1">
+    <div class="ph">
+      <div class="ph-badge">Giai đoạn 1 · 6–9 tháng · Bắt đầu ngay</div>
+      <div class="ph-title">Ngôn ngữ số</div>
+      <div class="ph-meta">Không thể bị qua mặt về tài chính</div>
+    </div>
+    <div class="insight">
+      <div class="insight-label">Sự thay đổi không thể đảo ngược</div>
+      <div class="insight-text">Sau giai đoạn này, bạn nhìn vào bất kỳ báo cáo tài chính nào và biết ngay đâu là sự thật, đâu là "được dàn dựng". Lãi ròng đẹp nhưng cash flow âm — bạn thấy ngay. Người khác trình bày slide đầy màu sắc, bạn hỏi đúng một câu khiến họ lúng túng. Tư duy này không tắt được sau khi bật.</div>
+    </div>
+
+    <div class="stitle">Kỹ năng cốt lõi</div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--p1)"></div>Phải tự master</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--p2)"></div>Tự làm để hiểu</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--muted)"></div>Biết đủ để delegate</div>
+    </div>
+    <div class="skill-grid">
+      <div class="sc"><div class="sc-top"><div class="sc-name">Đọc 3 báo cáo tài chính</div><span class="sc-tag tag-must">Phải master</span></div><div class="sc-desc">Income Statement, Balance Sheet, Cash Flow Statement. Hiểu quan hệ giữa 3 cái — đây là "bản đồ" của mọi business.</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">Cash flow vs profit</div><span class="sc-tag tag-must">Phải master</span></div><div class="sc-desc">Tại sao công ty có lãi vẫn phá sản. Accrual vs cash basis. Kiến thức phân biệt founder thật và founder "on paper".</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">Unit economics</div><span class="sc-tag tag-must">Phải master</span></div><div class="sc-desc">CAC, LTV, contribution margin, payback period. Biết business của mình "khỏe" hay đang burn tiền mà không biết.</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">Working capital basics</div><span class="sc-tag tag-own">Tự làm để hiểu</span></div><div class="sc-desc">Cash conversion cycle, AR/AP, inventory. Hiểu tại sao scale nhanh đôi khi giết cash flow.</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">Time value of money</div><span class="sc-tag tag-must">Phải master</span></div><div class="sc-desc">NPV, IRR, discounting. Nền tảng của mọi investment decision — không hiểu cái này thì mọi deal đều là guess.</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">Excel modeling cơ bản</div><span class="sc-tag tag-own">Tự làm để hiểu</span></div><div class="sc-desc">Build được 3-statement model đơn giản. Cần đủ để không bị "ảo thuật" bởi model của người khác.</div></div>
+    </div>
+
+    <div class="stitle">Tài nguyên — theo thứ tự làm</div>
+    <div class="res-list">
+      <div class="ri"><span class="rt rt-book">Sách</span><div><div class="rn">Financial Intelligence — Karen Berman</div><div class="rnote">Đọc đầu tiên. Giải thích 3 BCTC không cần background kế toán. Đọc xong biết CFO đang nói gì.</div></div></div>
+      <div class="ri"><span class="rt rt-book">Sách</span><div><div class="rn">The Outsiders — William Thorndike</div><div class="rnote">8 CEO vĩ đại, tất cả đều là capital allocator xuất sắc. Đọc song song — đây là "đích đến" để bạn biết mình đang học vì điều gì.</div></div></div>
+      <div class="ri"><span class="rt rt-book">Sách</span><div><div class="rn">Accounting Made Simple — Mike Piper</div><div class="rnote">Đọc nếu Financial Intelligence chưa đủ rõ về cơ chế kế toán. Mỏng, thực tế, không lãng phí thời gian.</div></div></div>
+      <div class="ri"><span class="rt rt-do">Thực hành</span><div><div class="rn">Đọc BCTC của 5 công ty niêm yết: FPT, VNM, HPG, MWG, VIC</div><div class="rnote">5 ngành khác nhau. Tự hỏi: cash flow từ operations trông thế nào? Tại sao khác nhau? Ghi chú so sánh.</div></div></div>
+      <div class="ri"><span class="rt rt-do">Thực hành</span><div><div class="rn">Xây personal + business cash flow tracker từ đầu bằng Google Sheets</div><div class="rnote">Không dùng app có sẵn. Tự thiết kế categories. Mục đích là tập tư duy phân loại dòng tiền.</div></div></div>
+    </div>
+
+    <div class="stitle">Milestones · Tích khi hoàn thành</div>
+    <div class="ms-list" data-phase="1">
+      <div class="mi" onclick="toggleMilestone(this)"><div class="mi-check"></div><div class="mtext">Đọc và phân tích 3 BCTC của 1 công ty trong 1 giờ, không tra cứu, biết được cash flow của họ "khỏe" hay không</div><div class="mwhen">Tháng 2</div></div>
+      <div class="mi" onclick="toggleMilestone(this)"><div class="mi-check"></div><div class="mtext">Tính được unit economics của 1 business idea — CAC, LTV, payback, contribution margin đầy đủ</div><div class="mwhen">Tháng 4</div></div>
+      <div class="mi" onclick="toggleMilestone(this)"><div class="mi-check"></div><div class="mtext">Giải thích được cho người không biết tài chính: tại sao startup tăng trưởng 200% vẫn có thể chết vì cash</div><div class="mwhen">Tháng 6</div></div>
+      <div class="mi" onclick="toggleMilestone(this)"><div class="mi-check"></div><div class="mtext">Xây được 12-month cash flow forecast cho 1 business idea từ đầu, không dùng template có sẵn</div><div class="mwhen">Tháng 8</div></div>
+    </div>
+
+    <div class="cpbox">
+      <div class="cptitle">Checkpoint · Bạn đã ở điểm 3 khi qua được tất cả điều này:</div>
+      <div class="cpq" onclick="toggleCp(this)"><div class="cpq-check"></div><div class="cpq-text">Ai show bạn P&L đẹp, câu đầu tiên bạn hỏi là "operating cash flow trông thế nào?" — không phải "doanh thu bao nhiêu?"</div></div>
+      <div class="cpq" onclick="toggleCp(this)"><div class="cpq-check"></div><div class="cpq-text">Bạn nhìn vào 1 business và trong 15 phút estimate được cash conversion cycle của nó — dù chưa có số cụ thể</div></div>
+      <div class="cpq" onclick="toggleCp(this)"><div class="cpq-check"></div><div class="cpq-text">Bạn đọc hiểu BCTC của FPT hay VNM mà không cần ai giải thích từng dòng</div></div>
+    </div>
+  </div>
+
+  <!-- ====== PHASE 2 ====== -->
+  <div class="panel p2" id="p2">
+    <div class="ph">
+      <div class="ph-badge">Giai đoạn 2 · 9–14 tháng tiếp theo</div>
+      <div class="ph-title">Tư duy phân bổ vốn</div>
+      <div class="ph-meta">Quyết định như một capital allocator — kết hợp học với deal thực đầu tiên</div>
+    </div>
+    <div class="insight">
+      <div class="insight-label">Sự thay đổi không thể đảo ngược</div>
+      <div class="insight-text">Sau giai đoạn này, mọi quyết định kinh doanh — tuyển người, mua thiết bị, mở rộng thị trường, nhận investment — bạn đều translate tự động sang: "cash đi đâu, bao giờ về, return so với cost of capital là bao nhiêu?" Đây là cách Buffett, Bezos, và mọi founder vĩ đại nhìn thế giới. Không học được từ sách — chỉ internalize qua thực chiến.</div>
+    </div>
+
+    <div class="stitle">Kỹ năng cốt lõi</div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--p1)"></div>Phải tự master</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--p2)"></div>Tự làm để hiểu</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--muted)"></div>Biết đủ để delegate</div>
+    </div>
+    <div class="skill-grid">
+      <div class="sc"><div class="sc-top"><div class="sc-name">Capital allocation framework</div><span class="sc-tag tag-must">Phải master</span></div><div class="sc-desc">Khi nào giữ cash, khi nào reinvest, khi nào acquire, khi nào trả nợ. Đây là skill #1 của chairman giỏi.</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">ROIC vs WACC thinking</div><span class="sc-tag tag-must">Phải master</span></div><div class="sc-desc">Chỉ đầu tư khi ROIC > WACC. Nghe đơn giản, nhưng 90% founder không áp dụng được nhất quán vì thiếu framework.</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">Deal reading speed</div><span class="sc-tag tag-must">Phải master</span></div><div class="sc-desc">Nhìn vào 1 deal trong 30 phút và biết "có sense không?" trước khi đọc sâu. Học từ case, không từ textbook.</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">13-week cash flow forecast</div><span class="sc-tag tag-must">Phải master</span></div><div class="sc-desc">Thói quen review weekly như đọc email sáng. Nhìn thấy cash crisis 90 ngày trước khi nó xảy ra — đây là sống còn.</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">DCF & valuation cơ bản</div><span class="sc-tag tag-own">Tự làm để hiểu</span></div><div class="sc-desc">Không cần làm model hoàn hảo. Cần hiểu assumptions nào drive valuation — để không bị "sold" một con số đẹp.</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">Debt vs equity tradeoffs</div><span class="sc-tag tag-must">Phải master</span></div><div class="sc-desc">Khi nào vay, khi nào raise equity, khi nào dùng internal cash. Quyết định này ảnh hưởng ownership và freedom mãi mãi.</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">3-statement modeling</div><span class="sc-tag tag-own">Tự làm để hiểu</span></div><div class="sc-desc">Build từ đầu để hiểu mechanics. Sau delegate cho CFO — nhưng phải biết đủ để phát hiện assumptions sai.</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">M&A due diligence basics</div><span class="sc-tag tag-del">Delegate được</span></div><div class="sc-desc">Hiểu process, biết red flags cần check, biết câu nào cần hỏi. Không cần tự làm full DD — cần supervise đúng.</div></div>
+    </div>
+
+    <div class="stitle">Tài nguyên — theo thứ tự làm</div>
+    <div class="res-list">
+      <div class="ri"><span class="rt rt-book">Sách</span><div><div class="rn">Principles of Corporate Finance — Brealey, Myers, Allen</div><div class="rnote">Đọc phần capital structure, payout policy, và real options. Bỏ qua phần kỹ thuật nặng — focus vào framework thinking.</div></div></div>
+      <div class="ri"><span class="rt rt-book">Sách</span><div><div class="rn">Poor Charlie's Almanack — Charlie Munger</div><div class="rnote">Mental models của capital allocator vĩ đại nhất. Không phải sách tài chính — nhưng thay đổi cách bạn ra quyết định.</div></div></div>
+      <div class="ri"><span class="rt rt-book">Sách</span><div><div class="rn">Valuation — McKinsey (Koller, Goedhart, Wessels)</div><div class="rnote">Reference cho ROIC và value driver framework. Đọc phần 1, 2 và phần về capital allocation. Không cần đọc hết.</div></div></div>
+      <div class="ri"><span class="rt rt-do">Thực hành</span><div><div class="rn">Build 13-week cash flow model cho business đang/sắp chạy — review hàng tuần</div><div class="rnote">Nếu chưa có business: dùng case study của 1 SME quen biết. Dữ liệu thật dạy nhiều hơn dữ liệu giả rất nhiều.</div></div></div>
+      <div class="ri"><span class="rt rt-do">Thực hành</span><div><div class="rn">Tự làm DCF valuation cho 3 công ty — publish và defend assumptions công khai</div><div class="rnote">Viết lên blog hoặc gửi cho mentor. Buộc phải defend sẽ bộc lộ chỗ chưa hiểu nhanh hơn tự học một mình rất nhiều.</div></div></div>
+      <div class="ri"><span class="rt rt-do">Thực hành</span><div><div class="rn">Participate vào ít nhất 1 deal thực — investment, fundraising, hoặc acquisition nhỏ</div><div class="rnote">Dù vai trò nhỏ. Deal room thật dạy trong 1 tuần nhiều hơn 1 năm đọc sách về M&A.</div></div></div>
+      <div class="ri"><span class="rt rt-net">Network</span><div><div class="rn">Tìm 3–5 founder/investor đã qua 1–2 exit để học từ mistakes của họ</div><div class="rnote">Hỏi: "Quyết định tài chính nào gần như giết công ty bạn?" — câu trả lời có giá hơn mọi khoá học.</div></div></div>
+    </div>
+
+    <div class="stitle">Milestones · Tích khi hoàn thành</div>
+    <div class="ms-list" data-phase="2">
+      <div class="mi" onclick="toggleMilestone(this)"><div class="mi-check"></div><div class="mtext">Có 13-week cash forecast đang chạy thực tế — không phải trên giấy — và review hàng tuần không bỏ sót</div><div class="mwhen">Tháng 3</div></div>
+      <div class="mi" onclick="toggleMilestone(this)"><div class="mi-check"></div><div class="mtext">Phân tích được tại sao 1 business cụ thể nên/không nên vay nợ để scale — dựa trên ROIC vs cost of debt, không phải cảm tính</div><div class="mwhen">Tháng 6</div></div>
+      <div class="mi" onclick="toggleMilestone(this)"><div class="mi-check"></div><div class="mtext">Tham gia ít nhất 1 deal thực — dù chỉ là observer hoặc junior analyst trong quá trình due diligence</div><div class="mwhen">Tháng 9</div></div>
+      <div class="mi" onclick="toggleMilestone(this)"><div class="mi-check"></div><div class="mtext">Ngồi với bất kỳ founder nào và trong 30 phút identify được 2–3 cash flow risk họ chưa nhìn thấy</div><div class="mwhen">Tháng 12</div></div>
+    </div>
+
+    <div class="cpbox">
+      <div class="cptitle">Checkpoint · Bạn đã ở điểm 6 khi:</div>
+      <div class="cpq" onclick="toggleCp(this)"><div class="cpq-check"></div><div class="cpq-text">Ai pitch deal cho bạn, câu hỏi tự nhiên là: "ROIC của deal này so với cost of capital trông thế nào, cash conversion cycle bao lâu?"</div></div>
+      <div class="cpq" onclick="toggleCp(this)"><div class="cpq-check"></div><div class="cpq-text">Bạn có 13-week cash flow forecast đang chạy và đã ít nhất 1 lần nhờ nó tránh được 1 quyết định sai</div></div>
+      <div class="cpq" onclick="toggleCp(this)"><div class="cpq-check"></div><div class="cpq-text">Bạn đã ngồi trong ít nhất 1 deal room thực và hiểu dynamics của nó — không bị overwhelm bởi jargon</div></div>
+      <div class="cpq" onclick="toggleCp(this)"><div class="cpq-check"></div><div class="cpq-text">Bạn có thể explain tại sao capital allocation quan trọng hơn operational efficiency trong dài hạn — và dùng ví dụ thực</div></div>
+    </div>
+  </div>
+
+  <!-- ====== PHASE 3 ====== -->
+  <div class="panel p3" id="p3">
+    <div class="ph">
+      <div class="ph-badge">Giai đoạn 3 · 12–24 tháng tiếp theo · Không có timeline cố định</div>
+      <div class="ph-title">Kiến trúc sư holding</div>
+      <div class="ph-meta">Thiết kế hệ thống tạo ra và kiểm soát dòng tiền</div>
+    </div>
+    <div class="insight">
+      <div class="insight-label">Sự thay đổi không thể đảo ngược</div>
+      <div class="insight-text">Sau giai đoạn này, bạn không chỉ chạy business — bạn thiết kế portfolio của các cash flow engines. Bạn nhìn thấy cơ hội mà người khác không thấy vì họ nhìn từng cây, bạn nhìn cả rừng. Bạn biết khi nào giữ, khi nào bán, khi nào mua thêm — và đặc biệt là biết khi nào KHÔNG làm gì cả. Ở tầng này, network và track record thay thế sách vở.</div>
+    </div>
+
+    <div class="stitle">Kỹ năng cốt lõi</div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--p1)"></div>Phải tự master</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--p2)"></div>Tự làm để hiểu</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--muted)"></div>Biết đủ để delegate</div>
+    </div>
+    <div class="skill-grid">
+      <div class="sc"><div class="sc-top"><div class="sc-name">Portfolio thinking</div><span class="sc-tag tag-must">Phải master</span></div><div class="sc-desc">Nhìn holding như portfolio — mỗi entity có vai trò: cash cow, growth engine, hoặc optionality bet. Allocate accordingly.</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">Holding structure mechanics</div><span class="sc-tag tag-must">Phải master</span></div><div class="sc-desc">Cash flow từ opco lên holdco hiệu quả — dividend policy, intercompany loan, management fee. Tax và legal implications.</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">Acquisition as growth strategy</div><span class="sc-tag tag-must">Phải master</span></div><div class="sc-desc">Khi nào mua rẻ hơn xây. Deal sourcing, valuation, integration cash flow impact. Biết tránh "synergy trap".</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">Board-level financial narrative</div><span class="sc-tag tag-must">Phải master</span></div><div class="sc-desc">Translate complex cash dynamics thành story rõ ràng cho board, investor, lender. Người không hiểu số phải tin bạn.</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">Distressed cash management</div><span class="sc-tag tag-own">Tự làm để hiểu</span></div><div class="sc-desc">Quản lý cash khi crisis — 13-week triage, creditor negotiation, runway extension. Biết trước khi cần dùng.</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">Investor relations & fundraising</div><span class="sc-tag tag-must">Phải master</span></div><div class="sc-desc">Pitch không chỉ là story — là cash flow story. Biết investor muốn thấy gì và tại sao từng assumption matter.</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">Cross-border & FX basics</div><span class="sc-tag tag-del">Delegate được</span></div><div class="sc-desc">Multi-entity consolidation, repatriation, FX exposure. Đủ để hire đúng người và đặt câu hỏi đúng.</div></div>
+      <div class="sc"><div class="sc-top"><div class="sc-name">Tax-efficient cash structuring</div><span class="sc-tag tag-del">Delegate được</span></div><div class="sc-desc">Holding structure tối ưu thuế. Đây là lãnh thổ của tax lawyer — nhưng bạn phải biết đủ để chỉ đạo hướng đi.</div></div>
+    </div>
+
+    <div class="stitle">Tài nguyên</div>
+    <div class="res-list">
+      <div class="ri"><span class="rt rt-book">Sách</span><div><div class="rn">The Essays of Warren Buffett — Lawrence Cunningham</div><div class="rnote">Shareholder letters Buffett viết về capital allocation, holding structure, và khi nào không làm gì. Operating manual của chairman.</div></div></div>
+      <div class="ri"><span class="rt rt-book">Sách</span><div><div class="rn">Distressed Debt Analysis — Stephen Moyer</div><div class="rnote">Hiểu cash flow dưới áp lực tối đa. Dù không làm distressed investing — biết điều này thay đổi cách bạn nhìn risk.</div></div></div>
+      <div class="ri"><span class="rt rt-book">Sách</span><div><div class="rn">The Art of Capital Allocation — David Giroux</div><div class="rnote">Framework hiện đại về capital allocation từ góc nhìn investor — đọc để hiểu investors nhìn bạn như thế nào.</div></div></div>
+      <div class="ri"><span class="rt rt-do">Thực hành</span><div><div class="rn">Own ít nhất 1 M&A deal từ sourcing đến close — dù nhỏ</div><div class="rnote">Không cần deal lớn. 1 acquisition nhỏ thực sự dạy nhiều hơn 100 case study. Tìm business muốn exit trong network của bạn.</div></div></div>
+      <div class="ri"><span class="rt rt-do">Thực hành</span><div><div class="rn">Design holding structure cho portfolio của mình — với tax lawyer và corporate lawyer</div><div class="rnote">Làm thực tế, không lý thuyết. Quá trình setup dạy bạn mechanics mà không sách nào giải thích rõ bằng.</div></div></div>
+      <div class="ri"><span class="rt rt-cert">Tùy chọn</span><div><div class="rn">CFA Level 1–2 nếu muốn raise institutional capital</div><div class="rnote">Không cần nếu focus là operating company. Cần nếu muốn raise từ fund, pension, hoặc lập fund của riêng mình sau này.</div></div></div>
+      <div class="ri"><span class="rt rt-net">Network</span><div><div class="rn">Vào room với chairman và holding company owner — không phải founder stage</div><div class="rnote">YPO Vietnam, EO Vietnam, hoặc tìm advisor đã build và exit holding company. Peer learning ở tầng này không có trong sách.</div></div></div>
+    </div>
+
+    <div class="stitle">Milestones · Tích khi hoàn thành</div>
+    <div class="ms-list" data-phase="3">
+      <div class="mi" onclick="toggleMilestone(this)"><div class="mi-check"></div><div class="mtext">Setup được holding structure đầu tiên — dù chỉ 2 entities — với cashflow routing rõ ràng giữa opco và holdco</div><div class="mwhen">Tháng 6</div></div>
+      <div class="mi" onclick="toggleMilestone(this)"><div class="mi-check"></div><div class="mtext">Close ít nhất 1 deal acquisition hoặc investment — own toàn bộ process từ thesis đến close</div><div class="mwhen">Tháng 12</div></div>
+      <div class="mi" onclick="toggleMilestone(this)"><div class="mi-check"></div><div class="mtext">Có capital allocation framework viết ra rõ ràng: khi nào reinvest, khi nào giữ cash, khi nào distribute — và đang sống theo nó</div><div class="mwhen">Tháng 15</div></div>
+      <div class="mi" onclick="toggleMilestone(this)"><div class="mi-check"></div><div class="mtext">Người khác chủ động hỏi ý kiến bạn về deal hoặc capital structure của họ — không phải bạn tự giới thiệu</div><div class="mwhen">Tháng 20–24</div></div>
+    </div>
+
+    <div class="cpbox">
+      <div class="cptitle">Checkpoint · Bạn đã ở điểm 9 khi:</div>
+      <div class="cpq" onclick="toggleCp(this)"><div class="cpq-check"></div><div class="cpq-text">Bạn nhìn vào holding company của người khác và trong 1 buổi identify được 3 inefficiency trong cash routing — đề xuất cụ thể, không phải lý thuyết</div></div>
+      <div class="cpq" onclick="toggleCp(this)"><div class="cpq-check"></div><div class="cpq-text">Bạn có written capital allocation policy và đã từng nói "không" với 1 deal hấp dẫn vì nó không fit framework — và đúng</div></div>
+      <div class="cpq" onclick="toggleCp(this)"><div class="cpq-check"></div><div class="cpq-text">Bạn đã qua ít nhất 1 cash crisis thực sự và manage được — biết feeling của payroll deadline khi tài khoản sắp về 0</div></div>
+      <div class="cpq" onclick="toggleCp(this)"><div class="cpq-check"></div><div class="cpq-text">Investor hoặc lender tin model của bạn mà không cần verify lại từng assumption — vì track record của bạn đã nói thay</div></div>
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <section class="notes-section">
+    <h2 class="notes-title">Những điều cần nhớ</h2>
+    <p class="notes-sub">Không có trong sách nào. Nhưng quan trọng hơn hầu hết những gì có trong sách.</p>
+    <div class="note-cards">
+      <div class="note-card">
+        <div class="note-card-head">Về mục tiêu thực sự</div>
+        <div class="note-card-text">Bạn không học tài chính để trở thành <strong>CFO giỏi nhất phòng</strong>. Bạn học để <strong>không bao giờ bị qua mặt về số</strong>. Đó là hai mục tiêu hoàn toàn khác nhau — và con đường đến chúng cũng khác nhau. Người làm thuê giỏi cần biết nhiều kỹ thuật. Người sở hữu cần biết đúng câu hỏi để hỏi.</div>
+      </div>
+      <div class="note-card">
+        <div class="note-card-head">Về 13-week cash flow forecast</div>
+        <div class="note-card-text">Đây không phải công cụ của CFO. Đây là <strong>thói quen sống còn của founder</strong>. Rất nhiều người thông minh, học rộng, hiểu tài chính lý thuyết rất tốt — nhưng không có thói quen này và bị bất ngờ bởi cash crisis. Bắt đầu build cái này <strong>ngay từ giai đoạn 1</strong>, dù business còn nhỏ. Review hàng tuần như uống cà phê sáng.</div>
+      </div>
+      <div class="note-card">
+        <div class="note-card-head">Về tốc độ lên điểm 9</div>
+        <div class="note-card-text">Điểm 9 <strong>không có timeline cố định</strong> vì nó phụ thuộc vào số deals thực bạn đi qua — không phải số sách bạn đọc. Người đến điểm 9 nhanh nhất là người có nhiều <strong>exposure thực</strong> nhất: deal room, cash crisis, acquisition, restructuring. Tìm cách vào những tình huống đó sớm nhất có thể, dù vai trò nhỏ.</div>
+      </div>
+      <div class="note-card">
+        <div class="note-card-head">Về bằng cấp</div>
+        <div class="note-card-text">CFA thường bị overrated nếu mục tiêu là <strong>operating company và holding</strong> — nó thiên về investment analysis. Cái thực sự có giá trị là <strong>track record thực chiến</strong>: đã từng quản lý cash cho business thật, đã từng ngồi trong deal room thật. Credential chỉ mở cửa. Thực chiến mới giữ bạn trong phòng và đưa bạn lên bàn.</div>
+      </div>
+      <div class="note-card">
+        <div class="note-card-head">Về capital allocation — skill #1 của chairman</div>
+        <div class="note-card-text">Hầu hết CEO giỏi về operations nhưng tệ về capital allocation — và đó là lý do nhiều công ty lớn không tạo ra shareholder value dù doanh thu tăng đều. <strong>Biết khi nào KHÔNG làm gì</strong> — không mua, không mở rộng, không đầu tư — thường khó hơn và có giá trị hơn biết khi nào hành động. Đây là điều phân biệt chairman tầm thường và chairman xuất sắc.</div>
+      </div>
+      <div class="note-card">
+        <div class="note-card-head">Về thứ tự đọc sách</div>
+        <div class="note-card-text">Thứ tự quan trọng hơn danh sách. <strong>Giai đoạn 1:</strong> Financial Intelligence + The Outsiders cùng lúc — một cái dạy ngôn ngữ, một cái cho thấy ngôn ngữ đó dùng để làm gì. <strong>Giai đoạn 2:</strong> Poor Charlie's Almanack trước Valuation — framework thinking trước kỹ thuật. <strong>Giai đoạn 3:</strong> Essays of Warren Buffett là operating manual — đọc đi đọc lại, không phải đọc một lần rồi xếp giá.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-text">Lộ trình · Founder → Chairman → Holding · Cập nhật tiến độ bằng cách tick checkbox</span>
+    <button class="reset-btn" onclick="resetProgress()">Reset progress</button>
+  </footer>
+
+</div>
+
+<script>
+const STORAGE_KEY = 'founder_finance_progress';
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
+}
+function saveState(state) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {}
+}
+
+function getMilestoneId(el) {
+  const list = el.closest('.ms-list');
+  const phase = list ? list.dataset.phase : 'cp';
+  const items = (list || el.closest('.cpbox')).querySelectorAll(list ? '.mi' : '.cpq');
+  return `${phase}-${Array.from(items).indexOf(el)}`;
+}
+
+function toggleMilestone(el) {
+  el.classList.toggle('done');
+  const state = loadState();
+  const id = getMilestoneId(el);
+  state[id] = el.classList.contains('done');
+  saveState(state);
+  updateProgress();
+}
+
+function toggleCp(el) {
+  el.classList.toggle('done');
+  const box = el.closest('.cpbox');
+  const panel = el.closest('.panel');
+  const phase = panel ? panel.id.replace('p','') : '0';
+  const items = box.querySelectorAll('.cpq');
+  const idx = Array.from(items).indexOf(el);
+  const state = loadState();
+  state[`cp${phase}-${idx}`] = el.classList.contains('done');
+  saveState(state);
+  updateProgress();
+}
+
+function updateProgress() {
+  const phases = [
+    { id:'1', milestones: document.querySelectorAll('#p1 .mi'), cps: document.querySelectorAll('#p1 .cpq') },
+    { id:'2', milestones: document.querySelectorAll('#p2 .mi'), cps: document.querySelectorAll('#p2 .cpq') },
+    { id:'3', milestones: document.querySelectorAll('#p3 .mi'), cps: document.querySelectorAll('#p3 .cpq') },
+  ];
+  let totalDone = 0, totalAll = 0;
+  phases.forEach((ph, i) => {
+    const all = ph.milestones.length + ph.cps.length;
+    const done = [...ph.milestones].filter(m=>m.classList.contains('done')).length +
+                 [...ph.cps].filter(c=>c.classList.contains('done')).length;
+    const pct = all ? Math.round(done/all*100) : 0;
+    document.getElementById(`bar${i+1}`).style.width = pct + '%';
+    document.getElementById(`pct${i+1}`).textContent = pct + '%';
+    totalDone += done; totalAll += all;
+  });
+  const overall = totalAll ? Math.round(totalDone/totalAll*100) : 0;
+  document.getElementById('total-pct').textContent = overall + '%';
+  document.getElementById('progress-fill').style.width = overall + '%';
+}
+
+function restoreState() {
+  const state = loadState();
+  document.querySelectorAll('.ms-list').forEach(list => {
+    const phase = list.dataset.phase;
+    list.querySelectorAll('.mi').forEach((el, i) => {
+      if (state[`${phase}-${i}`]) el.classList.add('done');
+    });
+  });
+  document.querySelectorAll('.panel').forEach(panel => {
+    const phase = panel.id.replace('p','');
+    panel.querySelectorAll('.cpq').forEach((el, i) => {
+      if (state[`cp${phase}-${i}`]) el.classList.add('done');
+    });
+  });
+  updateProgress();
+}
+
+function resetProgress() {
+  if (!confirm('Reset toàn bộ tiến độ?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  document.querySelectorAll('.mi, .cpq').forEach(el => el.classList.remove('done'));
+  updateProgress();
+}
+
+function show(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.pnav').forEach(b => b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelector(`[onclick="show('${id}')"]`).classList.add('on');
+}
+
+restoreState();
+</script>
+</body>
+</html>
