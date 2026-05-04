@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Mastery Roadmap | 12-Month Transformation</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --bg-elevated: #1e293b;
+    --bg-card: #1e293b;
+    --border: #334155;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    --accent: #38bdf8;
+    --accent-hover: #0ea5e9;
+    --accent-soft: rgba(56, 189, 248, 0.1);
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --gradient: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+  }
+
+  [data-theme="light"] {
+    --bg: #f8fafc;
+    --bg-elevated: #ffffff;
+    --bg-card: #ffffff;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --text-muted: #475569;
+    --text-dim: #94a3b8;
+    --accent: #0284c7;
+    --accent-hover: #0369a1;
+    --accent-soft: rgba(2, 132, 199, 0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: var(--gradient);
+    padding: 60px 24px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 80%, rgba(255,255,255,0.08) 0%, transparent 50%);
+  }
+  .header h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.02em;
+    position: relative;
+    margin-bottom: 12px;
+  }
+  .header .subtitle {
+    color: rgba(255,255,255,0.9);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 500;
+    position: relative;
+  }
+  .header .meta {
+    color: rgba(255,255,255,0.75);
+    font-size: 0.95rem;
+    margin-top: 16px;
+    position: relative;
+  }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    overflow-x: auto;
+    white-space: nowrap;
+    backdrop-filter: blur(10px);
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .nav a:hover {
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .theme-toggle {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .theme-toggle:hover { background: var(--accent-soft); }
+
+  /* ===== LAYOUT ===== */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  /* ===== STATS DASHBOARD ===== */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: -50px auto 50px;
+    max-width: 1100px;
+    padding: 0 24px;
+    position: relative;
+    z-index: 10;
+  }
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+  .stat-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+  .stat-label {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 8px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ===== SECTIONS ===== */
+  section { margin-bottom: 60px; scroll-margin-top: 80px; }
+
+  h2 {
+    font-size: 1.85rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    position: relative;
+    padding-left: 16px;
+  }
+  h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 4px;
+    background: var(--gradient);
+    border-radius: 2px;
+  }
+
+  h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 28px 0 14px;
+    color: var(--text);
+  }
+
+  h4 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 16px 0 8px;
+    color: var(--accent);
+  }
+
+  p { color: var(--text); margin-bottom: 14px; }
+
+  ul, ol { margin: 0 0 16px 24px; }
+  li { margin-bottom: 8px; color: var(--text); }
+
+  strong { color: var(--text); font-weight: 600; }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+
+  .card-accent {
+    border-left: 4px solid var(--accent);
+  }
+
+  /* ===== TABLE ===== */
+  .table-wrapper { overflow-x: auto; margin: 16px 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  tbody tr:hover { background: var(--accent-soft); }
+
+  /* ===== PHASE CARD ===== */
+  .phase {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .phase::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient);
+  }
+  .phase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .phase-title { font-size: 1.4rem; font-weight: 700; }
+  .phase-badge {
+    padding: 6px 14px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  .phase-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--gradient);
+    transition: width 0.4s ease;
+    border-radius: 4px;
+  }
+  .progress-text {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    min-width: 50px;
+    text-align: right;
+  }
+
+  /* ===== CHECKLIST ===== */
+  .checklist { list-style: none; margin: 0; padding: 0; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    transition: all 0.2s;
+    margin-bottom: 4px;
+    cursor: pointer;
+  }
+  .checklist li:hover { background: var(--accent-soft); }
+  .checklist input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    margin-top: 2px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .checklist label {
+    flex: 1;
+    cursor: pointer;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .checklist li.done label {
+    text-decoration: line-through;
+    color: var(--text-dim);
+  }
+
+  /* ===== DAILY TRACKER ===== */
+  .tracker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .tracker-input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    width: 100%;
+    font-family: inherit;
+  }
+  .tracker-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  textarea.tracker-input {
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  .button {
+    background: var(--gradient);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: transform 0.1s, box-shadow 0.2s;
+  }
+  .button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3);
+  }
+  .button-secondary {
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .button-secondary:hover {
+    background: var(--accent-soft);
+    box-shadow: none;
+  }
+  .button-danger {
+    background: var(--danger);
+  }
+
+  /* ===== STREAK ===== */
+  .streak-display {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 16px 0;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(239, 68, 68, 0.15) 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+  }
+  .streak-flame {
+    font-size: 3rem;
+    line-height: 1;
+  }
+  .streak-info { flex: 1; }
+  .streak-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--warning);
+    line-height: 1;
+  }
+  .streak-label {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 4px;
+  }
+
+  /* ===== JOURNAL ===== */
+  .journal-entry {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .journal-date {
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .journal-content { white-space: pre-wrap; color: var(--text); }
+  .journal-delete {
+    background: transparent;
+    border: none;
+    color: var(--danger);
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-top: 8px;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+  .journal-delete:hover { background: rgba(239, 68, 68, 0.1); }
+
+  /* ===== FRAMEWORK ===== */
+  .framework-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 12px 0;
+  }
+  .framework-letter {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background: var(--gradient);
+    color: white;
+    text-align: center;
+    line-height: 32px;
+    border-radius: 8px;
+    font-weight: 700;
+    margin-right: 12px;
+    font-size: 1rem;
+  }
+
+  /* ===== QUOTE ===== */
+  .quote {
+    text-align: center;
+    padding: 40px;
+    background: var(--bg-card);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    margin: 40px 0;
+  }
+  .quote-text {
+    font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+    font-style: italic;
+    font-weight: 600;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.5;
+  }
+  .quote-attribution {
+    color: var(--text-muted);
+    margin-top: 12px;
+    font-size: 0.9rem;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 40px 24px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  /* ===== TABS ===== */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 24px;
+    overflow-x: auto;
+  }
+  .tab {
+    background: transparent;
+    border: none;
+    padding: 12px 20px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.95rem;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px; }
+    .header { padding: 40px 16px 70px; }
+    h2 { font-size: 1.5rem; }
+    .phase { padding: 20px; }
+    .card { padding: 20px; }
+  }
+
+  /* Print */
+  @media print {
+    .nav, .theme-toggle, .button { display: none; }
+    body { background: white; color: black; }
+    .phase, .card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <h1>🚀 English Mastery Roadmap</h1>
+  <div class="subtitle">Hành Trình Chuyển Hóa 12 Tháng</div>
+  <div class="meta">Senior Software Engineer · B2 → C1+ · Phỏng vấn · Présent · Email · Essay</div>
+</header>
+
+<!-- ===== STATS DASHBOARD ===== -->
+<div class="stats">
+  <div class="stat-card">
+    <div class="stat-value" id="stat-streak">0</div>
+    <div class="stat-label">🔥 Day Streak</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" id="stat-total">0</div>
+    <div class="stat-label">Total Days</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" id="stat-progress">0%</div>
+    <div class="stat-label">Overall Progress</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value" id="stat-completed">0</div>
+    <div class="stat-label">Tasks Done</div>
+  </div>
+</div>
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#tracker">📊 Tracker</a>
+    <a href="#philosophy">💡 Triết lý</a>
+    <a href="#diagnostic">🔍 Chẩn đoán</a>
+    <a href="#roadmap">🗺️ Roadmap</a>
+    <a href="#skills">🎯 Skills</a>
+    <a href="#frameworks">🧠 Frameworks</a>
+    <a href="#routine">📅 Routine</a>
+    <a href="#budget">💰 Budget</a>
+    <a href="#start">🚦 Start</a>
+    <button class="theme-toggle" onclick="toggleTheme()">🌓 Theme</button>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ===== TRACKER SECTION ===== -->
+<section id="tracker">
+  <h2>📊 Daily Tracker</h2>
+
+  <div class="card card-accent">
+    <div class="streak-display">
+      <div class="streak-flame">🔥</div>
+      <div class="streak-info">
+        <div class="streak-number" id="streak-display">0 days</div>
+        <div class="streak-label">Đừng phá streak. Tối thiểu 15 phút/ngày.</div>
+      </div>
+    </div>
+
+    <h3>Hôm nay (<span id="today-date"></span>)</h3>
+
+    <div class="tracker-grid">
+      <input type="number" id="today-minutes" placeholder="Phút học" class="tracker-input" min="0">
+      <input type="text" id="today-words" placeholder="3 từ/cụm mới" class="tracker-input">
+      <input type="text" id="today-fix" placeholder="1 lỗi đã sửa" class="tracker-input">
+      <input type="text" id="today-win" placeholder="1 chiến thắng nhỏ" class="tracker-input">
+    </div>
+
+    <textarea id="today-notes" class="tracker-input" placeholder="Ghi chú tự do (work journal, reflections...)"></textarea>
+
+    <div style="margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap;">
+      <button class="button" onclick="logDay()">✅ Log Today</button>
+      <button class="button button-secondary" onclick="exportData()">📥 Export Data</button>
+      <button class="button button-secondary" onclick="importData()">📤 Import</button>
+      <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(event)">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab(event, 'recent')">Recent Logs</button>
+      <button class="tab" onclick="switchTab(event, 'all')">All Logs</button>
+    </div>
+    <div id="recent" class="tab-content active">
+      <div id="recent-logs"></div>
+    </div>
+    <div id="all" class="tab-content">
+      <div id="all-logs"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PHILOSOPHY ===== -->
+<section id="philosophy">
+  <h2>💡 Phần 1 — Triết lý & Nguyên tắc nền tảng</h2>
+
+  <div class="card">
+    <h3>1.1. Vì sao bạn không nói được dù biết từ vựng?</h3>
+    <p>Đây là vấn đề kinh điển của người học B2 ở Việt Nam, đặc biệt là dân kỹ thuật làm việc với tiếng Anh chủ yếu qua đọc. Bạn không thiếu kiến thức — bạn thiếu sự chuyển hóa từ <strong>kiến thức bị động (passive knowledge)</strong> sang <strong>kỹ năng chủ động (active skill)</strong>.</p>
+    <p>Não bộ lưu trữ ngôn ngữ ở hai vùng khác nhau: vùng nhận diện (recognition) và vùng truy xuất (retrieval). Đọc và nghe rèn vùng nhận diện. Nói và viết đòi hỏi vùng truy xuất, vốn cần được luyện tập riêng — và đây chính là vùng bạn chưa kích hoạt.</p>
+  </div>
+
+  <div class="card">
+    <h3>1.2. Ba nguyên tắc của plan này</h3>
+    <ul>
+      <li><strong>Output-driven:</strong> Mỗi ngày phải có output (nói hoặc viết), không chỉ input.</li>
+      <li><strong>Comprehensible Input + 1 (Krashen):</strong> Tài liệu nghe/đọc phải hơi khó hơn trình độ hiện tại một chút.</li>
+      <li><strong>Spaced Repetition + Active Recall:</strong> Việc ôn tập phải được lập lịch khoa học, không học thuộc lòng.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>1.3. Cơ chế "không thể đi lùi" (Ratchet System)</h3>
+    <ul>
+      <li><strong>Daily Streak Lock:</strong> Cam kết tối thiểu 15 phút/ngày — kể cả ngày bận. Streak quan trọng hơn cường độ.</li>
+      <li><strong>Public Commitment:</strong> Mỗi tuần viết 1 bài LinkedIn/blog kỹ thuật bằng tiếng Anh. Khi public, bạn không thể quay lui.</li>
+      <li><strong>Artifact Building:</strong> Mọi thứ bạn học đều phải tạo ra tài sản: notebook từ vựng, kho phrasebook, video review.</li>
+      <li><strong>Identity Shift:</strong> Đừng nói "tôi đang học tiếng Anh". Hãy nói "tôi là một engineer làm việc bằng tiếng Anh".</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== DIAGNOSTIC ===== -->
+<section id="diagnostic">
+  <h2>🔍 Phần 2 — Đánh giá hiện trạng</h2>
+
+  <div class="card">
+    <h3>2.1. Bốn pain points cần giải quyết</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr><th>Pain Point</th><th>Nguyên nhân</th><th>Giải pháp</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Biết từ nhưng không bật ra</td><td>Vốn từ ở vùng passive</td><td>Shadowing + Daily monologue + Retrieval drills</td></tr>
+          <tr><td>Trống rỗng khi nghĩ</td><td>Thiếu "chunks" và collocations sẵn có</td><td>Lexical Approach: học cụm, không học từ lẻ</td></tr>
+          <tr><td>Ngữ pháp sai nhiều</td><td>Học tách rời context</td><td>Grammar in Use + Output correction loop</td></tr>
+          <tr><td>Không articulate</td><td>Thiếu framework tư duy</td><td>STAR/PREP/SCQA + Connector drills</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card card-accent">
+    <h3>2.2. ✅ Baseline tests (Tuần đầu tiên)</h3>
+    <p style="color: var(--text-muted); margin-bottom: 16px;">Bấm vào checkbox khi hoàn thành. Đây là Day 0 của bạn.</p>
+    <ul class="checklist" data-storage="baseline">
+      <li><input type="checkbox" id="b1"><label for="b1"><strong>Speaking baseline:</strong> Quay video 3 phút trả lời "Tell me about a challenging technical problem you solved recently"</label></li>
+      <li><input type="checkbox" id="b2"><label for="b2"><strong>Writing baseline:</strong> Viết essay 500 từ về "Why I chose software engineering as my career" (không dùng AI)</label></li>
+      <li><input type="checkbox" id="b3"><label for="b3"><strong>Vocabulary test:</strong> Làm test tại testyourvocab.com, ghi lại số từ</label></li>
+      <li><input type="checkbox" id="b4"><label for="b4"><strong>Grammar diagnostic:</strong> Identify 3-5 lỗi ngữ pháp lặp đi lặp lại</label></li>
+      <li><input type="checkbox" id="b5"><label for="b5"><strong>(Optional) IELTS mock:</strong> Đặt 1 buổi với giáo viên trên Preply để có band score</label></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== ROADMAP ===== -->
+<section id="roadmap">
+  <h2>🗺️ Phần 3 — Roadmap 12 tháng</h2>
+
+  <!-- PHASE 1 -->
+  <div class="phase" id="phase1">
+    <div class="phase-header">
+      <div>
+        <span class="phase-badge">Tháng 1-3</span>
+        <div class="phase-title">Phase 1: Foundation & Fluency Unlock</div>
+      </div>
+    </div>
+    <div class="phase-progress">
+      <div class="progress-bar"><div class="progress-fill" id="progress-phase1" style="width:0%"></div></div>
+      <div class="progress-text" id="progress-text-phase1">0%</div>
+    </div>
+    <p><strong>Focus:</strong> Mở khóa khả năng nói cơ bản, xây dựng thói quen daily output, fix các lỗi ngữ pháp căn bản.</p>
+
+    <h4>🎯 Mục tiêu cuối Tháng 3</h4>
+    <ul class="checklist" data-storage="phase1-goals">
+      <li><input type="checkbox" id="p1g1"><label for="p1g1">Nói monologue 5 phút về chủ đề kỹ thuật, không vấp quá 3 lần</label></li>
+      <li><input type="checkbox" id="p1g2"><label for="p1g2">Viết email công việc 200 từ trong 15 phút, ngữ pháp đúng 90%+</label></li>
+      <li><input type="checkbox" id="p1g3"><label for="p1g3">Active vocabulary tăng ~500 từ/cụm</label></li>
+      <li><input type="checkbox" id="p1g4"><label for="p1g4">Loại bỏ 80% các lỗi ngữ pháp căn bản</label></li>
+    </ul>
+
+    <h4>📚 Resources</h4>
+    <ul class="checklist" data-storage="phase1-resources">
+      <li><input type="checkbox" id="p1r1"><label for="p1r1"><strong>📖 Sách:</strong> English Grammar in Use (Intermediate, Raymond Murphy)</label></li>
+      <li><input type="checkbox" id="p1r2"><label for="p1r2"><strong>📖 Sách:</strong> English Collocations in Use (Intermediate)</label></li>
+      <li><input type="checkbox" id="p1r3"><label for="p1r3"><strong>📱 App:</strong> Anki cài đặt với template Refold</label></li>
+      <li><input type="checkbox" id="p1r4"><label for="p1r4"><strong>📱 App:</strong> ELSA Speak (~$50-80/năm) cho phát âm</label></li>
+      <li><input type="checkbox" id="p1r5"><label for="p1r5"><strong>🎧 Podcast:</strong> All-In, Lex Fridman, Stack Overflow Podcast</label></li>
+      <li><input type="checkbox" id="p1r6"><label for="p1r6"><strong>📺 YouTube:</strong> EngVid, BBC Learning English, Rachel's English</label></li>
+    </ul>
+
+    <h4>⏱️ Phân bổ 1 tiếng/ngày</h4>
+    <ul>
+      <li><strong>15' Shadowing:</strong> TED Talk hoặc podcast tech 2-3 phút, bắt chước ngữ điệu</li>
+      <li><strong>15' Grammar in Use:</strong> 1 unit/ngày + viết 5 câu áp dụng vào tình huống công việc</li>
+      <li><strong>15' Daily Monologue:</strong> Quay video 3-5 phút trả lời 1 câu hỏi</li>
+      <li><strong>15' Writing + Vocab:</strong> Work journal 100-150 từ, sửa qua Grammarly, ghi 5 cụm vào Anki</li>
+    </ul>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase" id="phase2">
+    <div class="phase-header">
+      <div>
+        <span class="phase-badge">Tháng 4-6</span>
+        <div class="phase-title">Phase 2: Professional Communication</div>
+      </div>
+    </div>
+    <div class="phase-progress">
+      <div class="progress-bar"><div class="progress-fill" id="progress-phase2" style="width:0%"></div></div>
+      <div class="progress-text" id="progress-text-phase2">0%</div>
+    </div>
+    <p><strong>Focus:</strong> Tích hợp tiếng Anh vào công việc — email, document, PR review, technical solutions.</p>
+
+    <h4>🎯 Mục tiêu cuối Tháng 6</h4>
+    <ul class="checklist" data-storage="phase2-goals">
+      <li><input type="checkbox" id="p2g1"><label for="p2g1">Chủ động phát biểu ít nhất 2 lần/meeting với đồng nghiệp Mỹ</label></li>
+      <li><input type="checkbox" id="p2g2"><label for="p2g2">Viết technical document 1000+ từ với cấu trúc rõ ràng</label></li>
+      <li><input type="checkbox" id="p2g3"><label for="p2g3">Giải thích architecture/system design 10 phút bằng tiếng Anh</label></li>
+      <li><input type="checkbox" id="p2g4"><label for="p2g4">Có portfolio LinkedIn/Medium với ít nhất 6 bài kỹ thuật</label></li>
+    </ul>
+
+    <h4>📚 Resources</h4>
+    <ul class="checklist" data-storage="phase2-resources">
+      <li><input type="checkbox" id="p2r1"><label for="p2r1"><strong>📖 Sách:</strong> The Sense of Style (Steven Pinker)</label></li>
+      <li><input type="checkbox" id="p2r2"><label for="p2r2"><strong>📖 Sách:</strong> Business Vocabulary in Use (Advanced)</label></li>
+      <li><input type="checkbox" id="p2r3"><label for="p2r3"><strong>📖 Sách:</strong> Cracking the Coding Interview (phần behavioral)</label></li>
+      <li><input type="checkbox" id="p2r4"><label for="p2r4"><strong>🎓 Khóa:</strong> Coursera "Improve Your English Communication" (Georgia Tech)</label></li>
+      <li><input type="checkbox" id="p2r5"><label for="p2r5"><strong>🎯 Mock:</strong> Pramp hoặc interviewing.io</label></li>
+      <li><input type="checkbox" id="p2r6"><label for="p2r6"><strong>👨‍🏫 Tutor:</strong> Đăng ký Preply/iTalki ($8-20/giờ)</label></li>
+    </ul>
+
+    <h4>⏱️ Phân bổ 1 tiếng/ngày</h4>
+    <ul>
+      <li><strong>20' Input chuyên ngành:</strong> Engineering blog (Stripe, Uber, Netflix Tech) hoặc podcast tech</li>
+      <li><strong>20' Speaking practice:</strong> Tutor 2-3 lần/tuần, ngày khác dùng AI voice mode</li>
+      <li><strong>20' Writing output:</strong> PR explanation, post-mortem, design doc, hoặc summary</li>
+    </ul>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase" id="phase3">
+    <div class="phase-header">
+      <div>
+        <span class="phase-badge">Tháng 7-9</span>
+        <div class="phase-title">Phase 3: Articulation & Persuasion</div>
+      </div>
+    </div>
+    <div class="phase-progress">
+      <div class="progress-bar"><div class="progress-fill" id="progress-phase3" style="width:0%"></div></div>
+      <div class="progress-text" id="progress-text-phase3">0%</div>
+    </div>
+    <p><strong>Focus:</strong> Từ "giao tiếp được" sang "trình bày thuyết phục". Học cách argue, persuade, structure ideas.</p>
+
+    <h4>🎯 Mục tiêu cuối Tháng 9</h4>
+    <ul class="checklist" data-storage="phase3-goals">
+      <li><input type="checkbox" id="p3g1"><label for="p3g1">Lead được technical discussion 30 phút với team Mỹ</label></li>
+      <li><input type="checkbox" id="p3g2"><label for="p3g2">Viết essay 1500+ từ có argument structure rõ ràng</label></li>
+      <li><input type="checkbox" id="p3g3"><label for="p3g3">Pass mock interview vòng behavioral của FAANG-tier</label></li>
+      <li><input type="checkbox" id="p3g4"><label for="p3g4">Debate 1 chủ đề tech 15 phút mạch lạc</label></li>
+    </ul>
+
+    <h4>📚 Resources</h4>
+    <ul class="checklist" data-storage="phase3-resources">
+      <li><input type="checkbox" id="p3r1"><label for="p3r1"><strong>📖 Sách:</strong> On Writing Well (William Zinsser)</label></li>
+      <li><input type="checkbox" id="p3r2"><label for="p3r2"><strong>📖 Sách:</strong> Made to Stick (Chip & Dan Heath)</label></li>
+      <li><input type="checkbox" id="p3r3"><label for="p3r3"><strong>📖 Sách:</strong> Talk Like TED (Carmine Gallo)</label></li>
+      <li><input type="checkbox" id="p3r4"><label for="p3r4"><strong>🎓 Coursera:</strong> Learning How to Learn + Mindshift</label></li>
+      <li><input type="checkbox" id="p3r5"><label for="p3r5"><strong>🎓 MasterClass:</strong> Chris Voss, Aaron Sorkin</label></li>
+      <li><input type="checkbox" id="p3r6"><label for="p3r6"><strong>🎤 Toastmasters:</strong> Tham gia online club</label></li>
+    </ul>
+
+    <h4>⏱️ Phân bổ 1 tiếng/ngày</h4>
+    <ul>
+      <li><strong>20' Active listening:</strong> TED, QCon, GOTO, Strange Loop — note discourse moves</li>
+      <li><strong>20' Structured output:</strong> Trả lời theo PREP, STAR, SCQA luân phiên</li>
+      <li><strong>20' Essay writing:</strong> 500-800 từ/tuần, submit lên LinkedIn/Medium</li>
+    </ul>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase" id="phase4">
+    <div class="phase-header">
+      <div>
+        <span class="phase-badge">Tháng 10-12</span>
+        <div class="phase-title">Phase 4: Mastery & Identity Shift</div>
+      </div>
+    </div>
+    <div class="phase-progress">
+      <div class="progress-bar"><div class="progress-fill" id="progress-phase4" style="width:0%"></div></div>
+      <div class="progress-text" id="progress-text-phase4">0%</div>
+    </div>
+    <p><strong>Focus:</strong> Vận hành ở mức near-native. Tiếng Anh không còn là môn học mà là công cụ làm việc hằng ngày.</p>
+
+    <h4>🎯 Mục tiêu cuối Tháng 12</h4>
+    <ul class="checklist" data-storage="phase4-goals">
+      <li><input type="checkbox" id="p4g1"><label for="p4g1">Pass full-loop interview của công ty Mỹ tier 1</label></li>
+      <li><input type="checkbox" id="p4g2"><label for="p4g2">Mentor được junior engineer bằng tiếng Anh</label></li>
+      <li><input type="checkbox" id="p4g3"><label for="p4g3">Được mời làm presenter trong 1 sự kiện tech</label></li>
+      <li><input type="checkbox" id="p4g4"><label for="p4g4">Đạt IELTS 7.5+ hoặc TOEFL 100+</label></li>
+    </ul>
+
+    <h4>📚 Resources</h4>
+    <ul class="checklist" data-storage="phase4-resources">
+      <li><input type="checkbox" id="p4r1"><label for="p4r1"><strong>📖 Sách:</strong> Designing Data-Intensive Applications (Kleppmann)</label></li>
+      <li><input type="checkbox" id="p4r2"><label for="p4r2"><strong>📖 Sách:</strong> The Staff Engineer's Path (Tanya Reilly)</label></li>
+      <li><input type="checkbox" id="p4r3"><label for="p4r3"><strong>🎯 Mock:</strong> Hello Interview, Exponent (system design)</label></li>
+      <li><input type="checkbox" id="p4r4"><label for="p4r4"><strong>📜 Cert:</strong> Đặt lịch IELTS/TOEFL tháng 11-12</label></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== SKILLS ===== -->
+<section id="skills">
+  <h2>🎯 Phần 4 — Chiến lược chi tiết theo kỹ năng</h2>
+
+  <div class="card">
+    <h3>4.1. Speaking — Phá vỡ rào cản "trống rỗng"</h3>
+    <h4>🎬 Kỹ thuật 1: Shadowing (kỹ thuật vàng)</h4>
+    <ol>
+      <li>Chọn audio 2-3 phút có transcript (TED Talks, VOA)</li>
+      <li>Nghe và đọc transcript đồng thời 2 lần</li>
+      <li>Nhại lại từng câu, copy nguyên ngữ điệu, không dịch</li>
+      <li>Bật audio và nói song song với speaker, chậm hơn 1 giây</li>
+      <li>Ghi lại giọng mình, so sánh</li>
+    </ol>
+    <h4>🗣️ Kỹ thuật 2: Self-talk</h4>
+    <p>Mỗi ngày 10-15 phút tự nói một mình bằng tiếng Anh khi đi bộ, lái xe, tắm. Cách rẻ nhất và hiệu quả nhất để xây dựng "reflex" tiếng Anh.</p>
+    <h4>📹 Kỹ thuật 3: Daily Question Drill</h4>
+    <p>Quay video 3-5 phút mỗi ngày trả lời 1 câu hỏi. Sau 100 ngày, bạn có 100 câu trả lời và phản xạ tự nhiên.</p>
+    <h4>🤝 Kỹ thuật 4: Tutor + AI combo</h4>
+    <p>2-3 buổi/tuần với tutor + AI voice mode ngày khác. Đừng chọn 1 trong 2 — kết hợp cả hai.</p>
+  </div>
+
+  <div class="card">
+    <h3>4.2. Writing — Từ "dịch từ tiếng Việt" đến "nghĩ bằng tiếng Anh"</h3>
+    <h4>❌ Sai lầm cần dừng ngay</h4>
+    <p>Đa số người Việt: nghĩ ý bằng tiếng Việt → dịch sang tiếng Anh. Phải đảo ngược: <strong>nghĩ bằng tiếng Anh ngay từ đầu</strong>, kể cả ý còn vụng.</p>
+    <h4>✅ Quy trình viết hiệu quả</h4>
+    <ol>
+      <li>Outline trước (3-5 bullet points), bằng tiếng Anh</li>
+      <li>Draft nhanh (free-write), không quay lại sửa</li>
+      <li>Đọc lại lớn tiếng — nghe có "flow" không?</li>
+      <li>Đưa qua Grammarly/ChatGPT để sửa</li>
+      <li>So sánh bản cũ và mới — note 3 patterns lỗi</li>
+      <li>Sau 1 tuần, viết lại bài gốc từ đầu</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>4.3. Listening — Bệ phóng cho speaking</h3>
+    <ul>
+      <li><strong>Active listening (30%):</strong> Có transcript, dừng-tua-ghi note. Học cấu trúc, vocabulary.</li>
+      <li><strong>Passive listening (70%):</strong> Khi đi bộ, làm việc nhà. Để não quen với rhythm.</li>
+      <li><strong>Đa dạng accent:</strong> Mỹ (mặc định), Anh, Úc, Ấn (đồng nghiệp Ấn rất phổ biến).</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>4.4. Reading — Đầu vào chất lượng cao</h3>
+    <ul>
+      <li><strong>Tech-adjacent:</strong> Stratechery, Pragmatic Engineer Newsletter, Lethain.com</li>
+      <li><strong>Long-form general:</strong> The Atlantic, The New Yorker, Aeon</li>
+      <li><strong>Fiction:</strong> 1 cuốn/tháng — Sally Rooney, Kazuo Ishiguro</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== FRAMEWORKS ===== -->
+<section id="frameworks">
+  <h2>🧠 Phần 5 — Frameworks để Articulate</h2>
+
+  <div class="card">
+    <h3>5.1. PREP — Câu trả lời ngắn (30s - 2 phút)</h3>
+    <div class="framework-card">
+      <p><span class="framework-letter">P</span><strong>oint</strong> — Ý chính, 1 câu</p>
+      <p><span class="framework-letter">R</span><strong>eason</strong> — Vì sao</p>
+      <p><span class="framework-letter">E</span><strong>xample</strong> — Ví dụ cụ thể</p>
+      <p><span class="framework-letter">P</span><strong>oint</strong> — Lặp lại ý chính</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>5.2. STAR — Behavioral interview & storytelling</h3>
+    <div class="framework-card">
+      <p><span class="framework-letter">S</span><strong>ituation</strong> — Bối cảnh</p>
+      <p><span class="framework-letter">T</span><strong>ask</strong> — Nhiệm vụ của bạn</p>
+      <p><span class="framework-letter">A</span><strong>ction</strong> — Bạn đã làm gì</p>
+      <p><span class="framework-letter">R</span><strong>esult</strong> — Kết quả + bài học</p>
+    </div>
+    <p style="margin-top:12px;color:var(--text-muted);">Chuẩn bị sẵn 8-10 câu chuyện STAR cho: leadership, conflict, failure, success, technical challenge, mentoring.</p>
+  </div>
+
+  <div class="card">
+    <h3>5.3. SCQA — Technical writing & presentations</h3>
+    <div class="framework-card">
+      <p><span class="framework-letter">S</span><strong>ituation</strong> — Tình hình hiện tại</p>
+      <p><span class="framework-letter">C</span><strong>omplication</strong> — Vấn đề phát sinh</p>
+      <p><span class="framework-letter">Q</span><strong>uestion</strong> — Câu hỏi cần trả lời</p>
+      <p><span class="framework-letter">A</span><strong>nswer</strong> — Đề xuất của bạn</p>
+    </div>
+    <p style="margin-top:12px;color:var(--text-muted);">Framework McKinsey dùng. Cực kỳ hiệu quả cho design doc, post-mortem, technical proposal.</p>
+  </div>
+
+  <div class="card">
+    <h3>5.5. Connector Bank — Học thuộc</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Mục đích</th><th>Cụm từ</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Mở đầu</strong></td><td>Let me start by..., The way I see it..., What's interesting here is...</td></tr>
+          <tr><td><strong>Thêm ý</strong></td><td>On top of that..., What's more..., Beyond that..., To build on that point...</td></tr>
+          <tr><td><strong>Đối lập</strong></td><td>Having said that..., That said..., On the flip side..., I'd push back on that...</td></tr>
+          <tr><td><strong>Làm rõ</strong></td><td>To put it another way..., What I mean by that is..., Let me unpack that...</td></tr>
+          <tr><td><strong>Câu giờ</strong></td><td>That's a great question..., Let me think about that for a second..., It depends on...</td></tr>
+          <tr><td><strong>Kết luận</strong></td><td>The bottom line is..., At the end of the day..., What it boils down to is...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ROUTINE ===== -->
+<section id="routine">
+  <h2>📅 Phần 6 — Weekly Routine</h2>
+
+  <div class="card">
+    <h3>Lịch tuần mẫu</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Ngày</th><th>Hoạt động (60 phút)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Mon</strong></td><td>Shadowing 15' + Grammar 15' + Monologue 15' + Work journal 15'</td></tr>
+          <tr><td><strong>Tue</strong></td><td>Tutor 30' + Anki 10' + Reading tech blog 20'</td></tr>
+          <tr><td><strong>Wed</strong></td><td>Shadowing 15' + Grammar 15' + Monologue 15' + Email/doc draft 15'</td></tr>
+          <tr><td><strong>Thu</strong></td><td>Tutor 30' + Mock interview question 30'</td></tr>
+          <tr><td><strong>Fri</strong></td><td>Shadowing 15' + Connector drill 15' + Monologue 15' + Vocab 15'</td></tr>
+          <tr><td><strong>Sat</strong></td><td><strong>LONG:</strong> 1 LinkedIn/blog post (60-90'). Review video tuần.</td></tr>
+          <tr><td><strong>Sun</strong></td><td>Light: Fiction 30' + TED talk 30'. Hoặc rest day.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card card-accent">
+    <h3>⚡ Quy tắc bất di bất dịch</h3>
+    <ol>
+      <li><strong>Tối thiểu 15 phút/ngày</strong>, kể cả ngày bận. Streak không được phép gãy.</li>
+      <li><strong>Mỗi tuần 1 sản phẩm public</strong> (blog, LinkedIn, video). Không có ngoại lệ.</li>
+      <li><strong>Mỗi 4 tuần làm self-assessment</strong>: quay video cùng câu hỏi, so sánh.</li>
+      <li><strong>Không học "học" tiếng Anh</strong> — luôn học CÁI GÌ ĐÓ bằng tiếng Anh.</li>
+      <li><strong>Tiếng Anh là default</strong> sau tháng 6: phim, podcast, social, sách.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ===== BUDGET ===== -->
+<section id="budget">
+  <h2>💰 Phần 8 — Budget ước tính</h2>
+
+  <div class="card">
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Mục</th><th>Chi phí/tháng</th><th>Ghi chú</th></tr></thead>
+        <tbody>
+          <tr><td>Sách (1-2 cuốn)</td><td>300-500k</td><td>Mua dần theo phase</td></tr>
+          <tr><td><strong>Tutor (8 buổi @ $10)</strong></td><td><strong>~2 triệu</strong></td><td>Khoản đáng tiền nhất</td></tr>
+          <tr><td>ELSA Speak Premium</td><td>~150k</td><td>Mua bản năm</td></tr>
+          <tr><td>Grammarly Premium</td><td>~300k</td><td>Cần thiết cho writing</td></tr>
+          <tr><td>ChatGPT/Claude Pro</td><td>~500k</td><td>Voice mode rất giá trị</td></tr>
+          <tr><td>Coursera/MasterClass</td><td>~1 triệu</td><td>Tùy phase</td></tr>
+          <tr><td>IELTS/TOEFL exam (1 lần)</td><td>~5 triệu</td><td>Tháng 12 nếu thi</td></tr>
+          <tr style="background:var(--accent-soft);"><td><strong>TỔNG TRUNG BÌNH</strong></td><td><strong>3-4 triệu/tháng</strong></td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:16px;"><strong>Lưu ý:</strong> Khoản đáng đầu tư nhất là <strong>TUTOR</strong>. Cắt giảm chỗ khác trước khi cắt tutor.</p>
+  </div>
+</section>
+
+<!-- ===== START ===== -->
+<section id="start">
+  <h2>🚦 Phần 9 — 7 ngày đầu tiên</h2>
+
+  <div class="card card-accent">
+    <h3>Checklist 7 ngày đầu (làm ngay)</h3>
+    <ul class="checklist" data-storage="start-checklist">
+      <li><input type="checkbox" id="s1"><label for="s1"><strong>Hôm nay:</strong> Quay video baseline 3 phút, lưu vào folder "English Journey/Day 0"</label></li>
+      <li><input type="checkbox" id="s2"><label for="s2"><strong>Hôm nay:</strong> Mua English Grammar in Use (Intermediate)</label></li>
+      <li><input type="checkbox" id="s3"><label for="s3"><strong>Ngày 2:</strong> Cài Anki, ELSA Speak, Grammarly. Setup tracker.</label></li>
+      <li><input type="checkbox" id="s4"><label for="s4"><strong>Ngày 3:</strong> Test vocabulary tại testyourvocab.com</label></li>
+      <li><input type="checkbox" id="s5"><label for="s5"><strong>Ngày 4:</strong> Đăng ký 1 buổi tutor thử trên Preply/iTalki</label></li>
+      <li><input type="checkbox" id="s6"><label for="s6"><strong>Ngày 5:</strong> Viết LinkedIn đầu tiên: "My English transformation journey starts today"</label></li>
+      <li><input type="checkbox" id="s7"><label for="s7"><strong>Ngày 6-7:</strong> Bắt đầu daily routine 1 tiếng theo Phase 1</label></li>
+    </ul>
+  </div>
+
+  <div class="quote">
+    <div class="quote-text">"I am not learning English.<br>I am an engineer who works in English."</div>
+    <div class="quote-attribution">— Đọc câu này mỗi sáng. Khi identity thay đổi, hành vi tự duy trì.</div>
+  </div>
+
+  <div class="card" style="text-align:center;">
+    <h3>🎯 Sẵn sàng bắt đầu?</h3>
+    <p style="color:var(--text-muted);margin-bottom:20px;">Hôm nay là Day 0. Bấm vào checklist phía trên và quay video baseline ngay.</p>
+    <button class="button" onclick="document.getElementById('tracker').scrollIntoView({behavior:'smooth'})">📊 Đến Daily Tracker</button>
+  </div>
+</section>
+
+</div>
+
+<footer class="footer">
+  <p>English Mastery Roadmap · Personal Plan · Hosted as static HTML</p>
+  <p style="margin-top:8px;font-size:0.8rem;">Dữ liệu lưu trong trình duyệt qua localStorage. Export định kỳ để backup.</p>
+</footer>
+
+<script>
+  // ===== STATE MANAGEMENT =====
+  const STORAGE_KEY = 'english-roadmap-v1';
+
+  function loadState() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { logs: {}, checks: {}, theme: 'dark' };
+    } catch (e) {
+      return { logs: {}, checks: {}, theme: 'dark' };
+    }
+  }
+
+  function saveState(state) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  let state = loadState();
+
+  // ===== THEME =====
+  function applyTheme() {
+    document.documentElement.setAttribute('data-theme', state.theme);
+  }
+  function toggleTheme() {
+    state.theme = state.theme === 'dark' ? 'light' : 'dark';
+    saveState(state);
+    applyTheme();
+  }
+  applyTheme();
+
+  // ===== DATE HELPERS =====
+  function todayKey() {
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+  function formatDate(key) {
+    const d = new Date(key);
+    return d.toLocaleDateString('vi-VN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  document.getElementById('today-date').textContent = formatDate(todayKey());
+
+  // ===== CHECKBOX PERSISTENCE =====
+  document.querySelectorAll('.checklist').forEach(list => {
+    const storageKey = list.dataset.storage;
+    list.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      const key = storageKey + ':' + cb.id;
+      if (state.checks[key]) {
+        cb.checked = true;
+        cb.parentElement.classList.add('done');
+      }
+      cb.addEventListener('change', () => {
+        state.checks[key] = cb.checked;
+        cb.parentElement.classList.toggle('done', cb.checked);
+        saveState(state);
+        updateStats();
+        updatePhaseProgress();
+      });
+    });
+  });
+
+  // ===== DAILY LOG =====
+  function logDay() {
+    const minutes = parseInt(document.getElementById('today-minutes').value) || 0;
+    const words = document.getElementById('today-words').value.trim();
+    const fix = document.getElementById('today-fix').value.trim();
+    const win = document.getElementById('today-win').value.trim();
+    const notes = document.getElementById('today-notes').value.trim();
+
+    if (minutes === 0 && !words && !fix && !win && !notes) {
+      alert('Hãy điền ít nhất một mục trước khi log.');
+      return;
+    }
+
+    state.logs[todayKey()] = { minutes, words, fix, win, notes, ts: Date.now() };
+    saveState(state);
+
+    document.getElementById('today-minutes').value = '';
+    document.getElementById('today-words').value = '';
+    document.getElementById('today-fix').value = '';
+    document.getElementById('today-win').value = '';
+    document.getElementById('today-notes').value = '';
+
+    renderLogs();
+    updateStats();
+
+    // Pulse feedback
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✨ Logged!';
+    setTimeout(() => btn.textContent = orig, 1500);
+  }
+
+  // Pre-fill today's log if exists
+  function loadTodayLog() {
+    const today = state.logs[todayKey()];
+    if (today) {
+      document.getElementById('today-minutes').value = today.minutes || '';
+      document.getElementById('today-words').value = today.words || '';
+      document.getElementById('today-fix').value = today.fix || '';
+      document.getElementById('today-win').value = today.win || '';
+      document.getElementById('today-notes').value = today.notes || '';
+    }
+  }
+  loadTodayLog();
+
+  // ===== RENDER LOGS =====
+  function renderLogs() {
+    const entries = Object.entries(state.logs).sort((a,b) => b[0].localeCompare(a[0]));
+    const recentEl = document.getElementById('recent-logs');
+    const allEl = document.getElementById('all-logs');
+
+    const renderEntry = ([date, log]) => `
+      <div class="journal-entry">
+        <div class="journal-date">${formatDate(date)} · ${log.minutes || 0} phút</div>
+        <div class="journal-content">${[
+          log.words && '<strong>📝 New:</strong> ' + escapeHtml(log.words),
+          log.fix && '<strong>🔧 Fix:</strong> ' + escapeHtml(log.fix),
+          log.win && '<strong>🏆 Win:</strong> ' + escapeHtml(log.win),
+          log.notes && '<strong>💭 Notes:</strong>\n' + escapeHtml(log.notes)
+        ].filter(Boolean).join('\n')}</div>
+        <button class="journal-delete" onclick="deleteLog('${date}')">🗑️ Delete</button>
+      </div>
+    `;
+
+    if (entries.length === 0) {
+      recentEl.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:20px;">Chưa có log nào. Bắt đầu hôm nay!</p>';
+      allEl.innerHTML = recentEl.innerHTML;
+    } else {
+      recentEl.innerHTML = entries.slice(0, 7).map(renderEntry).join('');
+      allEl.innerHTML = entries.map(renderEntry).join('');
+    }
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function deleteLog(date) {
+    if (confirm('Xóa log ngày ' + formatDate(date) + '?')) {
+      delete state.logs[date];
+      saveState(state);
+      renderLogs();
+      updateStats();
+    }
+  }
+
+  // ===== STREAK =====
+  function calculateStreak() {
+    const dates = Object.keys(state.logs).sort();
+    if (dates.length === 0) return 0;
+
+    let streak = 0;
+    let cursor = new Date();
+
+    while (true) {
+      const key = cursor.getFullYear() + '-' + String(cursor.getMonth()+1).padStart(2,'0') + '-' + String(cursor.getDate()).padStart(2,'0');
+      if (state.logs[key]) {
+        streak++;
+        cursor.setDate(cursor.getDate() - 1);
+      } else {
+        // Allow skipping today if not logged yet, only count from yesterday
+        if (streak === 0 && key === todayKey()) {
+          cursor.setDate(cursor.getDate() - 1);
+          continue;
+        }
+        break;
+      }
+    }
+    return streak;
+  }
+
+  // ===== STATS =====
+  function updateStats() {
+    const streak = calculateStreak();
+    const total = Object.keys(state.logs).length;
+    const allChecks = Object.keys(state.checks).filter(k => state.checks[k]).length;
+    const totalChecks = document.querySelectorAll('.checklist input[type="checkbox"]').length;
+    const progress = totalChecks > 0 ? Math.round((allChecks / totalChecks) * 100) : 0;
+
+    document.getElementById('stat-streak').textContent = streak;
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-progress').textContent = progress + '%';
+    document.getElementById('stat-completed').textContent = allChecks;
+    document.getElementById('streak-display').textContent = streak + ' days';
+  }
+
+  function updatePhaseProgress() {
+    [1,2,3,4].forEach(n => {
+      const phase = document.getElementById('phase' + n);
+      if (!phase) return;
+      const checks = phase.querySelectorAll('input[type="checkbox"]');
+      const done = Array.from(checks).filter(c => c.checked).length;
+      const pct = checks.length > 0 ? Math.round((done / checks.length) * 100) : 0;
+      document.getElementById('progress-phase' + n).style.width = pct + '%';
+      document.getElementById('progress-text-phase' + n).textContent = pct + '%';
+    });
+  }
+
+  // ===== TABS =====
+  function switchTab(event, tabId) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+  }
+
+  // ===== EXPORT / IMPORT =====
+  function exportData() {
+    const data = JSON.stringify(state, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'english-roadmap-backup-' + todayKey() + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importData() {
+    document.getElementById('import-file').click();
+  }
+
+  function handleImport(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const imported = JSON.parse(e.target.result);
+        if (!imported.logs && !imported.checks) {
+          alert('File không hợp lệ.');
+          return;
+        }
+        if (confirm('Import sẽ ghi đè dữ liệu hiện tại. Tiếp tục?')) {
+          state = imported;
+          if (!state.theme) state.theme = 'dark';
+          saveState(state);
+          location.reload();
+        }
+      } catch (err) {
+        alert('Không đọc được file: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // ===== INIT =====
+  renderLogs();
+  updateStats();
+  updatePhaseProgress();
+</script>
+
+</body>
+</html>
