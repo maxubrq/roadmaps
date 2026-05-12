@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinTech Product Builder · Roadmap · Tran Phat Hung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=IBM+Plex+Serif:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #080A0E;
+    --surface: #111318;
+    --surface2: #191D24;
+    --border: rgba(255,255,255,0.065);
+    --border-hover: rgba(255,255,255,0.13);
+    --text: #EEE9E0;
+    --text-sec: #7A7870;
+    --text-mut: #3D3C38;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+    --serif: 'IBM Plex Serif', Georgia, serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; font-size: 14px; line-height: 1.6; }
+  button { cursor: pointer; font-family: var(--sans); border: none; background: none; }
+  ::-webkit-scrollbar { width: 3px; height: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+  /* HEADER */
+  #header { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+  #header-inner { max-width: 920px; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 48px; }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .header-label { font-family: var(--mono); font-size: 9px; color: var(--text-mut); letter-spacing: 0.18em; text-transform: uppercase; }
+  .header-sep { width: 1px; height: 14px; background: var(--text-mut); }
+  .header-right { display: flex; align-items: center; gap: 8px; }
+  #total-label { font-family: var(--mono); font-size: 10px; color: var(--text-sec); }
+  #total-bar { width: 80px; height: 2px; background: rgba(255,255,255,0.06); border-radius: 1px; overflow: hidden; }
+  #total-fill { height: 100%; border-radius: 1px; transition: width 0.4s; }
+
+  /* TIMELINE NAV */
+  #timeline { border-bottom: 1px solid var(--border); overflow-x: auto; background: var(--bg); position: sticky; top: 48px; z-index: 99; }
+  #timeline-inner { max-width: 920px; margin: 0 auto; padding: 0 2rem; display: flex; }
+  .stage-tab { flex: 1; background: transparent; border: none; border-bottom: 2px solid transparent; padding: 14px 0 12px; text-align: center; cursor: pointer; transition: all 0.2s; margin-bottom: -1px; min-width: 140px; }
+  .stage-tab:hover { background: rgba(255,255,255,0.02); }
+  .stage-tab.active { background: transparent; }
+  .stage-tab-time { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px; transition: color 0.2s; }
+  .stage-tab-name { font-size: 13px; transition: color 0.2s; }
+  .stage-tab-dots { display: flex; justify-content: center; gap: 4px; margin-top: 7px; flex-wrap: wrap; max-width: 80px; margin-left: auto; margin-right: auto; }
+  .dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.08); transition: background 0.2s; flex-shrink: 0; }
+  .dot.done { }
+
+  /* MAIN */
+  #main { max-width: 920px; margin: 0 auto; padding: 2rem; }
+
+  /* STAGE HEADER */
+  #stage-header { display: flex; gap: 24px; align-items: flex-start; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  #stage-header-left { flex: 1; min-width: 280px; }
+  .stage-icon-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .stage-icon { font-family: var(--mono); font-size: 28px; line-height: 1; }
+  .stage-icon-meta { }
+  .stage-range { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 2px; }
+  .stage-name { font-size: 22px; font-weight: 500; color: var(--text); }
+  .stage-sub { font-size: 13px; color: var(--text-sec); line-height: 1.7; margin-top: 8px; max-width: 560px; }
+  #stage-prog-box { border-radius: 10px; padding: 1.1rem 1.5rem; text-align: center; min-width: 130px; flex-shrink: 0; }
+  #stage-pct { font-family: var(--mono); font-size: 32px; font-weight: 500; line-height: 1; }
+  #stage-count { font-family: var(--mono); font-size: 10px; color: var(--text-sec); margin-top: 4px; }
+  #stage-prog-bar { height: 2px; background: rgba(255,255,255,0.06); border-radius: 1px; margin-top: 8px; overflow: hidden; }
+  #stage-prog-fill { height: 100%; border-radius: 1px; transition: width 0.4s; }
+
+  /* INNER TABS */
+  #inner-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 2rem; overflow-x: auto; }
+  .inner-tab { background: none; border: none; border-bottom: 1.5px solid transparent; padding: 10px 18px; font-size: 13px; font-weight: 400; color: var(--text-sec); cursor: pointer; transition: all 0.15s; margin-bottom: -1px; white-space: nowrap; }
+  .inner-tab:hover { color: var(--text); }
+  .inner-tab.active { font-weight: 500; }
+
+  /* MILESTONES */
+  .milestone-row { display: flex; gap: 12px; padding: 1rem 1.25rem; margin-bottom: 4px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; align-items: flex-start; }
+  .milestone-row:hover { background: rgba(255,255,255,0.025); }
+  .milestone-row.done { }
+  .check-box { width: 20px; height: 20px; border: 1.5px solid rgba(255,255,255,0.18); border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; transition: all 0.15s; }
+  .check-box svg { display: none; }
+  .milestone-row.done .check-box svg { display: block; }
+  .milestone-content { flex: 1; }
+  .milestone-week { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; background: var(--surface2); padding: 2px 6px; border-radius: 4px; margin-right: 8px; }
+  .milestone-text { font-size: 14px; color: var(--text-sec); line-height: 1.6; }
+  .milestone-row.done .milestone-text { color: var(--text); }
+
+  /* CHECKPOINT */
+  .checkpoint-block { margin-top: 2rem; padding: 1.5rem; border-radius: 12px; }
+  .checkpoint-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px; }
+  .checkpoint-body { font-size: 13px; color: var(--text-sec); line-height: 1.85; font-family: var(--serif); font-style: italic; }
+
+  /* PARETO */
+  .pareto-card { border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; transition: all 0.2s; }
+  .pareto-card:hover { border-color: rgba(255,255,255,0.11); }
+  .pareto-header { display: flex; align-items: center; gap: 16px; padding: 1.25rem 1.5rem; cursor: pointer; }
+  .pareto-num { font-family: var(--mono); font-size: 28px; line-height: 1; opacity: 0.6; flex-shrink: 0; }
+  .pareto-meta { flex: 1; }
+  .pareto-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .pareto-unlock { font-size: 12px; color: var(--text-sec); line-height: 1.5; }
+  .pareto-time { font-family: var(--mono); font-size: 10px; color: var(--text-mut); flex-shrink: 0; }
+  .pareto-chevron { flex-shrink: 0; transition: transform 0.2s; }
+  .pareto-card.expanded .pareto-chevron { transform: rotate(180deg); }
+  .pareto-body { display: none; padding: 0 1.5rem 1.5rem; border-top: 1px solid; }
+  .pareto-card.expanded .pareto-body { display: block; padding-top: 1.25rem; }
+  .pareto-text { font-size: 13px; color: var(--text-sec); line-height: 1.85; margin-bottom: 1.25rem; }
+  .pareto-res-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-mut); margin-bottom: 8px; }
+  .pareto-res-item { display: flex; gap: 8px; margin-bottom: 6px; align-items: flex-start; }
+  .pareto-res-arrow { font-size: 10px; margin-top: 3px; flex-shrink: 0; }
+  .pareto-res-text { font-size: 13px; color: var(--text-sec); }
+
+  /* SKILLS */
+  #skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .skill-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; }
+  .skill-title { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+  .skill-item { display: flex; gap: 8px; margin-bottom: 8px; align-items: flex-start; }
+  .skill-arrow { font-size: 9px; margin-top: 4px; flex-shrink: 0; }
+  .skill-text { font-size: 13px; color: var(--text-sec); line-height: 1.65; }
+
+  /* RESOURCES */
+  .res-section-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-mut); margin-bottom: 1rem; }
+  .res-section { margin-bottom: 2rem; }
+  .res-book { display: flex; gap: 14px; padding: 1rem 1.25rem; margin-bottom: 6px; border: 1px solid var(--border); border-radius: 10px; transition: all 0.15s; }
+  .res-book:hover { background: rgba(255,255,255,0.03); border-color: var(--border-hover); }
+  .res-bar { width: 3px; border-radius: 2px; flex-shrink: 0; align-self: stretch; }
+  .res-book-info { flex: 1; }
+  .res-book-title-row { display: flex; gap: 8px; align-items: baseline; margin-bottom: 5px; flex-wrap: wrap; }
+  .res-book-title { font-size: 14px; font-weight: 500; color: var(--text); }
+  .res-book-author { font-size: 11px; color: var(--text-mut); }
+  .res-priority { font-family: var(--mono); font-size: 9px; padding: 1px 6px; border-radius: 4px; background: rgba(255,255,255,0.05); letter-spacing: 0.08em; }
+  .res-book-why { font-size: 12px; color: var(--text-sec); line-height: 1.65; }
+  .res-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 2rem; }
+  .res-card { padding: 1rem 1.25rem; margin-bottom: 6px; border: 1px solid var(--border); border-radius: 10px; transition: all 0.15s; }
+  .res-card:hover { background: rgba(255,255,255,0.03); border-color: var(--border-hover); }
+  .res-card-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 5px; }
+  .res-card-why { font-size: 12px; color: var(--text-sec); line-height: 1.65; }
+  .res-cert { display: flex; gap: 14px; padding: 1rem 1.25rem; margin-bottom: 6px; border: 1px solid var(--border); border-radius: 10px; align-items: flex-start; transition: all 0.15s; }
+  .res-cert:hover { background: rgba(255,255,255,0.03); border-color: var(--border-hover); }
+  .res-cert-badge { font-family: var(--mono); font-size: 9px; padding: 4px 8px; border-radius: 5px; flex-shrink: 0; letter-spacing: 0.08em; margin-top: 2px; white-space: nowrap; }
+  .res-cert-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 5px; }
+  .res-cert-why { font-size: 12px; color: var(--text-sec); line-height: 1.65; }
+
+  /* WISDOM */
+  .wisdom-main { padding: 2.5rem; border-radius: 16px; margin-bottom: 1.5rem; }
+  .wisdom-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .wisdom-text { font-size: 17px; font-family: var(--serif); font-weight: 300; font-style: italic; color: var(--text); line-height: 1.95; }
+  .wisdom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .wisdom-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; }
+  .wisdom-card-title { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+  .wisdom-card-body { font-size: 13px; color: var(--text-sec); line-height: 1.75; }
+
+  /* FOOTER */
+  #footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .footer-text { font-family: var(--mono); font-size: 9px; color: var(--text-mut); letter-spacing: 0.08em; }
+
+  /* PANELS */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* PARETO INTRO */
+  .pareto-intro { margin-bottom: 1.5rem; }
+  .pareto-intro-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-mut); margin-bottom: 8px; }
+  .pareto-intro-text { font-size: 13px; color: var(--text-sec); line-height: 1.7; }
+
+  @media (max-width: 640px) {
+    #skills-grid { grid-template-columns: 1fr; }
+    .res-two-col { grid-template-columns: 1fr; gap: 0; }
+    .wisdom-grid { grid-template-columns: 1fr; }
+    #main { padding: 1.25rem; }
+    #header-inner { padding: 0 1.25rem; }
+    #timeline-inner { padding: 0 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div id="header-inner">
+    <div class="header-left">
+      <span class="header-label">FinTech Product Builder</span>
+      <span class="header-sep"></span>
+      <span class="header-label">Roadmap · Tran Phat Hung</span>
+    </div>
+    <div class="header-right">
+      <span id="total-label">0/0</span>
+      <div id="total-bar"><div id="total-fill"></div></div>
+    </div>
+  </div>
+</div>
+
+<div id="timeline">
+  <div id="timeline-inner"></div>
+</div>
+
+<div id="main">
+  <div id="stage-header">
+    <div id="stage-header-left">
+      <div class="stage-icon-row">
+        <span class="stage-icon" id="s-icon"></span>
+        <div class="stage-icon-meta">
+          <div class="stage-range" id="s-range"></div>
+          <div class="stage-name" id="s-name"></div>
+        </div>
+      </div>
+      <div class="stage-sub" id="s-sub"></div>
+    </div>
+    <div id="stage-prog-box">
+      <div class="stage-pct" id="stage-pct"></div>
+      <div class="stage-count" id="stage-count"></div>
+      <div id="stage-prog-bar"><div id="stage-prog-fill"></div></div>
+    </div>
+  </div>
+
+  <div id="inner-tabs"></div>
+
+  <div id="panel-milestones" class="panel active"></div>
+  <div id="panel-pareto" class="panel"></div>
+  <div id="panel-skills" class="panel"></div>
+  <div id="panel-resources" class="panel"></div>
+  <div id="panel-wisdom" class="panel"></div>
+
+  <div id="footer">
+    <span class="footer-text" id="footer-left"></span>
+    <span class="footer-text">Lá số: Stellium Bảo Bình · MC Bọ Cạp · North Node Xử Nữ H8</span>
+  </div>
+</div>
+
+<script>
+const LS_KEY = 'fintech_roadmap_v2';
+
+const STAGES = [
+  {
+    id:'s0', phase:'Pareto Sprint', range:'Tháng 1–6', levelTarget:'Nền tảng không thể sụp đổ',
+    accent:'#C9A84C', accentDim:'rgba(201,168,76,0.10)', accentBorder:'rgba(201,168,76,0.28)',
+    icon:'◐',
+    threshold:'Bạn hoàn thành Pareto Sprint khi: (1) Có thể giải thích toàn bộ payment flow cho người không biết gì mà không nhìn notes. (2) Viết được SQL query phân tích cohort retention từ raw data. (3) Đọc một fintech company\'s business model và trong 10 phút biết họ kiếm tiền từ đâu, margins ở đâu, risks gì. (4) Xác định được KYC/AML implications của một product feature mới.',
+    wisdom:'Pareto Sprint không phải về học nhiều — mà về chọn đúng. 5 khái niệm này là load-bearing walls của mọi fintech career. Nếu bạn bỏ qua bất kỳ cái nào, tất cả những gì xây trên đó sẽ không vững. Hầu hết người bỏ qua regulations vì nhàm, bỏ qua unit economics vì khó — đó chính xác là lý do 80% fintech PM không bao giờ vượt qua mức trung bình.',
+    wisdomCards:[
+      {title:'Tại sao 5 khái niệm này, không phải 50?', body:'Vì chúng là structure. Mọi kiến thức fintech khác là content build trên structure này. Học content trước khi có structure = nhớ facts không kết nối. Nguy hiểm vì trông có vẻ biết nhưng không thể reason từ first principles.'},
+      {title:'Pareto Sprint là discipline, không phải shortcut', body:'Ai cũng muốn skip đến phần advanced. Nhưng trong 6 tháng đầu, depth > breadth mà không có ngoại lệ. 5 khái niệm được master sâu tốt hơn 50 khái niệm biết lướt qua.'},
+      {title:'Lá số của bạn trong phase này', body:'Stellium Bảo Bình — bạn học tốt nhất qua systems và patterns, không phải memorization. Đừng cố nhớ facts. Hãy hiểu structure của hệ thống — tại sao nó được thiết kế như vậy.'},
+      {title:'Kẻ thù của giai đoạn này', body:'Shiny object syndrome: nhảy sang domain mới trước khi master domain hiện tại. 6 tháng đầu là 6 tháng không có ngoại lệ — 5 core concepts, không thêm không bớt.'},
+    ],
+    milestones:[
+      {week:'W2', text:'Giải thích payment processing end-to-end (swipe → settlement) không nhìn notes, cho người không biết gì'},
+      {week:'W4', text:'Viết PRD đầu tiên cho 1 fintech feature nhỏ — đủ chi tiết để engineer estimate'},
+      {week:'W6', text:'Đọc xong Continuous Discovery Habits + áp dụng Opportunity Solution Tree vào 1 problem thực tế'},
+      {week:'W8', text:'Tự viết SQL query phân tích mock fintech data (funnel, retention, revenue breakdown)'},
+      {week:'W10', text:'Đọc annual report / prospectus của 1 fintech company và extract unit economics của họ'},
+      {week:'W12', text:'Trả lời được: tại sao KYC/AML bắt buộc và hậu quả của violation là gì — với ví dụ thực'},
+      {week:'M4', text:'Có 3 cuộc trò chuyện substantive với người đang làm fintech — đặt được câu hỏi thông minh'},
+      {week:'M5', text:'Viết 1 breakdown phân tích 1 fintech company\'s business model và post lên LinkedIn/blog'},
+      {week:'M6', text:'Self-assessment: pass được cả 4 checkpoint trong threshold block bên dưới'},
+    ],
+    skills:[
+      {title:'Financial Systems (Priority 1)', items:['Payment rails: card network, ACH, SWIFT, real-time','Settlement mechanics và T+N timing','Fee structure: interchange, acquirer discount, processor margin','Chargebacks, refunds, disputes — lifecycle']},
+      {title:'Product Thinking (Priority 1)', items:['Jobs-to-be-done framework — thực hành không lý thuyết','Opportunity Solution Tree — build và maintain một tree thực','Continuous discovery habit — 1 user interview/tuần','Problem statement viết được rõ ràng, không solution-driven']},
+      {title:'Financial Literacy (Priority 2)', items:['Đọc P&L và balance sheet của fintech company','Unit economics: CAC, LTV, payback period, take rate, NIM','Interchange economics và tại sao margins thấp nhưng volume cao','Đọc được fundraising announcement và hiểu implications']},
+      {title:'Technical Floor (Priority 2)', items:['REST APIs: request/response, auth, webhooks','SQL: query, join, aggregate — tự viết được','System design vocabulary cơ bản','Đọc API documentation fluently']},
+      {title:'Regulatory Foundation (Priority 3)', items:['KYC/AML: verification flow, risk-based approach','PCI DSS: tại sao tokenization, card data handling','Money transmission: licensing basics, what triggers it','Open banking: PSD2, UK Open Banking, US Section 1033']},
+    ],
+    books:[
+      {title:'Continuous Discovery Habits', author:'Teresa Torres', priority:'P0', pcolor:'#E07A4F', why:'Đọc ngay tuần đầu tiên — framework tư duy quan trọng nhất'},
+      {title:'The Anatomy of the Swipe', author:'Ahmed Siddiqui', priority:'P0', pcolor:'#E07A4F', why:'Payments từ A-Z, viết cho PMs và business people'},
+      {title:'Inspired', author:'Marty Cagan', priority:'P1', pcolor:'#C9A84C', why:'Product bible — đọc song song trong tháng 1-2'},
+      {title:'The Power of Money', author:'Paul Sheard', priority:'P1', pcolor:'#C9A84C', why:'Hiểu hệ thống tiền tệ hiện đại — nền tảng mọi fintech'},
+    ],
+    podcasts:[
+      {name:'Fintech Insider (11:FS)', why:'Industry news + deep analysis — nghe khi di chuyển'},
+      {name:'Lenny\'s Podcast', why:'Product craft, discovery, metrics — các tập với Shreyas Doshi và Teresa Torres'},
+      {name:'Acquired', why:'Company deep dives: Stripe, Visa, Ant Financial — hiểu tại sao mỗi cái thắng'},
+    ],
+    reads:[
+      {name:'patio11.com (Patrick McKenzie)', why:'Fintech wisdom từ người sống trong hệ thống — đọc mọi thứ anh ta viết về payments'},
+      {name:'Matt Levine — Money Stuff (Bloomberg)', why:'Cách finance thinking hoạt động — đọc hàng ngày, miễn phí'},
+      {name:'Stripe documentation', why:'Đọc toàn bộ Payments, Connect, và Billing — đây là MBA về payments API'},
+    ],
+    certs:[
+      {name:'Mode Analytics SQL Tutorial', priority:'Miễn phí · 4h', why:'Fastest path đến SQL fluency — làm hết exercises'},
+      {name:'Google PM Certificate', priority:'3 tháng', why:'Buộc học fundamentals có structure — không skip'},
+      {name:'CFI: Intro to Banking & Finance', priority:'2 tháng', why:'Financial literacy có hệ thống'},
+    ],
+  },
+  {
+    id:'s1', phase:'Emergence', range:'Tháng 6–12', levelTarget:'Đạt Level 3–4',
+    accent:'#4DBFA3', accentDim:'rgba(77,191,163,0.10)', accentBorder:'rgba(77,191,163,0.28)',
+    icon:'◑',
+    threshold:'Bạn đạt Level 3-4 khi: Bạn đã ship ít nhất 1 feature/product với real users và có data về kết quả. Bạn có thể walk vào một cuộc conversation fintech và contribute genuine insight, không phải chỉ nod. Senior PM review PRD của bạn và sửa < 20% structure (tức là structure đúng, chỉ sửa content). Bạn biết rõ mình chưa biết gì — đây là dấu hiệu quan trọng nhất.',
+    wisdom:'Phase này là nơi hầu hết người dừng lại — không phải vì khó, mà vì comfortable. Họ có đủ knowledge để sound smart nhưng chưa có skin in the game thực sự. Ship thứ gì đó có real consequence là irreversible: bạn không thể giả vờ bạn chưa biết cảm giác khi feature của mình bị user ignore, hoặc ngược lại, khi nó thực sự giải quyết vấn đề của ai đó.',
+    wisdomCards:[
+      {title:'Ship trước, perfect sau', body:'Không có gì dạy bạn về product như việc có real users dùng thứ bạn build. Mọi assumption sẽ sai theo cách bạn không tưởng tượng được. Đó chính xác là điểm mấu chốt.'},
+      {title:'Junior PM trap', body:'Biết đủ để trông smart trong meetings nhưng không đủ để drive outcomes thực sự. Exit trap này bằng cách luôn gắn mình với metric cụ thể và accountability thực tế.'},
+      {title:'Lá số trong phase này', body:'North Node Xử Nữ ở Cung 8 — bạn grow khi đi vào chi tiết phức tạp và messy, không né tránh. User interviews là nơi Xử Nữ energy được express tốt nhất.'},
+      {title:'The most underrated skill', body:'Writing. PMs viết tốt influence organization gấp 10x PMs không viết. PRD tốt = sprint không cần sync calls. Strategy doc tốt = exec buy-in không cần deck.'},
+    ],
+    milestones:[
+      {week:'M7', text:'Apply vào ít nhất 3 fintech PM role (dù junior/associate) — để calibrate gap thực tế'},
+      {week:'M7', text:'Ship side project hoặc feature với ít nhất 10 real users — có metrics theo dõi được'},
+      {week:'M8', text:'Hoàn thành AWS Cloud Practitioner — technical credibility có chứng nhận'},
+      {week:'M9', text:'Viết case study đầu tiên: 1 fintech product decision — tại sao build, kết quả, học được gì'},
+      {week:'M10', text:'Xây được 1 fintech financial model đơn giản (unit economics projection) trong Excel/Sheets'},
+      {week:'M10', text:'Join 1 fintech community và participate actively — không lurk'},
+      {week:'M11', text:'Có 1 mentor relationship với senior fintech PM hoặc founder — recurring check-in'},
+      {week:'M12', text:'Nhận offer hoặc internship/contractor role fintech, HOẶC có 50+ người follow vì fintech content'},
+    ],
+    skills:[
+      {title:'Shipping Discipline', items:['Viết specs mà engineers execute không cần clarification','Scoping: MVP là gì và không phải gì — ruthless về scope','Launch checklist: metrics, rollback plan, comms','Post-launch review: data interpretation, next iteration']},
+      {title:'Metrics Fluency', items:['Define success metrics trước khi build — không sau','Funnel analysis: where users drop off và tại sao','Cohort analysis: retention curves đọc được','A/B test setup và statistical significance basics']},
+      {title:'Stakeholder Navigation', items:['Viết được one-pager thuyết phục exec approve priority','Engineering trust: không promise điều tech không thể deliver','Design collaboration: feedback constructive, không directive','Legal/compliance: framing request đúng cách']},
+      {title:'Domain Depth — chọn 1', items:['Payments: acquiring, issuing, embedded finance','Lending: credit scoring, underwriting, BNPL','Wealth: robo-advisory, portfolio construction basics','Infrastructure: core banking, ledger, compliance tech']},
+    ],
+    books:[
+      {title:'Escaping the Build Trap', author:'Melissa Perri', priority:'P0', pcolor:'#E07A4F', why:'Tại sao teams build sai thứ — và cấu trúc để thoát khỏi'},
+      {title:'Poor Charlie\'s Almanack', author:'Charles Munger', priority:'P0', pcolor:'#E07A4F', why:'Quyển quan trọng nhất trong toàn bộ roadmap — mental models thực sự'},
+      {title:'Thinking in Systems', author:'Donella Meadows', priority:'P1', pcolor:'#C9A84C', why:'Thay đổi cách bạn thấy mọi fintech problem — irreversible'},
+      {title:'High Growth Handbook', author:'Elad Gil', priority:'P1', pcolor:'#C9A84C', why:'Scaling từ 0-1 đến 1-N — chuẩn bị cho phase sau'},
+    ],
+    podcasts:[
+      {name:'Invest Like the Best', why:'Cách capital allocation thinking hoạt động — essential cho fintech PM'},
+      {name:'a16z Fintech', why:'VC perspective: tại sao các bet được đặt, thị trường được frame như thế nào'},
+      {name:'The Knowledge Project (Shane Parrish)', why:'Mental models — tiếp tục từ Pareto Sprint'},
+    ],
+    reads:[
+      {name:'Fintech Brain Food — Simon Taylor', why:'Newsletter số 1 — weekly deep dives, subscribe và đọc mỗi tuần'},
+      {name:'Nik Milanović — This Week in Fintech', why:'Industry pulse, deals, trends'},
+      {name:'Reforge Blog', why:'Highest-density product thinking — đọc mọi thứ về retention và monetization'},
+    ],
+    certs:[
+      {name:'AWS Cloud Practitioner', priority:'2 tháng', why:'Engineers nhìn bạn khác — không nên skip'},
+      {name:'Reforge: Product Strategy', priority:'Selective', why:'Elite PM community — apply ngay khi eligible'},
+      {name:'CFA Level 1 (optional, high-signal)', priority:'6 tháng · 300h', why:'Signals seriousness trong finance — phân biệt bạn với 90% PM'},
+    ],
+  },
+  {
+    id:'s2', phase:'Operator', range:'Tháng 12–24', levelTarget:'Đạt Level 6+',
+    accent:'#E07A4F', accentDim:'rgba(224,122,79,0.10)', accentBorder:'rgba(224,122,79,0.28)',
+    icon:'◕',
+    threshold:'Bạn đạt Level 6 khi: Bạn có ít nhất 1 outcome với business metric rõ ràng (revenue, retention, activation) bạn có thể claim ownership. Người khác trong team hỏi ý kiến bạn trước khi bắt đầu một feature quan trọng. Bạn có thể bước vào một fintech company mới trong vertical của mình và productive trong tuần đầu. Bạn đang selectively nhận cơ hội — không phải apply mọi thứ.',
+    wisdom:'Tại đây có một ngã ba: một bên là trở thành specialist rất giỏi trong một hệ thống (safe, comfortable, ceiling thấp). Bên kia là bắt đầu think như một owner — hỏi những câu hỏi mà không ai giao bạn quyền hỏi. Level 6 không phải về skills — mà về perspective shift. Bạn phải chủ động đặt câu hỏi về constraints, không chỉ execute trong constraints.',
+    wisdomCards:[
+      {title:'The operator-vs-owner divide', body:'Operator execute within constraints. Owner question constraints. Không phải vì owner có position power — mà vì họ feel responsible cho outcome, không chỉ process. Shift này là mental, không phải positional.'},
+      {title:'Fintech\'s hidden advantage', body:'Compliance knowledge = moat. PM biết regulatory landscape có thể turn constraints thành features. "We have to do KYC" → "Our identity layer is a platform." Đây là mindset hiếm.'},
+      {title:'Network quality > quantity', body:'5 relationships với senior fintech leaders tốt hơn 500 LinkedIn connections. Relationship thực là bidirectional — bạn mang gì đến cho họ, không chỉ nhận.'},
+      {title:'Lá số trong phase này', body:'MC Bọ Cạp — sự nghiệp của bạn được build trong depth và transformation. Phase này là nơi bạn đi sâu đến mức người khác không muốn đi.'},
+    ],
+    milestones:[
+      {week:'M13', text:'Nắm ownership một product area — roadmap, metrics, stakeholders — chủ động nhận, không chờ được giao'},
+      {week:'M15', text:'Conduct ít nhất 30 user interviews tích lũy — có synthesis document và insight tracker'},
+      {week:'M16', text:'Ship 1 product/feature từ 0-1 — discovery đến launch — với business case tự viết'},
+      {week:'M18', text:'Move 1 core business metric 15%+ và present kết quả với data — có thể defend methodology'},
+      {week:'M19', text:'Publish 1 in-depth analysis (2000+ words) về fintech vertical — được cite hoặc reshared'},
+      {week:'M20', text:'Build relationship với 5 senior fintech professionals (Director+) — real relationship, không chỉ LinkedIn'},
+      {week:'M22', text:'Được recruit/approached bởi ít nhất 1 company mình muốn làm — không phải mình approach họ'},
+      {week:'M24', text:'Tự viết được honest assessment: điểm mạnh và gap rõ ràng để lên 7–9. Không vague.'},
+    ],
+    skills:[
+      {title:'Systems Thinking', items:['Platform thinking: thiết kế cho 3rd parties build on','Network effects identification và measurement','Unit economics modeling tự build từ đầu','Build vs buy vs partner — framework quyết định với ví dụ']},
+      {title:'Data Mastery', items:['Design experiment với proper control và significance','Cohort analysis tự build trong SQL/Python','Dashboard design: metrics hierarchy, không data dump','Storytelling từ data: narrative trước chart']},
+      {title:'Influence Architecture', items:['Write strategy docs executives trust và act on','Compliance/legal: framing sao cho họ help bạn, không block','Engineering roadmap influence không có authority','Cross-functional conflict resolution — fintech style']},
+      {title:'Vertical Mastery', items:['Know your vertical sâu hơn hầu hết người trong ngành','Regulatory roadmap của vertical trong 3-5 năm tới','Competitive moat analysis: tại sao winners thắng','International expansion dynamics trong vertical']},
+    ],
+    books:[
+      {title:'The Network Effects Manual', author:'NFX', priority:'P0', pcolor:'#E07A4F', why:'Fintech là về network effects — biết khi nào và tại sao'},
+      {title:'Working Backwards', author:'Colin Bryar & Bill Carr', priority:'P0', pcolor:'#E07A4F', why:'Amazon\'s operating model — PR/FAQ là công cụ PM tốt nhất'},
+      {title:'Poor Charlie\'s Almanack', author:'Charles Munger', priority:'Reread', pcolor:'#9B7FE8', why:'Đọc lại — bạn sẽ thấy khác hoàn toàn sau 12 tháng kinh nghiệm'},
+      {title:'King of Capital', author:'David Carey', priority:'P1', pcolor:'#C9A84C', why:'Cách private equity nghĩ về financial services — perspective shift'},
+    ],
+    podcasts:[
+      {name:'20VC — Harry Stebbings', why:'VC perspective ở tier-1 — cách Sequoia, a16z evaluate fintech'},
+      {name:'Bank On It — John Barber', why:'Banking industry insider — quyết định từ trong ngành'},
+      {name:'Conversations with Tyler', why:'Intellectual breadth — wisdom không có trong fintech bubble'},
+    ],
+    reads:[
+      {name:'Stratechery — Ben Thompson', why:'Best business strategy writing — áp dụng framework vào fintech platforms'},
+      {name:'The Generalist — Mario Gabriele', why:'Long-form fintech và tech company deep dives'},
+      {name:'Bloomberg Odd Lots', why:'Macro financial thinking — context cho product decisions'},
+    ],
+    certs:[
+      {name:'AWS Solutions Architect Associate', priority:'3 tháng', why:'Engineers và CTOs nhìn bạn như technical peer — game changer'},
+      {name:'CFA Level 1 (nếu chưa làm)', priority:'6 tháng · 300h', why:'Credentials matter ở Director+ level trong fintech'},
+      {name:'Wharton/LBS Fintech Executive Program', priority:'Optional', why:'Network và credential — nếu đang aim Director level role'},
+    ],
+  },
+  {
+    id:'s3', phase:'Architect', range:'Tháng 24+', levelTarget:'Hành trình đến Level 9',
+    accent:'#9B7FE8', accentDim:'rgba(155,127,232,0.10)', accentBorder:'rgba(155,127,232,0.28)',
+    icon:'●',
+    threshold:'Bạn tiếp cận Level 9 khi: Cơ hội tìm đến bạn nhiều hơn bạn tìm cơ hội. VC hỏi bạn về market map trước khi bet. Exceptional people muốn làm việc với bạn trước khi biết cụ thể họ sẽ làm gì. Work của bạn thay đổi cách người khác trong ngành frame một problem. Bạn đang selective về leverage — từ chối nhiều hơn nhận.',
+    wisdom:'Level 9 không phải đích đến — mà là trajectory. Người ở đây không nghĩ mình giỏi hơn — họ nghĩ khác hơn. Họ thấy patterns người khác bỏ lỡ không phải vì intelligence mà vì depth và breadth kết hợp. Và quan trọng nhất: họ đã học cách sai và học từ đó nhanh hơn bất kỳ ai khác trong phòng.',
+    wisdomCards:[
+      {title:'Judgment là rarest resource', body:'Intelligence, work ethic, và skills có thể hire được. Judgment về đâu là đúng problem, đúng timing, đúng approach — chỉ đến từ consequential decisions và honest post-mortems.'},
+      {title:'Writing as leverage', body:'1 bài viết tốt làm việc cho bạn 24/7 trong nhiều năm. Architect level không chỉ build products — họ build mental models mà người khác borrow và credit bạn về.'},
+      {title:'Selective attention', body:'Level 9 không phải về làm nhiều hơn — mà về từ chối nhiều hơn. Mỗi yes là nhiều no đến mọi thứ khác. Clarity về priority là kỹ năng, không phải luxury.'},
+      {title:'Lá số của bạn ở đây', body:'Sun ở Cung 12 — sự nổi tiếng của bạn đến muộn nhưng sâu hơn hầu hết. Build invisibly và thoroughly trước. Emerge khi ready, không phải khi eager.'},
+    ],
+    milestones:[
+      {week:'Y2-3', text:'Lead 0→1 product đạt PMF signal rõ ràng — retention curves kể câu chuyện không cần diễn giải'},
+      {week:'Y2-3', text:'Personal brand: 10k+ followers trong domain HOẶC cited trong 3+ industry publications'},
+      {week:'Y3', text:'Advise hoặc angel invest vào 2+ early-stage fintech — skin in the game thực sự'},
+      {week:'Y3', text:'Được recruit ở Director+ role bởi tier-1 company — Stripe, Revolut, Adyen, hoặc top VC-backed'},
+      {week:'Y3-4', text:'Speak tại major fintech conference: Money20/20, Fintech Nexus, Singapore Fintech Festival'},
+      {week:'Y4+', text:'Work của bạn — writing, product, framework — được người khác trong industry reference và build upon'},
+    ],
+    skills:[
+      {title:'Ecosystem Architecture', items:['Design platforms 3rd parties muốn build on','API business models và developer experience as product','Biến regulatory constraints thành competitive moat','Khi nào là platform vs product vs pipe — và tại sao']},
+      {title:'Capital & Business Strategy', items:['Fundraising narrative: tại sao investors bet vào bạn','M&A framework: buy vs build vs partner với conviction','International expansion: regulatory arbitrage, localization depth','Invent new monetization mechanisms — không chỉ optimize']},
+      {title:'Org Intelligence', items:['Build product teams từ zero — hire for judgment','Create product culture không cần position power','Manage up ở exec level — khác hoàn toàn với operator level','Succession planning: make yourself replaceable']},
+      {title:'Thought Leadership', items:['Viết thay đổi cách người đọc frame một problem','Speaking được mời quay lại vì audience tốt hơn sau đó','Advising tạo network leverage — không chỉ tư vấn','Canonical reference: người khác cite bạn khi giải thích X']},
+    ],
+    books:[
+      {title:'Platform Revolution', author:'Geoffrey Parker et al', priority:'P0', pcolor:'#E07A4F', why:'Định nghĩa lại product — mọi fintech future là platform'},
+      {title:'The Innovator\'s Dilemma', author:'Clayton Christensen', priority:'P0', pcolor:'#E07A4F', why:'Disruption thực sự hoạt động như thế nào — và khi nào incumbents luôn thua'},
+      {title:'The Art of Action', author:'Stephen Bungay', priority:'P1', pcolor:'#C9A84C', why:'Strategy và execution — từ military doctrine áp dụng vào product org'},
+      {title:'Complexity', author:'Melanie Mitchell', priority:'P1', pcolor:'#C9A84C', why:'Fintech ecosystem là complex system — hiểu emergent behavior'},
+      {title:'Zero to One', author:'Peter Thiel', priority:'Sparring', pcolor:'#9B7FE8', why:'Không phải bible — đọc để disagree có học. Mỗi claim cần được test'},
+    ],
+    podcasts:[
+      {name:'Invest Like the Best', why:'Capital allocation thinking ở level cao nhất'},
+      {name:'Dwarkesh Podcast', why:'Intellectual depth không có ở nơi khác — science, history, strategy'},
+      {name:'Lenny\'s Product Leaders', why:'CPO-level org design và strategy'},
+    ],
+    reads:[
+      {name:'Stratechery (paid tier)', why:'Daily dispatches — mỗi bài là một framework để borrow'},
+      {name:'Not Boring — Packy McCormick', why:'Long-form thesis về fintech và tech companies'},
+      {name:'Bloomberg Odd Lots + Big Take', why:'Macro + micro financial thinking — context at scale'},
+    ],
+    certs:[
+      {name:'YC Batch hoặc Office Hours', priority:'Nếu đang build', why:'Không có accelerator nào tốt hơn — apply nếu đang start something'},
+      {name:'Wharton/LBS Executive Education', priority:'High-ROI', why:'Network và credential cho C-suite track'},
+      {name:'Reforge: Monetization & Platform', priority:'Elite', why:'Highest-leverage advanced PM learning còn tồn tại'},
+    ],
+  },
+];
+
+const PARETO_CORES = [
+  {id:'pc1', num:'01', title:'Payment Mechanics', time:'3–4 tuần nếu focused',
+    unlock:'Atomic unit của mọi fintech — hiểu cái này, mọi domain khác mở ra 3× nhanh hơn',
+    body:'Một giao dịch từ lúc quẹt thẻ đến lúc tiền vào tài khoản merchant đi qua: issuing bank → card network → acquiring bank → processor → merchant. Mỗi hop có fee, có timing, có risk. ACH khác SWIFT khác real-time rails (RTP, FedNow). Settlement là T+0 hay T+2 — tại sao? Chargebacks, refunds, và holds hoạt động như thế nào. Hiểu cấu trúc này = hiểu tại sao Stripe charged 2.9%+30¢, tại sao Wise rẻ hơn ngân hàng, tại sao Klarna có margin.',
+    resources:['Stripe documentation (đọc như textbook)','The Anatomy of the Swipe — Ahmed Siddiqui','patio11.com — bài về payment economics']},
+  {id:'pc2', num:'02', title:'Product Discovery Engine', time:'2 tuần đọc, 3 tháng thực hành',
+    unlock:'Công cụ tư duy phân biệt top 10% PM với mọi người còn lại',
+    body:'Jobs-to-be-done: người dùng không mua sản phẩm — họ "hire" sản phẩm để làm một việc. Opportunity Solution Tree của Teresa Torres: từ desired outcome → opportunities (unmet needs) → solutions (features). Không có framework này, mọi roadmap đều là guesswork có vẻ có cơ sở. Discovery là liên tục, không phải một phase trước delivery. Continuous Interview — ít nhất 1 user per tuần.',
+    resources:['Continuous Discovery Habits — Teresa Torres (đây là quyển quan trọng nhất giai đoạn này)','Lenny\'s Podcast — các tập về discovery']},
+  {id:'pc3', num:'03', title:'Fintech Unit Economics', time:'4 tuần intensive',
+    unlock:'Biết cách một business fintech thực sự kiếm tiền — không ai dạy điều này ở trường',
+    body:'Interchange model: Visa/MC thu %, issuing bank giữ phần lớn, acquiring bank giữ một phần. Net Interest Margin (NIM): ngân hàng và lending fintech sống bằng spread giữa cost of funds và lending rate. SaaS ARR cho B2B fintech. Take rate cho marketplace fintech. CAC, LTV, payback period — và tại sao payback period quan trọng hơn LTV/CAC ratio trong early stage. Gross margin structure của Stripe vs Robinhood vs Wise là khác nhau hoàn toàn — và tại sao.',
+    resources:['Matt Levine — Money Stuff (Bloomberg, miễn phí)','Fintech Brain Food — Simon Taylor','Annual reports: đọc Stripe, Nubank, Adyen 10-K hoặc prospectus']},
+  {id:'pc4', num:'04', title:'Regulatory DNA', time:'3 tuần, revisit liên tục',
+    unlock:'Fintech không phải tech — regulatory là constraint định nghĩa product space, không phải obstacle',
+    body:'KYC (Know Your Customer) và AML (Anti-Money Laundering): vì sao fintech phải verify identity, SAR filing là gì, risk-based approach. PCI DSS: tại sao không lưu raw card data, tokenization hoạt động như thế nào. Money transmission licensing: tại sao Stripe không phải bank nhưng vẫn cần license ở 50 states. Open Banking / PSD2 (EU), UK Open Banking, Section 1033 (US) — đây là infrastructure của next decade. Sandbox environments: MAS, FCA, OCC sandbox — nơi innovation được test trước khi ra thị trường.',
+    resources:['FFIEC BSA/AML Examination Manual (không cần đọc hết — đọc core sections)','11:FS Fintech Insider — các tập về regulation','Các trang gov: CFPB, FCA, MAS — đọc 1–2 enforcement actions để hiểu hậu quả thực']},
+  {id:'pc5', num:'05', title:'Technical Credibility Floor', time:'4–6 tuần nếu zero background',
+    unlock:'Minimum threshold để engineers trust bạn và để bạn đọc được technical docs',
+    body:'REST APIs: request/response cycle, HTTP methods, status codes, authentication (API keys, OAuth 2.0), webhooks vs polling. SQL: SELECT, WHERE, JOIN, GROUP BY, aggregate functions — viết được query phân tích dữ liệu không cần hỏi. System design vocabulary: database, cache, queue, microservices, monolith, latency vs throughput. Đọc Stripe API docs và hiểu mọi field — đây là bài test. Nếu bạn đọc một API doc mà không hiểu 20% từ, bạn chưa đủ technical credibility.',
+    resources:['Stripe API Documentation (đọc toàn bộ)','Mode Analytics SQL Tutorial (miễn phí, 4 giờ)','ByteByteGo — System Design newsletter (Alex Xu)']},
+];
+
+// STATE
+let checked = {};
+let activeStage = 0;
+let activeTab = 'milestones';
+let expandedPareto = null;
+
+function loadChecked() {
+  try { const s = localStorage.getItem(LS_KEY); if(s) checked = JSON.parse(s); } catch{}
+}
+function saveChecked() {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(checked)); } catch{}
+}
+
+function totalProgress() {
+  let done = 0, total = 0;
+  STAGES.forEach(s => {
+    total += s.milestones.length;
+    s.milestones.forEach((_,i) => { if(checked[s.id+'_'+i]) done++; });
+  });
+  return {done, total};
+}
+
+function stagePct(s) {
+  const total = s.milestones.length;
+  const done = s.milestones.filter((_,i) => checked[s.id+'_'+i]).length;
+  return {done, total, pct: Math.round((done/total)*100)};
+}
+
+function hex(color, alpha) {
+  return color; // already valid
+}
+
+// RENDER FUNCTIONS
+function renderTimeline() {
+  const el = document.getElementById('timeline-inner');
+  el.innerHTML = STAGES.map((s,i) => {
+    const pr = stagePct(s);
+    const isActive = i === activeStage;
+    const dots = s.milestones.map((_,mi) => {
+      const done = !!checked[s.id+'_'+mi];
+      return `<span class="dot${done?' done':''}" style="${done?'background:'+s.accent:''}"></span>`;
+    }).join('');
+    return `<button class="stage-tab${isActive?' active':''}" onclick="setStage(${i})" style="border-bottom-color:${isActive?s.accent:'transparent'}">
+      <div class="stage-tab-time" style="color:${isActive?s.accent:'var(--text-mut)'}">${s.range}</div>
+      <div class="stage-tab-name" style="color:${isActive?'var(--text)':'var(--text-sec)'}; font-weight:${isActive?500:400}">${s.phase}</div>
+      <div class="stage-tab-dots">${dots}</div>
+    </button>`;
+  }).join('');
+}
+
+function renderStageHeader() {
+  const s = STAGES[activeStage];
+  const pr = stagePct(s);
+  document.getElementById('s-icon').textContent = s.icon;
+  document.getElementById('s-icon').style.color = s.accent;
+  document.getElementById('s-range').textContent = s.range;
+  document.getElementById('s-range').style.color = s.accent;
+  document.getElementById('s-name').textContent = s.phase;
+  document.getElementById('s-sub').textContent = s.levelTarget;
+  document.getElementById('s-sub').style.color = 'var(--text-sec)';
+  const box = document.getElementById('stage-prog-box');
+  box.style.background = s.accentDim;
+  box.style.border = '1px solid '+s.accentBorder;
+  document.getElementById('stage-pct').textContent = pr.pct+'%';
+  document.getElementById('stage-pct').style.color = s.accent;
+  document.getElementById('stage-count').textContent = pr.done+'/'+pr.total+' done';
+  document.getElementById('stage-prog-fill').style.width = pr.pct+'%';
+  document.getElementById('stage-prog-fill').style.background = s.accent;
+}
+
+function renderInnerTabs() {
+  const s = STAGES[activeStage];
+  const tabs = activeStage === 0
+    ? ['milestones','pareto','skills','resources','wisdom']
+    : ['milestones','skills','resources','wisdom'];
+  const labels = {milestones:'Milestones', pareto:'Pareto 20%', skills:'Skills', resources:'Resources', wisdom:'Wisdom'};
+  document.getElementById('inner-tabs').innerHTML = tabs.map(t =>
+    `<button class="inner-tab${activeTab===t?' active':''}" onclick="setTab('${t}')"
+      style="color:${activeTab===t?s.accent:'var(--text-sec)'}; border-bottom-color:${activeTab===t?s.accent:'transparent'}">${labels[t]}</button>`
+  ).join('');
+}
+
+function renderPanels() {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-'+activeTab).classList.add('active');
+  const s = STAGES[activeStage];
+
+  if(activeTab === 'milestones') renderMilestones(s);
+  if(activeTab === 'pareto' && activeStage === 0) renderPareto(s);
+  if(activeTab === 'skills') renderSkills(s);
+  if(activeTab === 'resources') renderResources(s);
+  if(activeTab === 'wisdom') renderWisdom(s);
+}
+
+function renderMilestones(s) {
+  const el = document.getElementById('panel-milestones');
+  const rows = s.milestones.map((m,i) => {
+    const k = s.id+'_'+i;
+    const done = !!checked[k];
+    return `<div class="milestone-row${done?' done':''}" onclick="toggleCheck('${s.id}',${i})"
+      style="${done?'border-color:'+s.accentBorder+';background:'+s.accentDim:''}">
+      <div class="check-box" style="${done?'background:'+s.accent+';border-color:'+s.accent:''}">
+        <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#080A0E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="milestone-content">
+        <span class="milestone-week" style="color:${done?s.accent:'var(--text-mut)'}">${m.week}</span><span class="milestone-text">${m.text}</span>
+      </div>
+    </div>`;
+  }).join('');
+  el.innerHTML = rows + `
+    <div class="checkpoint-block" style="border:1px solid ${s.accentBorder};background:${s.accentDim}">
+      <div class="checkpoint-label" style="color:${s.accent}">Checkpoint — Dấu hiệu thực sự đạt mức này</div>
+      <div class="checkpoint-body">${s.threshold}</div>
+    </div>`;
+}
+
+function renderPareto(s) {
+  const el = document.getElementById('panel-pareto');
+  const cards = PARETO_CORES.map(pc => {
+    const expanded = expandedPareto === pc.id;
+    const res = pc.resources.map(r =>
+      `<div class="pareto-res-item"><span class="pareto-res-arrow" style="color:${s.accent}">▸</span><span class="pareto-res-text">${r}</span></div>`
+    ).join('');
+    return `<div class="pareto-card${expanded?' expanded':''}" id="card-${pc.id}">
+      <div class="pareto-header" onclick="togglePareto('${pc.id}')">
+        <span class="pareto-num" style="color:${s.accent}">${pc.num}</span>
+        <div class="pareto-meta">
+          <div class="pareto-title">${pc.title}</div>
+          <div class="pareto-unlock">${pc.unlock}</div>
+        </div>
+        <span class="pareto-time">${pc.time}</span>
+        <svg class="pareto-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M3 5L7 9L11 5" stroke="var(--text-sec)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="pareto-body" style="border-top-color:${s.accentBorder}">
+        <div class="pareto-text">${pc.body}</div>
+        <div class="pareto-res-label">Resources cụ thể</div>
+        ${res}
+      </div>
+    </div>`;
+  }).join('');
+  el.innerHTML = `<div class="pareto-intro">
+    <div class="pareto-intro-label">5 load-bearing concepts · Master tất cả trong 6 tháng</div>
+    <div class="pareto-intro-text">Đây là 20% kiến thức cho 80% kết quả. Không phải vì chúng đơn giản — mà vì chúng là nền tảng mà mọi thứ khác build trên đó. Bỏ qua bất kỳ cái nào, toàn bộ cấu trúc trên sẽ không vững.</div>
+  </div>${cards}`;
+}
+
+function renderSkills(s) {
+  const el = document.getElementById('panel-skills');
+  el.innerHTML = `<div id="skills-grid">${s.skills.map(sk => `
+    <div class="skill-card">
+      <div class="skill-title" style="color:${s.accent}">${sk.title}</div>
+      ${sk.items.map(it => `<div class="skill-item"><span class="skill-arrow" style="color:${s.accent}">▸</span><span class="skill-text">${it}</span></div>`).join('')}
+    </div>`).join('')}</div>`;
+}
+
+function renderResources(s) {
+  const el = document.getElementById('panel-resources');
+  const books = s.books.map(b => `
+    <div class="res-book">
+      <div class="res-bar" style="background:${b.pcolor}"></div>
+      <div class="res-book-info">
+        <div class="res-book-title-row">
+          <span class="res-book-title">${b.title}</span>
+          <span class="res-book-author">— ${b.author}</span>
+          <span class="res-priority" style="color:${b.pcolor}">${b.priority}</span>
+        </div>
+        <div class="res-book-why">${b.why}</div>
+      </div>
+    </div>`).join('');
+
+  const pods = s.podcasts.map(p => `<div class="res-card"><div class="res-card-name">${p.name}</div><div class="res-card-why">${p.why}</div></div>`).join('');
+  const reads = s.reads.map(r => `<div class="res-card"><div class="res-card-name">${r.name}</div><div class="res-card-why">${r.why}</div></div>`).join('');
+  const certs = s.certs.map(c => `
+    <div class="res-cert">
+      <div class="res-cert-badge" style="color:${s.accent};background:${s.accentDim};border:1px solid ${s.accentBorder}">${c.priority}</div>
+      <div><div class="res-cert-name">${c.name}</div><div class="res-cert-why">${c.why}</div></div>
+    </div>`).join('');
+
+  el.innerHTML = `
+    <div class="res-section"><div class="res-section-label">Sách</div>${books}</div>
+    <div class="res-two-col">
+      <div><div class="res-section-label">Podcast</div>${pods}</div>
+      <div><div class="res-section-label">Newsletters & Reading</div>${reads}</div>
+    </div>
+    <div class="res-section"><div class="res-section-label">Certifications & Programs</div>${certs}</div>`;
+}
+
+function renderWisdom(s) {
+  const el = document.getElementById('panel-wisdom');
+  const cards = s.wisdomCards.map(w => `
+    <div class="wisdom-card">
+      <div class="wisdom-card-title" style="color:${s.accent}">${w.title}</div>
+      <div class="wisdom-card-body">${w.body}</div>
+    </div>`).join('');
+  el.innerHTML = `
+    <div class="wisdom-main" style="border:1px solid ${s.accentBorder};background:${s.accentDim}">
+      <div class="wisdom-label" style="color:${s.accent}">Core Wisdom — ${s.phase}</div>
+      <div class="wisdom-text">${s.wisdom}</div>
+    </div>
+    <div class="wisdom-grid">${cards}</div>`;
+}
+
+function renderHeader() {
+  const p = totalProgress();
+  document.getElementById('total-label').textContent = p.done+'/'+p.total;
+  const fill = document.getElementById('total-fill');
+  fill.style.width = Math.round((p.done/p.total)*100)+'%';
+  fill.style.background = STAGES[activeStage].accent;
+}
+
+function renderFooter() {
+  const p = totalProgress();
+  document.getElementById('footer-left').textContent = 'Progress tự động lưu · '+p.done+'/'+p.total+' milestones hoàn thành';
+}
+
+function render() {
+  renderHeader();
+  renderTimeline();
+  renderStageHeader();
+  renderInnerTabs();
+  renderPanels();
+  renderFooter();
+}
+
+// ACTIONS
+function setStage(i) {
+  activeStage = i;
+  activeTab = 'milestones';
+  expandedPareto = null;
+  render();
+}
+
+function setTab(t) {
+  activeTab = t;
+  render();
+}
+
+function toggleCheck(stageId, idx) {
+  const k = stageId+'_'+idx;
+  checked[k] = !checked[k];
+  saveChecked();
+  render();
+}
+
+function togglePareto(id) {
+  expandedPareto = expandedPareto === id ? null : id;
+  renderPanels();
+}
+
+// INIT
+loadChecked();
+render();
+</script>
+</body>
+</html>
