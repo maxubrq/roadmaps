@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finance & Economy Strategist · Roadmap · Tran Phat Hung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=IBM+Plex+Serif:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #07090D;
+    --surface: #0F1218;
+    --surface2: #171C24;
+    --border: rgba(255,255,255,0.063);
+    --border-hover: rgba(255,255,255,0.12);
+    --text: #EAE6DC;
+    --text-sec: #787570;
+    --text-mut: #3A3935;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+    --serif: 'IBM Plex Serif', Georgia, serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; font-size: 14px; line-height: 1.6; }
+  button { cursor: pointer; font-family: var(--sans); border: none; background: none; }
+  ::-webkit-scrollbar { width: 3px; height: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.07); border-radius: 2px; }
+
+  #header { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+  #header-inner { max-width: 940px; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 48px; }
+  .header-label { font-family: var(--mono); font-size: 9px; color: var(--text-mut); letter-spacing: 0.18em; text-transform: uppercase; }
+  .header-sep { width: 1px; height: 14px; background: var(--text-mut); }
+  #total-label { font-family: var(--mono); font-size: 10px; color: var(--text-sec); }
+  #total-bar { width: 80px; height: 2px; background: rgba(255,255,255,0.05); border-radius: 1px; overflow: hidden; }
+  #total-fill { height: 100%; border-radius: 1px; transition: width 0.4s; }
+
+  #timeline { border-bottom: 1px solid var(--border); overflow-x: auto; background: var(--bg); position: sticky; top: 48px; z-index: 99; }
+  #timeline-inner { max-width: 940px; margin: 0 auto; padding: 0 2rem; display: flex; }
+  .stage-tab { flex: 1; background: transparent; border: none; border-bottom: 2px solid transparent; padding: 14px 0 12px; text-align: center; cursor: pointer; transition: all 0.2s; margin-bottom: -1px; min-width: 140px; }
+  .stage-tab:hover { background: rgba(255,255,255,0.018); }
+  .stage-tab-time { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px; }
+  .stage-tab-name { font-size: 13px; }
+  .stage-tab-dots { display: flex; justify-content: center; gap: 4px; margin-top: 7px; flex-wrap: wrap; max-width: 90px; margin-left: auto; margin-right: auto; }
+  .dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.07); flex-shrink: 0; transition: background 0.2s; }
+
+  #main { max-width: 940px; margin: 0 auto; padding: 2rem; }
+
+  #stage-header { display: flex; gap: 24px; align-items: flex-start; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  #stage-header-left { flex: 1; min-width: 280px; }
+  .stage-icon-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .stage-icon { font-family: var(--mono); font-size: 28px; line-height: 1; }
+  .stage-range { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 2px; }
+  .stage-name { font-size: 22px; font-weight: 500; color: var(--text); }
+  .stage-sub { font-size: 13px; color: var(--text-sec); line-height: 1.7; margin-top: 8px; max-width: 560px; }
+  #stage-prog-box { border-radius: 10px; padding: 1.1rem 1.5rem; text-align: center; min-width: 130px; flex-shrink: 0; }
+  #stage-pct { font-family: var(--mono); font-size: 32px; font-weight: 500; line-height: 1; }
+  #stage-count { font-family: var(--mono); font-size: 10px; color: var(--text-sec); margin-top: 4px; }
+  #stage-prog-bar { height: 2px; background: rgba(255,255,255,0.05); border-radius: 1px; margin-top: 8px; overflow: hidden; }
+  #stage-prog-fill { height: 100%; border-radius: 1px; transition: width 0.4s; }
+
+  #inner-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 2rem; overflow-x: auto; }
+  .inner-tab { background: none; border: none; border-bottom: 1.5px solid transparent; padding: 10px 18px; font-size: 13px; color: var(--text-sec); cursor: pointer; transition: all 0.15s; margin-bottom: -1px; white-space: nowrap; }
+  .inner-tab:hover { color: var(--text); }
+  .inner-tab.active { font-weight: 500; }
+
+  .milestone-row { display: flex; gap: 12px; padding: 1rem 1.25rem; margin-bottom: 4px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; align-items: flex-start; }
+  .milestone-row:hover { background: rgba(255,255,255,0.022); }
+  .check-box { width: 20px; height: 20px; border: 1.5px solid rgba(255,255,255,0.17); border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; transition: all 0.15s; }
+  .check-box svg { display: none; }
+  .milestone-row.done .check-box svg { display: block; }
+  .milestone-content { flex: 1; }
+  .milestone-week { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; background: var(--surface2); padding: 2px 6px; border-radius: 4px; margin-right: 8px; }
+  .milestone-text { font-size: 14px; color: var(--text-sec); line-height: 1.6; }
+  .milestone-row.done .milestone-text { color: var(--text); }
+  .checkpoint-block { margin-top: 2rem; padding: 1.5rem; border-radius: 12px; }
+  .checkpoint-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px; }
+  .checkpoint-body { font-size: 13px; color: var(--text-sec); line-height: 1.85; font-family: var(--serif); font-style: italic; }
+
+  .pareto-intro { margin-bottom: 1.5rem; }
+  .pareto-intro-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-mut); margin-bottom: 8px; }
+  .pareto-intro-text { font-size: 13px; color: var(--text-sec); line-height: 1.7; }
+  .pareto-card { border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; transition: border-color 0.2s; }
+  .pareto-card:hover { border-color: rgba(255,255,255,0.1); }
+  .pareto-header { display: flex; align-items: center; gap: 16px; padding: 1.25rem 1.5rem; cursor: pointer; }
+  .pareto-num { font-family: var(--mono); font-size: 28px; line-height: 1; opacity: 0.6; flex-shrink: 0; }
+  .pareto-meta { flex: 1; }
+  .pareto-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .pareto-unlock { font-size: 12px; color: var(--text-sec); line-height: 1.5; }
+  .pareto-time { font-family: var(--mono); font-size: 10px; color: var(--text-mut); flex-shrink: 0; }
+  .pareto-chevron { flex-shrink: 0; transition: transform 0.2s; }
+  .pareto-card.expanded .pareto-chevron { transform: rotate(180deg); }
+  .pareto-body { display: none; padding: 0 1.5rem 1.5rem; border-top: 1px solid; }
+  .pareto-card.expanded .pareto-body { display: block; padding-top: 1.25rem; }
+  .pareto-text { font-size: 13px; color: var(--text-sec); line-height: 1.85; margin-bottom: 1.25rem; }
+  .pareto-res-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-mut); margin-bottom: 8px; }
+  .pareto-res-item { display: flex; gap: 8px; margin-bottom: 6px; align-items: flex-start; }
+  .pareto-res-arrow { font-size: 10px; margin-top: 3px; flex-shrink: 0; }
+  .pareto-res-text { font-size: 13px; color: var(--text-sec); }
+
+  #skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .skill-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; }
+  .skill-title { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+  .skill-item { display: flex; gap: 8px; margin-bottom: 8px; align-items: flex-start; }
+  .skill-arrow { font-size: 9px; margin-top: 4px; flex-shrink: 0; }
+  .skill-text { font-size: 13px; color: var(--text-sec); line-height: 1.65; }
+
+  .res-section { margin-bottom: 2rem; }
+  .res-section-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-mut); margin-bottom: 1rem; }
+  .res-book { display: flex; gap: 14px; padding: 1rem 1.25rem; margin-bottom: 6px; border: 1px solid var(--border); border-radius: 10px; transition: all 0.15s; }
+  .res-book:hover { background: rgba(255,255,255,0.025); border-color: var(--border-hover); }
+  .res-bar { width: 3px; border-radius: 2px; flex-shrink: 0; align-self: stretch; }
+  .res-book-info { flex: 1; }
+  .res-book-title-row { display: flex; gap: 8px; align-items: baseline; margin-bottom: 5px; flex-wrap: wrap; }
+  .res-book-title { font-size: 14px; font-weight: 500; color: var(--text); }
+  .res-book-author { font-size: 11px; color: var(--text-mut); }
+  .res-priority { font-family: var(--mono); font-size: 9px; padding: 1px 6px; border-radius: 4px; background: rgba(255,255,255,0.04); letter-spacing: 0.08em; }
+  .res-book-why { font-size: 12px; color: var(--text-sec); line-height: 1.65; }
+  .res-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 2rem; }
+  .res-card { padding: 1rem 1.25rem; margin-bottom: 6px; border: 1px solid var(--border); border-radius: 10px; transition: all 0.15s; }
+  .res-card:hover { background: rgba(255,255,255,0.025); border-color: var(--border-hover); }
+  .res-card-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 5px; }
+  .res-card-why { font-size: 12px; color: var(--text-sec); line-height: 1.65; }
+  .res-cert { display: flex; gap: 14px; padding: 1rem 1.25rem; margin-bottom: 6px; border: 1px solid var(--border); border-radius: 10px; align-items: flex-start; transition: all 0.15s; }
+  .res-cert:hover { background: rgba(255,255,255,0.025); border-color: var(--border-hover); }
+  .res-cert-badge { font-family: var(--mono); font-size: 9px; padding: 4px 8px; border-radius: 5px; flex-shrink: 0; letter-spacing: 0.08em; margin-top: 2px; white-space: nowrap; }
+  .res-cert-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 5px; }
+  .res-cert-why { font-size: 12px; color: var(--text-sec); line-height: 1.65; }
+
+  .wisdom-main { padding: 2.5rem; border-radius: 16px; margin-bottom: 1.5rem; }
+  .wisdom-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .wisdom-text { font-size: 17px; font-family: var(--serif); font-weight: 300; font-style: italic; color: var(--text); line-height: 1.95; }
+  .wisdom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .wisdom-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; }
+  .wisdom-card-title { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+  .wisdom-card-body { font-size: 13px; color: var(--text-sec); line-height: 1.75; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+  #footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .footer-text { font-family: var(--mono); font-size: 9px; color: var(--text-mut); }
+
+  @media (max-width: 640px) {
+    #skills-grid, .res-two-col, .wisdom-grid { grid-template-columns: 1fr; }
+    .res-two-col { gap: 0; }
+    #main, #header-inner, #timeline-inner { padding-left: 1.25rem; padding-right: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div id="header-inner">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span class="header-label">Finance & Economy Strategist</span>
+      <span class="header-sep"></span>
+      <span class="header-label">Roadmap · Tran Phat Hung</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span id="total-label"></span>
+      <div id="total-bar"><div id="total-fill"></div></div>
+    </div>
+  </div>
+</div>
+
+<div id="timeline"><div id="timeline-inner"></div></div>
+
+<div id="main">
+  <div id="stage-header">
+    <div id="stage-header-left">
+      <div class="stage-icon-row">
+        <span class="stage-icon" id="s-icon"></span>
+        <div>
+          <div class="stage-range" id="s-range"></div>
+          <div class="stage-name" id="s-name"></div>
+        </div>
+      </div>
+      <div class="stage-sub" id="s-sub"></div>
+    </div>
+    <div id="stage-prog-box">
+      <div id="stage-pct"></div>
+      <div id="stage-count"></div>
+      <div id="stage-prog-bar"><div id="stage-prog-fill"></div></div>
+    </div>
+  </div>
+
+  <div id="inner-tabs"></div>
+  <div id="panel-milestones" class="panel active"></div>
+  <div id="panel-pareto" class="panel"></div>
+  <div id="panel-skills" class="panel"></div>
+  <div id="panel-resources" class="panel"></div>
+  <div id="panel-wisdom" class="panel"></div>
+
+  <div id="footer">
+    <span class="footer-text" id="footer-left"></span>
+    <span class="footer-text">Lá số: Stellium Bảo Bình · MC Bọ Cạp · North Node Xử Nữ H8</span>
+  </div>
+</div>
+
+<script>
+const LS_KEY = 'finance_roadmap_v1';
+
+const PARETO_CORES = [
+  {
+    id:'pc1', num:'01', title:'Macroeconomic Architecture', time:'4–5 tuần focused',
+    unlock:'Bản đồ tổng thể của mọi thứ — không có cái này, mọi phân tích chỉ là context-free facts',
+    body:'GDP và các components (C + I + G + NX): hiểu tại sao consumption chiếm 70% GDP Mỹ nhưng chỉ 38% Trung Quốc — và implications là gì. Money supply: M0, M1, M2 — tiền được tạo ra như thế nào (bank credit, không phải in tiền). Transmission mechanism: khi Fed tăng lãi suất, con đường từ rate → credit → spending → inflation mất bao lâu và qua những kênh nào. Inflation mechanics: demand-pull vs cost-push vs structural — tại sao 2021-2022 inflation khác 1970s inflation. Phillips Curve: tại sao trade-off thất nghiệp-lạm phát không ổn định. IS-LM framework đủ để tư duy chính sách ngắn hạn.',
+    resources:['Macroeconomics — Gregory Mankiw (Part 3-5 là core, đọc kỹ, không skip)','Principles of Economics — N. Gregory Mankiw (nếu chưa có nền tảng)','Fed Education resources: federalreserveeducation.org — đọc mọi explainer','ECB/Fed/BOE research papers — đọc ít nhất 1 paper/tuần từ month 2']
+  },
+  {
+    id:'pc2', num:'02', title:'The Credit & Debt Cycle', time:'3 tuần đọc + ongoing application',
+    unlock:'1 framework giải thích 80% lịch sử kinh tế — và 80% cơ hội lớn trong investing hay policy',
+    body:'Ray Dalio\'s template: nền kinh tế là tổng hợp của các credit transactions. Short-term debt cycle (5-8 năm): expansion → tightening → recession → easing. Long-term debt cycle (75-100 năm): debt accumulates until debt service exceeds income growth → deleveraging. 3 loại deleveraging: inflationary (Weimar), deflationary (Great Depression), "beautiful" (US 2008-2012). Tại sao 2008 không thành depression: Fed/Treasury actions và so sánh với 1930s policy errors. Minsky Moment: stability breeds instability — khi markets feel safe nhất là khi risk nhất. Shadow banking và credit creation ngoài ngân hàng truyền thống.',
+    resources:['Principles for Navigating Big Debt Crises — Ray Dalio (PDF miễn phí tại bridgewater.com, đọc toàn bộ)','This Time Is Different — Reinhart & Rogoff (data từ 800 năm, transformative)','The Minsky Moment — đọc các academic papers về Hyman Minsky','Lords of Finance — Liaquat Ahamed (1929 crash, narrative + lesson)']
+  },
+  {
+    id:'pc3', num:'03', title:'Financial Markets Structure', time:'4 tuần + continuous practice',
+    unlock:'Ngôn ngữ của domain — không có cái này, bạn không đọc được thị trường hay communicate với practitioners',
+    body:'Equity markets: price discovery, market microstructure, valuation frameworks (DCF, comps, precedent transactions), market cap vs enterprise value. Bond markets: yield curve (normal, inverted, flat), duration và convexity, credit spreads, yield curve inversion as recession predictor — tại sao? FX markets: purchasing power parity, interest rate parity, carry trade, reserve currency dynamics. Derivatives: options Greeks cơ bản (delta, gamma, vega), futures và hedging, credit default swaps (CDS) là gì và tại sao quan trọng trong 2008. Intermarket relationships: khi nào stocks và bonds tương quan dương, âm — và tại sao giai đoạn 2022 là rare.',
+    resources:['Options, Futures, and Other Derivatives — John Hull (Chapters 1-10 là core)','The Intelligent Investor — Benjamin Graham (mental model cho valuation)','Bloomberg Terminal tutorials (nếu có access) hoặc Koyfin/Macrotrends miễn phí','Market Wizards series — Jack Schwager (cách practitioners thực sự nghĩ)']
+  },
+  {
+    id:'pc4', num:'04', title:'Institutional Capital Flows', time:'3–4 tuần',
+    unlock:'Hiểu ai di chuyển giá — 80% price action là do institutional flows, không phải retail sentiment',
+    body:'Central banks: Fed balance sheet, reserve management, currency intervention, FX reserves. Sovereign Wealth Funds: Norway\'s GPFG, GIC Singapore, ADIA Abu Dhabi — investment mandates và constraints. Pension funds và endowments: liability-driven investing, Yale Model (Swensen), asset allocation frameworks. Hedge funds: long-short equity, global macro, quantitative strategies — cách từng strategy tạo alpha. Insurance companies: investment constraints từ liability matching, duration matching. Tại sao institutional constraints tạo ra persistent market inefficiencies mà individual investors có thể exploit. The Plumbing: repo market, prime brokerage, securities lending — tại sao repo market hiểu là đọc được financial stability.',
+    resources:['Pioneering Portfolio Management — David Swensen (Yale Model, transformative cho asset allocation)','Collateral Damaged — Christopher Whalen (repo market và shadow banking plumbing)','Zoltan Pozsar research papers (Credit Suisse / now OKX) — best writing on money market plumbing','BIS Quarterly Review — đọc sections về capital flows và FX intervention']
+  },
+  {
+    id:'pc5', num:'05', title:'Economic History as Dataset', time:'Ongoing — 1 case study/tháng',
+    unlock:'History là dataset duy nhất cho rare events — ai không biết lịch sử sẽ bị surprise bởi những thứ đã xảy ra trước',
+    body:'Hyperinflations: Weimar Germany 1921-23, Zimbabwe 2007-09, Venezuela 2016-present — common causes và tipping points. Great Depression 1929-33: Friedman & Schwartz\'s monetary explanation vs Keynes\'s demand explanation — tại sao cả hai đều đúng một phần. 1970s Stagflation: supply shock + monetary accommodation + broken Bretton Woods — tại sao Fed mất credibility và Volcker shock rebuilt it. 1997 Asian Financial Crisis: currency pegs, hot money flows, IMF conditionality debate. 2008 GFC: từ subprime → Bear Stearns → Lehman → systemic freeze — step by step. 2020 pandemic response: tốc độ và quy mô can thiệp vs 2008. Mỗi episode là test case cho một framework.',
+    resources:['A Monetary History of the United States — Friedman & Schwartz (chapters on Great Depression)','When Money Dies — Adam Fergusson (Weimar hyperinflation, best narrative account)','The Big Short — Michael Lewis (2008 từ góc nhìn những người thấy trước)','Manias, Panics, and Crashes — Charles Kindleberger (pattern recognition across centuries)']
+  }
+];
+
+const STAGES = [
+  {
+    id:'s0', phase:'Pareto Sprint', range:'Tháng 1–6', levelTarget:'Nền tảng không thể sụp đổ',
+    accent:'#5B9BD5', accentDim:'rgba(91,155,213,0.10)', accentBorder:'rgba(91,155,213,0.28)',
+    icon:'◐',
+    threshold:'Bạn hoàn thành Pareto Sprint khi: (1) Đọc được một Fed statement và giải thích implications cho markets trong 10 phút — không phải nhại lại mà là reason từ đó. (2) Nhìn yield curve inversion và giải thích cơ chế tại sao nó predict recession, với uncertainty bounds. (3) Tóm tắt debt cycle của một quốc gia trong một page — identify họ đang ở đâu trong cycle. (4) Đọc một crisis retrospective và identify ít nhất 3 warning signs mà analysts bỏ lỡ — và tại sao về mặt incentive và cognitive.',
+    wisdom:'Finance và Economics là domain mà illusion of understanding cực kỳ nguy hiểm. Bạn có thể đọc 50 cuốn sách và vẫn không hiểu gì nếu đọc sai cách. Pareto Sprint này không phải về accumulate knowledge — mà về build 5 mental models đủ vững để bạn có thể reason về tình huống chưa gặp. Khác biệt giữa người thực sự hiểu và người chỉ nhớ là: người hiểu có thể nói "tôi không biết" đúng lúc và biết tại sao mình không biết.',
+    wisdomCards:[
+      {title:'Tại sao 5 frameworks này, không phải học CFA ngay?', body:'CFA cho bạn breadth nhưng chưa cho depth để reason. 5 frameworks này là lenses — cách nhìn. Khi bạn có lenses tốt, CFA content sẽ meaningful thay vì là memorization.'},
+      {title:'Economic history là superpower bị bỏ qua', body:'80% analysts làm việc với data từ 10-20 năm gần nhất. Người biết lịch sử 100 năm có một dataset hoàn toàn khác. Rare events không rare trong lịch sử — chúng rare trong career.'},
+      {title:'Lá số của bạn trong phase này', body:'Stellium Bảo Bình — bạn xử lý systems tốt nhất. Đừng memorize economic facts. Hãy map relationships: khi X thay đổi, Y thay đổi như thế nào và tại sao — qua cơ chế gì.'},
+      {title:'Confirmation bias là kẻ thù số 1', body:'Đọc cả Keynes lẫn Hayek. Đọc cả monetarists lẫn post-Keynesians. Không phải để không có quan điểm — mà để quan điểm của bạn được test bởi arguments tốt nhất của phía đối lập.'},
+    ],
+    milestones:[
+      {week:'W3', text:'Giải thích transmission mechanism của monetary policy (rate hike → inflation) với đầy đủ các kênh và timing'},
+      {week:'W5', text:'Đọc xong Ray Dalio\'s Big Debt Crises PDF — viết 1-page summary về long-term debt cycle template'},
+      {week:'W7', text:'Đọc và giải thích 1 FOMC statement + minutes: Fed đang lo gì, trade-offs họ đang cân nhắc'},
+      {week:'W9', text:'Tóm tắt 2008 GFC từ mortgage origination đến Lehman collapse — không nhìn notes, đủ để dạy người khác'},
+      {week:'W11', text:'Build simple IS-LM diagram và dùng nó để analyze 1 policy scenario hiện tại'},
+      {week:'M4', text:'Đọc xong This Time Is Different (Reinhart & Rogoff) — identify 3 patterns áp dụng được cho hiện tại'},
+      {week:'M5', text:'Viết analysis 800 từ về 1 current macro situation — post lên LinkedIn hoặc blog, nhận feedback'},
+      {week:'M6', text:'Self-test: giải thích tại sao yield curve inversion predict recession, với mechanism đầy đủ và limitations'},
+    ],
+    skills:[
+      {title:'Macro Frameworks (Priority 1)', items:['IS-LM: reason về fiscal & monetary policy interactions','AS-AD: supply shocks vs demand shocks — policy response khác nhau như thế nào','Mundell-Fleming: open economy với capital mobility — tại sao small open economies khác','Taylor Rule: central bank reaction function — predict Fed moves']},
+      {title:'Credit Cycle Analysis (Priority 1)', items:['Identify stage trong debt cycle của bất kỳ economy nào','Debt sustainability analysis: debt/GDP, interest coverage, rollover risk','Deleveraging mechanics: inflationary vs deflationary path','Early warning indicators: credit growth, asset prices, current account']},
+      {title:'Markets Literacy (Priority 2)', items:['Đọc yield curve và extract market expectations về growth & inflation','Credit spreads: IG vs HY, sovereign spreads — market stress indicators','FX: real vs nominal exchange rates, current account linkage','Equity valuation: P/E trong context của rates và growth']},
+      {title:'Data Fluency (Priority 2)', items:['FRED (St. Louis Fed): pull, chart, và interpret economic data','Inflation decomposition: core vs headline, PCE vs CPI — và tại sao Fed dùng PCE','Employment report: headline vs participation rate vs prime-age employment','Trade data: current account, capital account, BOP mechanics']},
+      {title:'Historical Pattern Recognition (Priority 3)', items:['5 major crises: causes, policy responses, outcomes, lessons','Hyperinflation preconditions: fiscal dominance, credibility loss, velocity acceleration','Currency crisis mechanics: reserves depletion, speculative attacks, IMF programs','Bubbles: Tulip Mania → Dot-com → 2008 — common anatomy']},
+    ],
+    books:[
+      {title:"Principles for Navigating Big Debt Crises", author:'Ray Dalio', priority:'P0', pcolor:'#E07A4F', why:'PDF miễn phí. Template cho mọi debt crisis — đọc từng case study trong đó'},
+      {title:'This Time Is Different', author:'Reinhart & Rogoff', priority:'P0', pcolor:'#E07A4F', why:'800 năm data về financial crises — pattern recognition không thể học ở nơi khác'},
+      {title:'Macroeconomics', author:'Gregory Mankiw', priority:'P1', pcolor:'#C9A84C', why:'Textbook chuẩn — đọc chapters 11-21 (monetary & open economy)'},
+      {title:'Lords of Finance', author:'Liaquat Ahamed', priority:'P1', pcolor:'#C9A84C', why:'4 central bankers và Great Depression — history as lived experience'},
+      {title:'When Money Dies', author:'Adam Fergusson', priority:'P1', pcolor:'#C9A84C', why:'Weimar hyperinflation — nhất thiết phải đọc để hiểu monetary credibility'},
+    ],
+    podcasts:[
+      {name:'Bloomberg Odd Lots (Weisenthal & Alloway)', why:'Best macro finance podcast — practitioners explain market plumbing mỗi tuần'},
+      {name:'Macro Voices — Erik Townsend', why:'Deep macro interviews với fund managers và analysts ở top of field'},
+      {name:'Hidden Forces — Demetri Kofinas', why:'Long-form macro và geopolitical — questions được hỏi rất hay'},
+    ],
+    reads:[
+      {name:'FRED Blog — St. Louis Fed', why:'Data visualization và explanation — học cách đọc economic data đúng cách'},
+      {name:'BIS Quarterly Review', why:'Bank for International Settlements — best source cho financial stability analysis'},
+      {name:'Ben Bernanke speeches archive (Fed website)', why:'Đọc chronologically từ 2002-2009 — xem thinking evolve trong real-time'},
+    ],
+    certs:[
+      {name:'CFA Level 1 — bắt đầu ngay tháng 3', priority:'4 tháng · 300h', why:'Domain standard — không phải optional. Bắt đầu sớm để kết thúc trong năm 1'},
+      {name:'Financial Markets — Yale/Coursera (Robert Shiller)', priority:'Miễn phí · 7 tuần', why:'Shiller là Nobel laureate — best free intro đến financial markets thinking'},
+      {name:'Khan Academy: Macroeconomics', priority:'Miễn phí · 20h', why:'Nếu cần refresh fundamentals nhanh trước khi đọc textbook'},
+    ],
+  },
+  {
+    id:'s1', phase:'Emergence', range:'Tháng 6–12', levelTarget:'Đạt Level 3–4',
+    accent:'#4BAE8A', accentDim:'rgba(75,174,138,0.10)', accentBorder:'rgba(75,174,138,0.28)',
+    icon:'◑',
+    threshold:'Bạn đạt Level 3-4 khi: Có regular output — viết, research, model — mà người trong ngành đọc và thấy có value. Đã đưa ra ít nhất 1 prediction có structured reasoning và track outcomes của nó. Hoàn thành CFA Level 1. Có thể ngồi trong cuộc conversation với economists hoặc analysts và contribute, không chỉ listen. Bắt đầu nhận ra patterns trong data trước khi đọc consensus view.',
+    wisdom:'Finance là domain mà bạn nghĩ bạn hiểu rất nhanh — và đó là lúc nguy hiểm nhất. Level 3-4 là nơi ego trở thành enemy. Bạn bắt đầu có opinions về markets và economy — và bạn cần học cách hold opinions loosely, update nhanh khi sai, và distinguish giữa "tôi sai" và "framework của tôi sai". Người giỏi nhất trong domain này là người có thể đồng thời confident và genuinely uncertain.',
+    wisdomCards:[
+      {title:'Forecasting là skill — và nó có thể được đo', body:'Superforecasters (Tetlock) cho thấy forecasting accuracy có thể được train. Bắt đầu track predictions của bạn trên Metaculus hoặc Manifold. Calibration quan trọng hơn being right.'},
+      {title:'Write to think, không phải think rồi write', body:'Economists và strategists giỏi nhất viết để clarify thinking — không phải để show off. Khi bạn không thể viết clearly về một topic, bạn chưa thực sự hiểu nó.'},
+      {title:'Primary sources over secondary', body:'Đọc actual FOMC minutes, actual IMF reports, actual central bank speeches — không chỉ Bloomberg summarizing them. The nuance is always in the primary source.'},
+      {title:'Lá số trong phase này', body:'MC Bọ Cạp — sự nghiệp của bạn được build bởi depth analysis, không phải breadth commentary. Một research piece thực sự sâu tốt hơn mười pieces bề mặt.'},
+    ],
+    milestones:[
+      {week:'M7', text:'Hoàn thành CFA Level 1 (nếu bắt đầu tháng 3, đây là exam window tháng 8-9)'},
+      {week:'M7', text:'Publish 5 macro analysis pieces — ít nhất 2 phải có quantitative backing với data từ FRED/IMF/BIS'},
+      {week:'M8', text:'Build 1 simple macro model: ví dụ inflation decomposition model hoặc current account sustainability model trong Excel/Python'},
+      {week:'M9', text:'Đọc xong 3 cuốn classics: Alchemy of Finance (Soros), Market Wizards (Schwager), Intelligent Investor (Graham)'},
+      {week:'M10', text:'Attend hoặc watch recordings của CFA Institute events, CFR discussions, Brookings economic forums'},
+      {week:'M11', text:'Cold-email hoặc LinkedIn-reach 3 economists hoặc analysts — ask 1 specific, well-researched question mỗi người'},
+      {week:'M11', text:'Start Metaculus/Manifold: make 20 predictions với explicit reasoning — bắt đầu track calibration'},
+      {week:'M12', text:'Có 1 người trong industry đọc analysis của bạn và give substantive feedback (không phải chỉ "good job")'},
+    ],
+    skills:[
+      {title:'Analytical Writing', items:['Macro research note: thesis → supporting data → risks → conclusion, trong 500-1000 từ','Investment memo format: situation, complication, question, answer','Scenario analysis: base case / bull / bear — với explicit probability và trigger','Đọc Zoltan Pozsar, Michael Pettis, và reverse-engineer structure của họ']},
+      {title:'Quantitative Foundation', items:['Excel/Python: pull FRED data, build charts, run basic regressions','Time series basics: stationarity, autocorrelation, cointegration — tại sao matter','Econometrics awareness: tại sao correlation không phải causation — Granger causality','Financial modeling: DCF, sensitivity analysis, scenario modeling']},
+      {title:'Geopolitical-Economic Linkage', items:['Trade policy: tariffs, comparative advantage, global value chains','Currency wars: beggar-thy-neighbor, Plaza Accord lessons, current tensions','Sanctions economics: tại sao sanctions work / don\'t work — Iran, Russia case studies','Resource economics: commodity markets và geopolitical premium']},
+      {title:'Institutional Process Knowledge', items:['How Fed decisions are made: FOMC structure, dissents, communication strategy','IMF programs: conditionality, stigma, SDR allocation — và geopolitics','Treasury market: primary dealers, auction mechanics, "safe haven" dynamics','Capital flows regulation: capital controls — pros, cons, emerging market experience']},
+    ],
+    books:[
+      {title:'The Alchemy of Finance', author:'George Soros', priority:'P0', pcolor:'#E07A4F', why:'Soros\'s reflexivity theory — cách markets create their own reality. Transformative framework'},
+      {title:'Market Wizards', author:'Jack Schwager', priority:'P0', pcolor:'#E07A4F', why:'Interviews với top traders — cách practitioners thực sự think, không phải academic theory'},
+      {title:'The Intelligent Investor', author:'Benjamin Graham', priority:'P1', pcolor:'#C9A84C', why:'Value investing mental model — Mr. Market và margin of safety là wisdom cho mọi domain'},
+      {title:'Manias, Panics, and Crashes', author:'Kindleberger', priority:'P1', pcolor:'#C9A84C', why:'Pattern của financial crises qua lịch sử — sau cuốn này bạn nhận ra patterns realtime'},
+      {title:'The Deficit Myth', author:'Stephanie Kelton', priority:'Debate', pcolor:'#9B7FE8', why:'MMT argument tốt nhất — đọc để understand và stress-test, không nhất thiết agree'},
+    ],
+    podcasts:[
+      {name:'Invest Like the Best (Patrick O\'Shaughnessy)', why:'Capital allocation conversations với top investors — cách tier-1 funds think'},
+      {name:'The Grant Williams Podcast', why:'Macro investing — deep conversations với practitioners outside mainstream'},
+      {name:'Bankless / Unchained', why:'New monetary systems và DeFi as macro experiment — cho context về monetary innovation'},
+    ],
+    reads:[
+      {name:'Michael Pettis — China Financial Markets', why:'Best analyst of global imbalances và capital flows — every essay is a framework'},
+      {name:'John Authers — Bloomberg Points of Return', why:'Daily macro synthesis từ veteran financial journalist'},
+      {name:'IMF World Economic Outlook', why:'Twice yearly — read the executive summary và chapter 1-2, track their forecasts vs reality'},
+    ],
+    certs:[
+      {name:'CFA Level 2', priority:'6 tháng · 400h', why:'Portfolio management depth — equity, fixed income, derivatives valuation. Significantly harder than Level 1'},
+      {name:'Python for Finance — Coursera/DataCamp', priority:'2 tháng', why:'Data pull, analysis, và visualization — bắt buộc cho modern economist/strategist'},
+      {name:'Superforecasting Course — Good Judgment', priority:'Optional · 20h', why:'Train calibration và structured forecasting — measurable skill improvement'},
+    ],
+  },
+  {
+    id:'s2', phase:'Operator', range:'Tháng 12–24', levelTarget:'Đạt Level 6+',
+    accent:'#C9A84C', accentDim:'rgba(201,168,76,0.10)', accentBorder:'rgba(201,168,76,0.28)',
+    icon:'◕',
+    threshold:'Bạn đạt Level 6 khi: Bạn có một published track record — forecasts, analysis, hoặc strategies — mà người trong ngành đọc và tham chiếu. Bạn được mời present hoặc speak ở một forum nghiêm túc (không phải chỉ vì bạn submit). Bạn đã completed CFA Program hoặc đang ở Level 3. Bạn có a specific edge — một domain hoặc framework mà bạn biết sâu hơn hầu hết people in the room. Bạn đang được approached, không phải chỉ approaching.',
+    wisdom:'Ở đây có một bifurcation: một con đường là become a very good analyst trong một institution — stable, respected, ceiling ở Director/MD. Con đường kia là begin building intellectual authority của riêng bạn — riskier, harder, nhưng không có ceiling. Level 6 là nơi bạn phải chọn consciously, không phải drift. Chọn sai không phải là fail — drift không chọn mới là fail.',
+    wisdomCards:[
+      {title:'Specialize to generalize', body:'Top strategists thường có 1 domain họ biết sâu hơn ai — currency, credit, commodities, EM. Từ đó họ generalize. Bottom-up specialization tốt hơn top-down breadth.'},
+      {title:'Skin in the game changes thinking', body:'Quản lý dù chỉ một small amount of real capital thay đổi cách bạn nghĩ về risk. Không có substitute cho điều này. Paper trading và actual trading là 2 thứ khác hoàn toàn.'},
+      {title:'The right network ở level này', body:'5 relationships với real practitioners — fund managers, central bankers, treasury officials — tốt hơn 500 LinkedIn connections. Mỗi relationship đòi hỏi bạn mang value đến, không chỉ take.'},
+      {title:'Lá số trong phase này', body:'North Node Xử Nữ ở Cung 8 — bạn phát triển qua đi sâu vào complexity, không phải né tránh nó. Phase này đòi hỏi bạn đi vào những topics khó nhất trong domain.'},
+    ],
+    milestones:[
+      {week:'M13', text:'Chọn 1 specialization vertical: EM macro, credit markets, FX strategy, commodity economics, hoặc monetary policy analysis'},
+      {week:'M15', text:'Complete CFA Level 2 hoặc FRM Level 2 — phụ thuộc vào specialization path đã chọn'},
+      {week:'M16', text:'Publish 1 major research piece (3000+ từ) với original thesis — không rehash consensus, có quantitative backing'},
+      {week:'M18', text:'Manage real capital — dù nhỏ: personal portfolio với explicit strategy và written thesis cho mỗi position'},
+      {week:'M19', text:'Speak hoặc present tại 1 forum nghiêm túc: CFA Society event, university seminar, industry conference panel'},
+      {week:'M20', text:'Build relationship với 3 senior practitioners (PM, economist, policy official) — real conversations, không chỉ follows'},
+      {week:'M22', text:'Có research hoặc analysis được cited hoặc referenced bởi người khác trong industry'},
+      {week:'M24', text:'Honest gap analysis: what is the 1 thing preventing you from being in the top 5% — và path to close it'},
+    ],
+    skills:[
+      {title:'Advanced Macro Analysis', items:['Nowcasting: real-time GDP estimation, Atlanta Fed GDPNow methodology','Regime identification: inflationary vs deflationary, expansion vs contraction — signals','Cross-asset analysis: bond-equity correlation, commodity cycles, DXY dynamics','Central bank communication: reading between the lines của Fed speak']},
+      {title:'Strategic Synthesis', items:['Investment thesis construction: entry, sizing, exit, risk management','Scenario planning: define 3-4 scenarios với explicit triggers và probabilities','Framework for framework: khi nào dùng Dalio, khi nào dùng Austrian, khi nào dùng MMT lens','Communicate complexity simply: 1-page summary của complex analysis']},
+      {title:'Building & Creating', items:['Research product: newsletter, report, atau framework với consistent audience','Speaking: present analysis trong 20 phút với conviction, handle Q&A substantively','Advisory capacity: provide economic analysis to businesses, family offices, NGOs','Policy translation: translate academic research thành actionable policy or business insight']},
+      {title:'Specialization Depth', items:['Your vertical: sâu đến mức biết những gì consensus bỏ lỡ','Track record: documented predictions với outcome tracking','Original contribution: một insight hoặc framework chưa được articulated trước đó','Network trong vertical: know the 10 most important people working on your topic']},
+    ],
+    books:[
+      {title:'Pioneering Portfolio Management', author:'David Swensen', priority:'P0', pcolor:'#E07A4F', why:'Yale endowment model — framework cho long-term capital allocation, irreversible mindset shift'},
+      {title:'The Dao of Capital', author:'Mark Spitznagel', priority:'P0', pcolor:'#E07A4F', why:'Austrian economics meets tail risk — alternative framework cho những gì mainstream bỏ qua'},
+      {title:'Currency Wars', author:'James Rickards', priority:'P1', pcolor:'#C9A84C', why:'International monetary system và geopolitics — nếu specializing trong FX/macro'},
+      {title:'The Economics of Money, Banking and Financial Markets', author:'Frederic Mishkin', priority:'P1', pcolor:'#C9A84C', why:'Graduate-level monetary economics — nếu muốn policy path'},
+      {title:'Thinking, Fast and Slow', author:'Daniel Kahneman', priority:'Meta', pcolor:'#4BAE8A', why:'Behavioral economics foundations — hiểu tại sao markets irrational theo patterns predictable'},
+    ],
+    podcasts:[
+      {name:'On The Margin — Milkroad / Blockworks', why:'Macro + crypto intersection — nếu theo dõi monetary system evolution'},
+      {name:'Top Traders Unplugged', why:'Systematic và discretionary macro traders — process và framework'},
+      {name:'EconTalk — Russ Roberts', why:'Long-form economic ideas — breadth across schools of thought'},
+    ],
+    reads:[
+      {name:'Zoltan Pozsar research (tìm archive)', why:'Shadow banking và monetary plumbing — no one writes better on this topic'},
+      {name:'Grant\'s Interest Rate Observer', why:'Contrarian macro research — tìm thứ mà consensus đang bỏ qua'},
+      {name:'In Gold We Trust Report (Incrementum)', why:'Annual macro research report — excellent survey of monetary system'},
+    ],
+    certs:[
+      {name:'CFA Level 3 (Charter)', priority:'6 tháng · 400h', why:'Completing the Charter — portfolio management, asset allocation, and ethics. The definitive credential'},
+      {name:'FRM (Financial Risk Manager)', priority:'Alt path · 6 tháng', why:'Nếu specializing trong risk — complement hoặc alternative to CFA'},
+      {name:'Economics Master\'s part-time (LSE, Oxford)', priority:'Cao cấp · 2 năm', why:'Nếu muốn policy/academic path — network và credential đẩy bạn vào circles khác hoàn toàn'},
+    ],
+  },
+  {
+    id:'s3', phase:'Architect', range:'Tháng 24+', levelTarget:'Hành trình đến Level 9',
+    accent:'#A87CC1', accentDim:'rgba(168,124,193,0.10)', accentBorder:'rgba(168,124,193,0.28)',
+    icon:'●',
+    threshold:'Bạn tiếp cận Level 9 khi: Bạn được invited vào rooms bạn không apply vào — central bank advisory boards, Davos panels, sovereign wealth fund consultancies, government task forces. Bạn có published work (book, major research) mà field tham chiếu. Khi có một major macro event, journalists, policymakers, và investors muốn nghe perspective của bạn. Bạn đang shaping conversations, không chỉ participate trong chúng.',
+    wisdom:'Level 9 trong Finance & Economics không phải về being richest hoặc most famous — mà về being genuinely useful tại scale. Ray Dalio, Carmen Reinhart, Paul Volcker — điểm chung là họ đều có frameworks đủ robust để được tested bởi reality và survive. Và họ đều sẵn sàng change mind khi wrong. Intellectual honesty ở level này không optional — nó là foundation của authority.',
+    wisdomCards:[
+      {title:'Authority đến từ being right over time', body:'Không phải từ position, degree, hoặc institution. Track record của predictions và analysis — với honest accounting của errors — là currency thực sự ở level này. Không thể fake trong dài hạn.'},
+      {title:'Building institutions vs building audience', body:'Có 2 con đường: build intellectual audience (newsletter, books, speaking) hoặc build institution (fund, think tank, policy body). Tốt nhất là làm cả hai, nhưng phải conscious về priority ở mỗi giai đoạn.'},
+      {title:'The geopolitical lens', body:'Ở level 9, economics không thể tách khỏi geopolitics. Kissinger, Brzezinski — họ là economic thinkers cũng như political ones. Hiểu power dynamics là prerequisite cho policy influence thực sự.'},
+      {title:'Lá số của bạn ở đây', body:'Sun ở Cung 12 — power của bạn đến từ depth và từ việc biết thứ người khác chưa thấy. Những nhà kinh tế và chiến lược gia vĩ đại nhất thường không phải là media personalities — họ là people whose thinking shapes the thinking of decision makers.'},
+    ],
+    milestones:[
+      {week:'Y2-3', text:'Complete CFA Charter + có specialization được peer-recognized — không phải self-declared'},
+      {week:'Y2-3', text:'Publish book, major paper, hoặc framework được cited: không phải blog post mà là substantive contribution'},
+      {week:'Y3', text:'Manage capital với documented track record — fund, family office, hoặc personal với auditable history'},
+      {week:'Y3', text:'Join advisory capacity: corporate board, NGO economic committee, government advisory role, hoặc think tank fellow'},
+      {week:'Y3-4', text:'Speak tại tier-1 venues: Council on Foreign Relations, Brookings, Milken Institute, OECD forums, Davos'},
+      {week:'Y4+', text:'Được cited trong policy documents, academic papers, hoặc được consulted trực tiếp bởi decision makers'},
+    ],
+    skills:[
+      {title:'Intellectual Architecture', items:['Synthesize across schools: biết khi nào Keynes đúng, khi nào Hayek đúng, khi nào Minsky đúng','Original framework development: identify gap trong existing frameworks và fill it','Long-horizon thinking: 10-30 year structural trends, không chỉ cycle','Write for permanence: books và papers outlast newsletters và podcasts']},
+      {title:'Policy Translation', items:['Translate research thành actionable policy recommendations','Navigate political economy: tại sao good economics thường bad politics','Communicate trade-offs clearly: không oversimplify nhưng không obscure','Build coalitions around evidence-based policy — học từ Volcker, Bernanke cases']},
+      {title:'Institution Building', items:['Research organization: team, funding, publication, dissemination','Advisory network: who consults whom — và trở thành một node trong network đó','Curriculum building: teach the next generation — books, courses, mentoring','Legacy thinking: what framework or institution will outlast you?']},
+      {title:'Meta-Level Wisdom', items:['Know what you don\'t know — và communicate uncertainty honestly','Model humility: tất cả models đều sai, một số models hữu ích — biết cái nào khi nào','Incentive analysis: tại sao institutions và individuals behave như họ behavior','Long-game thinking: reputation built over decades, destroyed overnight']},
+    ],
+    books:[
+      {title:'The General Theory', author:'John Maynard Keynes', priority:'Primary', pcolor:'#E07A4F', why:'Đọc primary source — không phải summary của Keynes. Revolutionary thinking in its original form'},
+      {title:'Capitalism, Socialism and Democracy', author:'Joseph Schumpeter', priority:'Primary', pcolor:'#E07A4F', why:'Creative destruction và long waves — framework cho structural economic change'},
+      {title:'The Ascent of Money', author:'Niall Ferguson', priority:'P1', pcolor:'#C9A84C', why:'Financial history từ Babylon đến present — sweep và pattern across civilizations'},
+      {title:'Capital in the 21st Century', author:'Thomas Piketty', priority:'P1', pcolor:'#C9A84C', why:'R > G thesis — đọc vì methodology và data, debate với conclusion'},
+      {title:'The Road to Serfdom', author:'Friedrich Hayek', priority:'Counter', pcolor:'#A87CC1', why:'Counter-weight to Keynesian thinking — understand the strongest opposing argument'},
+    ],
+    podcasts:[
+      {name:'CFR — Council on Foreign Relations Podcast', why:'Where policy and economics meet at the highest level'},
+      {name:'Conversations with Tyler (Cowen)', why:'Breadth và depth — best intellectual podcast for economists and strategists'},
+      {name:'Peterson Institute for International Economics', why:'Think tank level analysis — where policy is shaped'},
+    ],
+    reads:[
+      {name:'Foreign Affairs — Economic issues', why:'Where the synthesis of economics, geopolitics, and policy happens at highest level'},
+      {name:'Working papers: NBER, SSRN, IMF WP series', why:'Primary research trước khi nó becomes consensus — 2 năm ahead của mainstream'},
+      {name:'BIS Annual Report', why:'Most comprehensive view của global financial system from the central bank of central banks'},
+    ],
+    certs:[
+      {name:'PhD Economics — part-time hoặc executive', priority:'Highest signal', why:'Nếu muốn academic/policy path — the credential that opens the most important doors'},
+      {name:'Think tank fellowship (Brookings, CFR, PIIE)', priority:'Competitive', why:'Research and network — được invited là signal bạn đã arrived ở một level nhất định'},
+      {name:'IMF / World Bank / BIS internship or consulting', priority:'Competitive', why:'Inside the institutions — understand how global economic policy is actually made'},
+    ],
+  }
+];
+
+let checked = {};
+let activeStage = 0;
+let activeTab = 'milestones';
+let expandedPareto = null;
+
+function load() { try { const s = localStorage.getItem(LS_KEY); if(s) checked = JSON.parse(s); } catch{} }
+function save() { try { localStorage.setItem(LS_KEY, JSON.stringify(checked)); } catch{} }
+function totalProg() {
+  let done=0, total=0;
+  STAGES.forEach(s => { total += s.milestones.length; s.milestones.forEach((_,i) => { if(checked[s.id+'_'+i]) done++; }); });
+  return {done, total};
+}
+function sPct(s) {
+  const total = s.milestones.length;
+  const done = s.milestones.filter((_,i) => checked[s.id+'_'+i]).length;
+  return {done, total, pct: Math.round((done/total)*100)};
+}
+
+function renderTimeline() {
+  const el = document.getElementById('timeline-inner');
+  el.innerHTML = STAGES.map((s,i) => {
+    const isA = i===activeStage;
+    const dots = s.milestones.map((_,mi) => `<span class="dot" style="${checked[s.id+'_'+mi]?'background:'+s.accent:''}"></span>`).join('');
+    return `<button class="stage-tab" onclick="setStage(${i})" style="border-bottom-color:${isA?s.accent:'transparent'}">
+      <div class="stage-tab-time" style="color:${isA?s.accent:'var(--text-mut)'}">${s.range}</div>
+      <div class="stage-tab-name" style="color:${isA?'var(--text)':'var(--text-sec)'};font-weight:${isA?500:400}">${s.phase}</div>
+      <div class="stage-tab-dots">${dots}</div>
+    </button>`;
+  }).join('');
+}
+
+function renderHeader() {
+  const p = totalProg();
+  document.getElementById('total-label').textContent = p.done+'/'+p.total;
+  const f = document.getElementById('total-fill');
+  f.style.width = Math.round((p.done/p.total)*100)+'%';
+  f.style.background = STAGES[activeStage].accent;
+}
+
+function renderStageHeader() {
+  const s = STAGES[activeStage]; const p = sPct(s);
+  document.getElementById('s-icon').textContent = s.icon;
+  document.getElementById('s-icon').style.color = s.accent;
+  document.getElementById('s-range').textContent = s.range;
+  document.getElementById('s-range').style.color = s.accent;
+  document.getElementById('s-name').textContent = s.phase;
+  document.getElementById('s-sub').textContent = s.levelTarget;
+  const box = document.getElementById('stage-prog-box');
+  box.style.background = s.accentDim; box.style.border = '1px solid '+s.accentBorder;
+  document.getElementById('stage-pct').textContent = p.pct+'%';
+  document.getElementById('stage-pct').style.cssText = 'font-family:var(--mono);font-size:32px;font-weight:500;line-height:1;color:'+s.accent;
+  document.getElementById('stage-count').textContent = p.done+'/'+p.total+' done';
+  document.getElementById('stage-prog-fill').style.cssText = 'height:100%;border-radius:1px;width:'+p.pct+'%;background:'+s.accent+';transition:width 0.4s';
+}
+
+function renderInnerTabs() {
+  const s = STAGES[activeStage];
+  const tabs = activeStage===0 ? ['milestones','pareto','skills','resources','wisdom'] : ['milestones','skills','resources','wisdom'];
+  const labels = {milestones:'Milestones',pareto:'Pareto 20%',skills:'Skills',resources:'Resources',wisdom:'Wisdom'};
+  document.getElementById('inner-tabs').innerHTML = tabs.map(t =>
+    `<button class="inner-tab${activeTab===t?' active':''}" onclick="setTab('${t}')"
+      style="color:${activeTab===t?s.accent:'var(--text-sec)'};border-bottom-color:${activeTab===t?s.accent:'transparent'}">${labels[t]}</button>`
+  ).join('');
+}
+
+function renderPanels() {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+activeTab).classList.add('active');
+  const s = STAGES[activeStage];
+  if(activeTab==='milestones') renderMilestones(s);
+  if(activeTab==='pareto' && activeStage===0) renderPareto(s);
+  if(activeTab==='skills') renderSkills(s);
+  if(activeTab==='resources') renderResources(s);
+  if(activeTab==='wisdom') renderWisdom(s);
+}
+
+function renderMilestones(s) {
+  const rows = s.milestones.map((m,i) => {
+    const done = !!checked[s.id+'_'+i];
+    return `<div class="milestone-row${done?' done':''}" onclick="toggleCheck('${s.id}',${i})"
+      style="${done?'border-color:'+s.accentBorder+';background:'+s.accentDim:''}">
+      <div class="check-box" style="${done?'background:'+s.accent+';border-color:'+s.accent:''}">
+        <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#07090D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="milestone-content">
+        <span class="milestone-week" style="color:${done?s.accent:'var(--text-mut)'}">${m.week}</span><span class="milestone-text">${m.text}</span>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('panel-milestones').innerHTML = rows +
+    `<div class="checkpoint-block" style="border:1px solid ${s.accentBorder};background:${s.accentDim}">
+      <div class="checkpoint-label" style="color:${s.accent}">Checkpoint — Dấu hiệu thực sự đạt mức này</div>
+      <div class="checkpoint-body">${s.threshold}</div>
+    </div>`;
+}
+
+function renderPareto(s) {
+  const cards = PARETO_CORES.map(pc => {
+    const exp = expandedPareto===pc.id;
+    return `<div class="pareto-card${exp?' expanded':''}" id="card-${pc.id}">
+      <div class="pareto-header" onclick="togglePareto('${pc.id}')">
+        <span class="pareto-num" style="color:${s.accent}">${pc.num}</span>
+        <div class="pareto-meta">
+          <div class="pareto-title">${pc.title}</div>
+          <div class="pareto-unlock">${pc.unlock}</div>
+        </div>
+        <span class="pareto-time">${pc.time}</span>
+        <svg class="pareto-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5L7 9L11 5" stroke="var(--text-sec)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="pareto-body" style="border-top-color:${s.accentBorder}">
+        <div class="pareto-text">${pc.body}</div>
+        <div class="pareto-res-label">Resources cụ thể</div>
+        ${pc.resources.map(r=>`<div class="pareto-res-item"><span class="pareto-res-arrow" style="color:${s.accent}">▸</span><span class="pareto-res-text">${r}</span></div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('panel-pareto').innerHTML =
+    `<div class="pareto-intro">
+      <div class="pareto-intro-label">5 load-bearing frameworks · Master tất cả trong 6 tháng đầu</div>
+      <div class="pareto-intro-text">Đây là 20% kiến thức cho 80% năng lực phân tích. Không phải vì chúng đơn giản — mà vì chúng là lenses mà mọi analysis khác cần đến. Bỏ qua bất kỳ cái nào, bạn sẽ có blind spots nguy hiểm trong chính xác những tình huống quan trọng nhất.</div>
+    </div>${cards}`;
+}
+
+function renderSkills(s) {
+  document.getElementById('panel-skills').innerHTML =
+    `<div id="skills-grid">${s.skills.map(sk=>`
+      <div class="skill-card">
+        <div class="skill-title" style="color:${s.accent}">${sk.title}</div>
+        ${sk.items.map(it=>`<div class="skill-item"><span class="skill-arrow" style="color:${s.accent}">▸</span><span class="skill-text">${it}</span></div>`).join('')}
+      </div>`).join('')}</div>`;
+}
+
+function renderResources(s) {
+  const books = s.books.map(b=>`
+    <div class="res-book">
+      <div class="res-bar" style="background:${b.pcolor}"></div>
+      <div class="res-book-info">
+        <div class="res-book-title-row">
+          <span class="res-book-title">${b.title}</span>
+          <span class="res-book-author">— ${b.author}</span>
+          <span class="res-priority" style="color:${b.pcolor}">${b.priority}</span>
+        </div>
+        <div class="res-book-why">${b.why}</div>
+      </div>
+    </div>`).join('');
+  const pods = s.podcasts.map(p=>`<div class="res-card"><div class="res-card-name">${p.name}</div><div class="res-card-why">${p.why}</div></div>`).join('');
+  const reads = s.reads.map(r=>`<div class="res-card"><div class="res-card-name">${r.name}</div><div class="res-card-why">${r.why}</div></div>`).join('');
+  const certs = s.certs.map(c=>`
+    <div class="res-cert">
+      <div class="res-cert-badge" style="color:${s.accent};background:${s.accentDim};border:1px solid ${s.accentBorder}">${c.priority}</div>
+      <div><div class="res-cert-name">${c.name}</div><div class="res-cert-why">${c.why}</div></div>
+    </div>`).join('');
+  document.getElementById('panel-resources').innerHTML =
+    `<div class="res-section"><div class="res-section-label">Sách</div>${books}</div>
+    <div class="res-two-col">
+      <div><div class="res-section-label">Podcast & Audio</div>${pods}</div>
+      <div><div class="res-section-label">Newsletters & Reading</div>${reads}</div>
+    </div>
+    <div class="res-section"><div class="res-section-label">Certifications & Programs</div>${certs}</div>`;
+}
+
+function renderWisdom(s) {
+  const cards = s.wisdomCards.map(w=>`
+    <div class="wisdom-card">
+      <div class="wisdom-card-title" style="color:${s.accent}">${w.title}</div>
+      <div class="wisdom-card-body">${w.body}</div>
+    </div>`).join('');
+  document.getElementById('panel-wisdom').innerHTML =
+    `<div class="wisdom-main" style="border:1px solid ${s.accentBorder};background:${s.accentDim}">
+      <div class="wisdom-label" style="color:${s.accent}">Core Wisdom — ${s.phase}</div>
+      <div class="wisdom-text">${s.wisdom}</div>
+    </div>
+    <div class="wisdom-grid">${cards}</div>`;
+}
+
+function renderFooter() {
+  const p = totalProg();
+  document.getElementById('footer-left').textContent = 'Progress tự động lưu · '+p.done+'/'+p.total+' milestones hoàn thành';
+}
+
+function render() {
+  renderHeader(); renderTimeline(); renderStageHeader();
+  renderInnerTabs(); renderPanels(); renderFooter();
+}
+
+function setStage(i) { activeStage=i; activeTab='milestones'; expandedPareto=null; render(); }
+function setTab(t) { activeTab=t; render(); }
+function toggleCheck(sid, idx) { const k=sid+'_'+idx; checked[k]=!checked[k]; save(); render(); }
+function togglePareto(id) { expandedPareto = expandedPareto===id?null:id; renderPanels(); }
+
+load(); render();
+</script>
+</body>
+</html>
