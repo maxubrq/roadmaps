@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Human Nature & Influence · Master Roadmap · Tran Phat Hung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=IBM+Plex+Serif:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #09080C;
+    --surface: #121018;
+    --surface2: #1A1820;
+    --border: rgba(255,255,255,0.063);
+    --border-h: rgba(255,255,255,0.12);
+    --text: #EDE8E0;
+    --ts: #7A7478;
+    --tm: #3C383C;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+    --serif: 'IBM Plex Serif', Georgia, serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; font-size: 14px; line-height: 1.6; }
+  button { cursor: pointer; font-family: var(--sans); border: none; background: none; }
+  ::-webkit-scrollbar { width: 3px; height: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.07); border-radius: 2px; }
+
+  #hdr { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+  #hdr-in { max-width: 940px; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 48px; }
+  .hlbl { font-family: var(--mono); font-size: 9px; color: var(--tm); letter-spacing: 0.18em; text-transform: uppercase; }
+  .hsep { width: 1px; height: 14px; background: var(--tm); }
+  #tbar { width: 80px; height: 2px; background: rgba(255,255,255,0.05); border-radius: 1px; overflow: hidden; }
+  #tfill { height: 100%; border-radius: 1px; transition: width 0.4s; }
+  #tlbl { font-family: var(--mono); font-size: 10px; color: var(--ts); }
+
+  #tl { border-bottom: 1px solid var(--border); overflow-x: auto; background: var(--bg); position: sticky; top: 48px; z-index: 99; }
+  #tl-in { max-width: 940px; margin: 0 auto; padding: 0 2rem; display: flex; }
+  .stab { flex: 1; background: transparent; border: none; border-bottom: 2px solid transparent; padding: 14px 0 12px; text-align: center; cursor: pointer; transition: all 0.2s; margin-bottom: -1px; min-width: 140px; }
+  .stab:hover { background: rgba(255,255,255,0.018); }
+  .stab-t { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px; }
+  .stab-n { font-size: 13px; }
+  .stab-d { display: flex; justify-content: center; gap: 4px; margin-top: 7px; flex-wrap: wrap; max-width: 90px; margin-left: auto; margin-right: auto; }
+  .dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.07); flex-shrink: 0; transition: background 0.2s; }
+
+  #main { max-width: 940px; margin: 0 auto; padding: 2rem; }
+
+  #sh { display: flex; gap: 24px; align-items: flex-start; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  #shl { flex: 1; min-width: 280px; }
+  .sir { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .sico { font-family: var(--mono); font-size: 28px; line-height: 1; }
+  .srng { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 2px; }
+  .snm { font-size: 22px; font-weight: 500; color: var(--text); }
+  .ssb { font-size: 13px; color: var(--ts); line-height: 1.7; margin-top: 8px; max-width: 560px; }
+  #spb { border-radius: 10px; padding: 1.1rem 1.5rem; text-align: center; min-width: 130px; flex-shrink: 0; }
+  #spct { font-family: var(--mono); font-size: 32px; font-weight: 500; line-height: 1; }
+  #scnt { font-family: var(--mono); font-size: 10px; color: var(--ts); margin-top: 4px; }
+  #sbar { height: 2px; background: rgba(255,255,255,0.05); border-radius: 1px; margin-top: 8px; overflow: hidden; }
+  #sfill { height: 100%; border-radius: 1px; transition: width 0.4s; }
+
+  #itabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 2rem; overflow-x: auto; }
+  .itab { background: none; border: none; border-bottom: 1.5px solid transparent; padding: 10px 18px; font-size: 13px; color: var(--ts); cursor: pointer; transition: all 0.15s; margin-bottom: -1px; white-space: nowrap; }
+  .itab:hover { color: var(--text); }
+  .itab.on { font-weight: 500; }
+
+  .mrow { display: flex; gap: 12px; padding: 1rem 1.25rem; margin-bottom: 4px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; align-items: flex-start; }
+  .mrow:hover { background: rgba(255,255,255,0.022); }
+  .cb { width: 20px; height: 20px; border: 1.5px solid rgba(255,255,255,0.17); border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; transition: all 0.15s; }
+  .cb svg { display: none; }
+  .mrow.done .cb svg { display: block; }
+  .mwk { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; background: var(--surface2); padding: 2px 6px; border-radius: 4px; margin-right: 8px; }
+  .mtxt { font-size: 14px; color: var(--ts); line-height: 1.6; }
+  .mrow.done .mtxt { color: var(--text); }
+  .cpb { margin-top: 2rem; padding: 1.5rem; border-radius: 12px; }
+  .cpl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px; }
+  .cpx { font-size: 13px; color: var(--ts); line-height: 1.85; font-family: var(--serif); font-style: italic; }
+
+  .pi { margin-bottom: 1.5rem; }
+  .pil { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--tm); margin-bottom: 8px; }
+  .pit { font-size: 13px; color: var(--ts); line-height: 1.7; }
+  .pc { border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; transition: border-color 0.2s; }
+  .pc:hover { border-color: rgba(255,255,255,0.1); }
+  .ph { display: flex; align-items: center; gap: 16px; padding: 1.25rem 1.5rem; cursor: pointer; }
+  .pn { font-family: var(--mono); font-size: 28px; line-height: 1; opacity: 0.6; flex-shrink: 0; }
+  .pm { flex: 1; }
+  .pt { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .pu { font-size: 12px; color: var(--ts); line-height: 1.5; }
+  .ptm { font-family: var(--mono); font-size: 10px; color: var(--tm); flex-shrink: 0; }
+  .pch { flex-shrink: 0; transition: transform 0.2s; }
+  .pc.ex .pch { transform: rotate(180deg); }
+  .pb { display: none; padding: 0 1.5rem 1.5rem; border-top: 1px solid; }
+  .pc.ex .pb { display: block; padding-top: 1.25rem; }
+  .pbx { font-size: 13px; color: var(--ts); line-height: 1.85; margin-bottom: 1.25rem; }
+  .prl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tm); margin-bottom: 8px; }
+  .pri { display: flex; gap: 8px; margin-bottom: 6px; align-items: flex-start; }
+  .pra { font-size: 10px; margin-top: 3px; flex-shrink: 0; }
+  .prt { font-size: 13px; color: var(--ts); }
+
+  #sg { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .sc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; }
+  .stl { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+  .si { display: flex; gap: 8px; margin-bottom: 8px; align-items: flex-start; }
+  .sa { font-size: 9px; margin-top: 4px; flex-shrink: 0; }
+  .sx { font-size: 13px; color: var(--ts); line-height: 1.65; }
+
+  .rs { margin-bottom: 2rem; }
+  .rsl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--tm); margin-bottom: 1rem; }
+  .rb { display: flex; gap: 14px; padding: 1rem 1.25rem; margin-bottom: 6px; border: 1px solid var(--border); border-radius: 10px; transition: all 0.15s; }
+  .rb:hover { background: rgba(255,255,255,0.025); border-color: var(--border-h); }
+  .rbar { width: 3px; border-radius: 2px; flex-shrink: 0; align-self: stretch; }
+  .rbi { flex: 1; }
+  .rtr { display: flex; gap: 8px; align-items: baseline; margin-bottom: 5px; flex-wrap: wrap; }
+  .rtt { font-size: 14px; font-weight: 500; color: var(--text); }
+  .rta { font-size: 11px; color: var(--tm); }
+  .rpri { font-family: var(--mono); font-size: 9px; padding: 1px 6px; border-radius: 4px; background: rgba(255,255,255,0.04); letter-spacing: 0.08em; }
+  .rwy { font-size: 12px; color: var(--ts); line-height: 1.65; }
+  .r2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 2rem; }
+  .rc { padding: 1rem 1.25rem; margin-bottom: 6px; border: 1px solid var(--border); border-radius: 10px; transition: all 0.15s; }
+  .rc:hover { background: rgba(255,255,255,0.025); border-color: var(--border-h); }
+  .rcn { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 5px; }
+  .rcw { font-size: 12px; color: var(--ts); line-height: 1.65; }
+  .rct { display: flex; gap: 14px; padding: 1rem 1.25rem; margin-bottom: 6px; border: 1px solid var(--border); border-radius: 10px; align-items: flex-start; transition: all 0.15s; }
+  .rct:hover { background: rgba(255,255,255,0.025); border-color: var(--border-h); }
+  .rcb { font-family: var(--mono); font-size: 9px; padding: 4px 8px; border-radius: 5px; flex-shrink: 0; letter-spacing: 0.08em; margin-top: 2px; white-space: nowrap; }
+  .rctn { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 5px; }
+  .rctw { font-size: 12px; color: var(--ts); line-height: 1.65; }
+
+  .wm { padding: 2.5rem; border-radius: 16px; margin-bottom: 1.5rem; }
+  .wl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .wt { font-size: 17px; font-family: var(--serif); font-weight: 300; font-style: italic; color: var(--text); line-height: 1.95; }
+  .wg { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .wc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; }
+  .wcl { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+  .wcx { font-size: 13px; color: var(--ts); line-height: 1.75; }
+
+  .panel { display: none; }
+  .panel.on { display: block; }
+  #ftr { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .ft { font-family: var(--mono); font-size: 9px; color: var(--tm); }
+
+  @media (max-width: 640px) {
+    #sg, .r2, .wg { grid-template-columns: 1fr; }
+    .r2 { gap: 0; }
+    #main, #hdr-in, #tl-in { padding-left: 1.25rem; padding-right: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="hdr">
+  <div id="hdr-in">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span class="hlbl">Human Nature & Influence</span>
+      <span class="hsep"></span>
+      <span class="hlbl">Master Roadmap · Tran Phat Hung</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span id="tlbl"></span>
+      <div id="tbar"><div id="tfill"></div></div>
+    </div>
+  </div>
+</div>
+
+<div id="tl"><div id="tl-in"></div></div>
+
+<div id="main">
+  <div id="sh">
+    <div id="shl">
+      <div class="sir">
+        <span class="sico" id="sico"></span>
+        <div>
+          <div class="srng" id="srng"></div>
+          <div class="snm" id="snm"></div>
+        </div>
+      </div>
+      <div class="ssb" id="ssb"></div>
+    </div>
+    <div id="spb">
+      <div id="spct"></div>
+      <div id="scnt"></div>
+      <div id="sbar"><div id="sfill"></div></div>
+    </div>
+  </div>
+
+  <div id="itabs"></div>
+  <div id="panel-milestones" class="panel on"></div>
+  <div id="panel-pareto" class="panel"></div>
+  <div id="panel-skills" class="panel"></div>
+  <div id="panel-resources" class="panel"></div>
+  <div id="panel-wisdom" class="panel"></div>
+
+  <div id="ftr">
+    <span class="ft" id="fl"></span>
+    <span class="ft">Lá số: Stellium Bảo Bình · MC Bọ Cạp · North Node Xử Nữ H8</span>
+  </div>
+</div>
+
+<script>
+const LK = 'human_nature_v1';
+
+const PARETO = [
+  {
+    id:'p1', num:'01', title:'The Unconscious as Primary Driver', time:'4 tuần + lifetime practice',
+    unlock:'90% hành vi con người không được tạo ra bởi ý thức — không hiểu cái này, mọi model về người khác đều sai từ nền tảng',
+    body:'Freud đúng về điều quan trọng nhất: hầu hết những gì drive behavior con người là unconscious. Ego, id, superego — không cần tin vào metapsychology của Freud để thấy pattern này hoạt động. Jung đi xa hơn: Shadow là phần bị disown của self — và shadow của người khác là thứ họ project lên bạn dữ dội nhất. Timothy Wilson\'s "Strangers to Ourselves": adaptive unconscious xử lý 11 million bits/giây trong khi conscious mind chỉ xử lý 40 bits. Người ta không lying khi nói lý do hành động của họ — họ genuinely không biết. Rationalization: behavior đến trước, explanation đến sau (Jonathan Haidt\'s "The Righteous Mind"). Self-deception là feature, không phải bug: chúng ta self-deceive để maintain self-image và social standing. Key practice: khi ai đó giải thích hành động của mình, luôn hỏi: "Điều gì drive hành động đó mà họ không nói?"',
+    resources:['The Laws of Human Nature — Robert Greene (đọc như primary text, chapter by chapter với reflection)','Strangers to Ourselves — Timothy Wilson (scientific evidence cho adaptive unconscious)','Jung: Modern Man in Search of a Soul (accessible entry point vào Jung\'s framework)','The Righteous Mind — Jonathan Haidt (moral intuitions come first, reasoning second)']
+  },
+  {
+    id:'p2', num:'02', title:'Cognitive Architecture: Predictable Irrationality', time:'3–4 tuần + ongoing application',
+    unlock:'Irrationality không phải random — nó có patterns. Ai biết patterns có thể predict và influence behavior với độ chính xác cao',
+    body:'Kahneman\'s System 1 & 2: System 1 là fast, automatic, emotional, associative — nó chạy mọi lúc. System 2 là slow, deliberate, logical — nó mệt nhanh và thường rationalize decisions của System 1. 15 biases quan trọng nhất: Confirmation bias (tìm evidence cho điều đã tin), Availability heuristic (recent/vivid = important), Anchoring (first number sticks), Loss aversion (losing $100 > gaining $100), Social proof (others doing X = X is correct), Authority bias, Scarcity principle, In-group favoritism, Sunk cost, Hindsight bias, Dunning-Kruger, Fundamental attribution error (underestimate situation, overestimate character), Self-serving bias, Reciprocity norm, Commitment & consistency. Mỗi bias này là một lever: bạn có thể design situations để activate hoặc de-activate chúng. Key insight: biases không phải stupidity — chúng là evolutionary adaptations hoạt động trong wrong environment.',
+    resources:['Thinking, Fast and Slow — Daniel Kahneman (đây là foundation, không thể skip)','Predictably Irrational — Dan Ariely (practical demonstrations của behavioral economics)','The Undoing Project — Michael Lewis (story của Kahneman & Tversky, easier entry point)','Influence — Robert Cialdini (6 principles là applied version của bias framework)']
+  },
+  {
+    id:'p3', num:'03', title:'Status, Hierarchy & Social Dynamics', time:'3 tuần + continuous observation',
+    unlock:'Con người là status-seeking primates trước khi là rational beings — khi hiểu cái này, mọi conflict, negotiation, và organization đều có ý nghĩa khác',
+    body:'Henrich\'s two hierarchies: Dominance hierarchy (fear-based, enforced by coercion) và Prestige hierarchy (admiration-based, freely conferred). Modern organizations có cả hai, thường conflict nhau. Status anxiety: Alain de Botton — mọi người care về status hơn bất kỳ thứ gì khác, nhưng không admit it. Social comparison: Festinger — chúng ta define success relativity. Người sẽ destroy absolute gains để maintain relative position. Face-saving: trong nhiều cultures, face là resource quan trọng hơn money. Never humiliate — người bị humiliate sẽ tìm cách retaliate mãi mãi. Coalition dynamics: ai align với ai và tại sao — politics là bề mặt của coalition games phía dưới. Key observation practice: trong mỗi group interaction, identify: ai có status cao, ai đang seek status, ai đang protect face. Bạn sẽ thấy mọi conversation là negotiation về status.',
+    resources:['The Secret of Our Success — Joseph Henrich (prestige vs dominance hierarchy, transformative)','Status Anxiety — Alain de Botton (phenomenology của status as human driver)','The Anatomy of Evil — Michael Stone (extreme cases reveal normal patterns)','48 Laws of Power — Robert Greene (applied status dynamics — use as diagnostic, not prescription)']
+  },
+  {
+    id:'p4', num:'04', title:'Emotional Logic & Contagion', time:'3 tuần + embodied practice',
+    unlock:'Emotions là operating system của human decision-making — logic là post-processing layer. Ai control emotional frame của cuộc trò chuyện sẽ control outcome',
+    body:'Paul Ekman\'s 7 universal emotions: anger, fear, disgust, contempt, sadness, happiness, surprise — cross-cultural, có micro-expressions có thể đọc được. Emotional logic: mỗi emotion có evolutionary function và predictable triggers. Anger: boundary violated, injustice. Fear: threat to survival hoặc status. Shame: social exclusion threat. Desire: reward anticipation. Hiểu logic này = predict cách người react trước khi họ react. Emotional contagion (Hatfield): emotions lây — người với emotional regulation tốt hơn thường "infects" người kia. Mirror neurons: chúng ta literally cảm thấy emotions của người khác trong body. Tại sao người có high affect intensity dễ influence. Distinction quan trọng: sympathy (tôi thấy tội nghiệp cho bạn) vs empathy (tôi feel what you feel) — empathy là tool of influence, sympathy là emotional distance. Regulation as strategic asset: người kiểm soát được emotions của mình trong high-stakes moments có asymmetric advantage.',
+    resources:['Emotions Revealed — Paul Ekman (universal emotions, micro-expressions, practical recognition)','Emotional Intelligence — Daniel Goleman (EQ as learnable skill framework)','Never Split the Difference — Chris Voss (negotiation là applied emotional intelligence)','The Body Keeps the Score — Bessel van der Kolk (how emotions live in body, for depth)']
+  },
+  {
+    id:'p5', num:'05', title:'The 6 Influence Levers + Narrative Architecture', time:'4 tuần + practice in every interaction',
+    unlock:'Đây là mechanics của làm thế nào humans actually change mind và behavior — không phải lý thuyết mà là architecture',
+    body:'Cialdini\'s 6 principles: (1) Reciprocity — ta cảm thấy obligated trả lại những gì được cho. (2) Commitment & Consistency — sau khi commit, ta sẽ behave consistently với commitment đó. (3) Social Proof — khi uncertain, ta làm gì người khác làm. (4) Authority — ta follow người có expertise/credentials/confidence. (5) Liking — ta agree với người ta thích. (6) Scarcity — rare = valuable. Mỗi cái này là lever: biết lever nào đang active trong một situation là biết cách move người. Identity-based influence: behavior follows identity. Không thay đổi behavior — thay đổi identity label. "You are not a smoker" powerful hơn "please stop smoking." Narrative Architecture: story là oldest influence technology. Hero journey, conflict-resolution, identity narrative — brain processes story khác với facts (transportation theory). Key: người không bị thuyết phục bởi arguments, họ bị moved bởi stories mà họ thấy mình trong đó. Framing effects: identical information, different frame = different decision.',
+    resources:['Influence: The Psychology of Persuasion — Robert Cialdini (the foundational text, không có substitute)','Pre-Suasion — Robert Cialdini (timing và context trong influence — sequel, cần thiết)','Story — Robert McKee (narrative architecture cho influence — vượt xa copywriting)','Made to Stick — Chip & Dan Heath (tại sao một số ideas survive và cái khác die)']
+  }
+];
+
+const STAGES = [
+  {
+    id:'s0', phase:'Pareto Sprint', range:'Tháng 1–6', lvl:'5 lenses thay đổi cách bạn nhìn mọi tương tác',
+    accent:'#B8956A', adim:'rgba(184,149,106,0.10)', abdr:'rgba(184,149,106,0.28)',
+    icon:'◐',
+    threshold:'Bạn hoàn thành Pareto Sprint khi: (1) Trong một cuộc trò chuyện bình thường, bạn có thể identify real motivation của người nói — không phải stated reason mà actual driver. (2) Bạn nhận ra bias nào đang active trong một decision được đưa ra. (3) Bạn identify được ai có status cao nhất trong một group interaction — và tại sao. (4) Bạn có thể detect emotional state của người khác chính xác hơn họ articulate được. (5) Bạn nhận ra influence principle nào đang được deployed khi ai đó cố thuyết phục bạn.',
+    wisdom:'Phase này là về mất đi sự ngây thơ — và đó là trải nghiệm không thoải mái. Khi bạn bắt đầu thấy unconscious motivations, status games, và influence mechanics trong mọi interaction, thế giới trông ít innocent hơn. Đây là price of clarity. Wisdom thực sự là dùng knowledge này để compassionate hơn, không phải cynical hơn — vì bạn cũng có unconscious motivations, cũng chơi status games, cũng bị influence. Knowledge về human nature bắt đầu bằng honest self-knowledge.',
+    wcards:[
+      {t:'Tại sao 5 frameworks này, không phải psychology textbook?', b:'Vì chúng là operative lenses — không phải information. Biết 1000 facts về psychology không giúp bạn read người trong real-time. 5 frameworks này tạo ra new perception, không phải new knowledge.'},
+      {t:'The dark side của knowledge này', b:'Người học human nature và chỉ dùng nó để manipulate sẽ tạo ra enemies invisible đến khi quá trễ. Cialdini viết cuốn Influence để teach people RESIST manipulation — không phải để deploy nó. Phân biệt influence (mutual benefit) và manipulation (asymmetric benefit).'},
+      {t:'Self-knowledge là prerequisite', b:'Bạn không thể đọc người khác accurate nếu bạn không biết khi nào projections của bạn đang color perception. Mỗi người bạn dislike mạnh mẽ — họ đang mirror một phần của bạn mà bạn chưa integrate. Jung gọi đây là shadow projection.'},
+      {t:'Lá số của bạn trong phase này', b:'Stellium Bảo Bình ở Cung 1 — bạn approach human nature như một system. Đây là strength: bạn sẽ map patterns tốt hơn hầu hết. Rủi ro: bạn có thể intellectualize thay vì feel. Human nature được hiểu qua cả head lẫn body.'},
+    ],
+    miles:[
+      {w:'W2', t:'Đọc xong Part 1 của Laws of Human Nature (Greene) — viết 1 trang về unconscious motivation của 3 người bạn biết rõ'},
+      {w:'W4', t:'Finish Thinking Fast and Slow — identify 5 biases bạn đã activate trong 1 tuần qua với ví dụ cụ thể'},
+      {w:'W5', t:'Đọc Influence (Cialdini) — viết ví dụ thực từ cuộc sống của bạn cho mỗi 1 trong 6 principles'},
+      {w:'W7', t:'Bắt đầu journal: sau mỗi significant interaction, ghi lại: real motivation là gì, emotional state của người kia là gì, status dynamics như thế nào'},
+      {w:'W9', t:'Đọc The Righteous Mind (Haidt) — identify 1 strong belief của bạn và trace actual origin của nó (trước khi rationalizations)'},
+      {w:'W11', t:'Observe 5 group interactions (meetings, dinners, events) và map: ai có status cao nhất, ai đang seeking status, ai đang protecting face'},
+      {w:'M4', t:'Áp dụng emotional labeling (từ Never Split the Difference) trong 10 conversations — ghi lại kết quả'},
+      {w:'M5', t:'Viết analysis 1000 từ về 1 người bạn thấy khó deal with — từ framework unconscious + status + emotion, không phải "họ là người xấu"'},
+      {w:'M6', t:'Self-assessment: bạn predict được reaction của người khác chính xác hơn 6 tháng trước chưa? 3 ví dụ cụ thể.'},
+    ],
+    skills:[
+      {t:'Reading the Unconscious', i:['Distinguish stated reason vs actual motivation trong conversation','Nhận ra rationalization đang xảy ra (behavior first, explanation after)','Shadow recognition: thứ bạn dislike nhất ở người khác = candidate for shadow projection','Pattern across time: behavior trong multiple situations reveal character']},
+      {t:'Bias Recognition & Leverage', i:['Identify bias đang active trong real-time decision making','Recognize khi bạn đang bị biased — cognitive decoupling','Frame information để activate hoặc de-activate specific biases','Design situations để predictably shift behavior']},
+      {t:'Status & Social Reading', i:['Map status hierarchy trong bất kỳ group nào trong 5 phút','Distinguish dominance (fear-based) vs prestige (admiration-based) status','Identify face-saving needs trước khi chúng trở thành conflict','Recognize coalition formation và shifting trong groups']},
+      {t:'Emotional Intelligence', i:['Read micro-expressions và body language tells (Ekman framework)','Emotional labeling: name emotion của người khác to de-escalate','Identify emotional state driving behavior — không phải stated reason','Regulate own emotional response trong high-stakes interactions']},
+      {t:'Influence Architecture', i:['Identify active influence principles trong any persuasion attempt','Deploy reciprocity, commitment, social proof appropriately và ethically','Frame requests để resonate với identity, không chỉ interest','Construct narrative với hero journey structure cho any pitch or argument']},
+    ],
+    books:[
+      {t:'The Laws of Human Nature', a:'Robert Greene', p:'P0', pc:'#E07A4F', w:'Comprehensive systematic map của human nature — đọc chapter by chapter, take notes, apply to real people'},
+      {t:'Thinking, Fast and Slow', a:'Daniel Kahneman', p:'P0', pc:'#E07A4F', w:'Foundation của behavioral science — without this, understanding of irrationality is anecdotal'},
+      {t:'Influence', a:'Robert Cialdini', p:'P0', pc:'#E07A4F', w:'The 6 principles — essential và immediately applicable. Đọc kỹ examples'},
+      {t:'The Righteous Mind', a:'Jonathan Haidt', p:'P1', pc:'#C9A84C', w:'Moral psychology — tại sao người ta disagree và tại sao arguments rarely change minds'},
+      {t:'Strangers to Ourselves', a:'Timothy Wilson', p:'P1', pc:'#C9A84C', w:'Scientific evidence cho adaptive unconscious — changes how you see human motivation'},
+    ],
+    pods:[
+      {n:'Hidden Brain — Shankar Vedantam', w:'Best podcast về unconscious mind và social behavior — story-driven, research-backed'},
+      {n:'The Psychology Podcast — Scott Barry Kaufman', w:'Depth interviews với psychologists, researchers — covers full spectrum'},
+      {n:'Huberman Lab (psychology episodes)', w:'Neuroscience của behavior, emotions, và social dynamics — mechanistic understanding'},
+    ],
+    reads:[
+      {n:'Farnam Street Blog (fs.blog)', w:'Mental models và human nature — Shane Parrish synthesizes across psychology, history, philosophy'},
+      {n:'Astral Codex Ten — Scott Alexander', w:'Rationalism meets psychology — best thinker online về cognitive biases và human nature'},
+      {n:'Paul Bloom — Just Babies (và essays)', w:'Moral psychology từ developmental perspective — nature of human empathy và its limits'},
+    ],
+    certs:[
+      {n:'The Science of Well-Being — Yale/Coursera (Laurie Santos)', p:'Miễn phí · 10 tuần', w:'Research-backed happiness science — apply to understanding motivation, không chỉ personal use'},
+      {n:'Learning How to Learn — Coursera (Barbara Oakley)', p:'Miễn phí · 4 tuần', w:'Meta-skill cho toàn bộ roadmap — learn faster và retain better'},
+      {n:'Nonviolent Communication (NVC) Workshop', p:'1–2 ngày', w:'Marshall Rosenberg\'s framework — practical emotional intelligence và needs identification'},
+    ],
+  },
+  {
+    id:'s1', phase:'Emergence', range:'Tháng 6–12', lvl:'Đạt Level 3–4',
+    accent:'#5BA3A0', adim:'rgba(91,163,160,0.10)', abdr:'rgba(91,163,160,0.28)',
+    icon:'◑',
+    threshold:'Bạn đạt Level 3-4 khi: Người khác notice rằng bạn "understand people" theo cách hầu hết người không. Bạn có ít nhất 1 documented case trong đó bạn successfully influence một outcome quan trọng bằng cách apply frameworks này. Bạn có thể explain bất kỳ conflict nào bạn observe theo ngôn ngữ của unconscious + status + emotion — không phải "người kia tệ." Bạn bắt đầu thấy mình trong các patterns bạn đọc về.',
+    wisdom:'Level 3-4 là nơi knowledge và application begin to merge — nhưng cũng là nơi nguy hiểm nhất. Bạn biết đủ để dangerous, chưa biết đủ để wise. "A little learning is a dangerous thing" — Pope. Người mới học Cialdini thường trở nên manipulative trước khi trở nên influential. Người mới học về power thường trở nên paranoid. Test thực sự ở level này không phải là bạn có thể đọc người khác không — mà là bạn đã grow trong compassion hay cynicism.',
+    wcards:[
+      {t:'Study from life, not just books', b:'Từ tháng 7 trở đi, mỗi tương tác là classroom. Nhưng note-taking trong đầu khác note-taking thực: viết down observations trong journal sau mỗi significant interaction. Pattern recognition requires data.'},
+      {t:'Historical figures là case studies', b:'Robert Greene học về human nature qua historical biographies. Julius Caesar, Napoleon, Eleanor Roosevelt, Frederick Douglass — mỗi người là case study về power, resilience, influence. History là laboratory.'},
+      {t:'Đọc fiction nghiêm túc', b:'Great fiction writers — Dostoevsky, Tolstoy, Shakespeare, George Eliot — hiểu human nature sâu hơn hầu hết psychologists. Crime and Punishment là case study về guilt, rationalization, và redemption. Anna Karenina về desire và self-destruction. Đây không phải giải trí — đây là curriculum.'},
+      {t:'Lá số trong phase này', b:'North Node Xử Nữ Cung 8 — bạn grow khi đi vào complexity của shadow, không né tránh. Level này đòi hỏi bạn nhìn vào những phần uncomfortable nhất của human nature — bao gồm trong chính mình.'},
+    ],
+    miles:[
+      {w:'M7', t:'Đọc xong 48 Laws of Power (Greene) — viết critical analysis: laws nào ethical, laws nào không, và điều kiện của mỗi'},
+      {w:'M7', t:'Bắt đầu 1 practice: meditation, therapy, hoặc journaling structured — self-knowledge là prerequisite của influence knowledge'},
+      {w:'M8', t:'Đọc xong Never Split the Difference — thực hành emotional labeling và tactical empathy trong 20 negotiations (kể cả nhỏ)'},
+      {w:'M9', t:'Study 3 historical figures qua biography — extract specific influence techniques và human nature lessons từ cuộc đời họ'},
+      {w:'M10', t:'Đọc 2 great novels với lens human nature: Crime and Punishment + 1 cuốn khác — viết analysis về character motivations'},
+      {w:'M10', t:'Teach 1 framework từ Pareto Sprint cho 1 người khác — teaching forces understanding, không chỉ familiarity'},
+      {w:'M11', t:'Apply 1 influence campaign có structure: cần thay đổi 1 behavior hoặc decision của group — plan, execute, review outcomes'},
+      {w:'M12', t:'Honest reflection: trong 12 tháng qua, bạn đã grow trong compassion hay cynicism? Nếu cynicism, đây là signal để recalibrate.'},
+    ],
+    skills:[
+      {t:'Advanced People Reading', i:['Track người theo thời gian: behavior trong low-stress vs high-stress situations','Identify core character traits vs situational behavior','Read group dynamics: coalitions, alliances, hidden tensions','Spot deception: behavioral tells, narrative inconsistencies, micro-expressions']},
+      {t:'Influence in Practice', i:['Negotiation: tactical empathy, anchoring, labels và mirrors (Voss)','Persuasion: ethos/pathos/logos — khi nào dùng cái nào','Leadership influence: inspire vs direct vs manipulate — và ethical lines','Conflict de-escalation: name the emotion, address the need, không argue the position']},
+      {t:'Narrative & Story', i:['Construct persuasive narrative với hero journey structure','Frame information để resonate với người nghe\'s identity và values','Storytelling in 1-1: draw person into story mà họ thấy mình là hero','Rhetorical analysis: identify narrative structures trong speeches, ads, propaganda']},
+      {t:'Historical Case Studies', i:['Extract influence lessons từ historical leaders (Greene methodology)','Identify patterns: how power is gained, maintained, lost','Study failures as much as successes — failure cases reveal mechanisms','Apply historical lessons vào modern situations với appropriate adaptation']},
+    ],
+    books:[
+      {t:'48 Laws of Power', a:'Robert Greene', p:'P0', pc:'#E07A4F', w:'Case studies trong power và influence — đọc critically, không uncritically. Mỗi law có shadow side'},
+      {t:'Never Split the Difference', a:'Chris Voss', p:'P0', pc:'#E07A4F', w:'FBI negotiation = applied human nature. Tactical empathy là the most practical skill in this book'},
+      {t:'The Art of Seduction', a:'Robert Greene', p:'P1', pc:'#C9A84C', w:'Không phải về romance — về creating desire và fascination. Deep study của what makes people compelling'},
+      {t:'Pre-Suasion', a:'Robert Cialdini', p:'P1', pc:'#C9A84C', w:'Context và timing trong influence — what happens BEFORE the ask determines the outcome'},
+      {t:'Crime and Punishment', a:'Fyodor Dostoevsky', p:'Fiction', pc:'#5BA3A0', w:'Deepest psychological novel ever written. Rationalization, guilt, pride, redemption — case study in human nature'},
+    ],
+    pods:[
+      {n:'Lex Fridman (psychology/philosophy episodes)', w:'Long-form conversations về consciousness, human nature, AI — broad intellectual context'},
+      {n:'The Tim Ferriss Show (specific guests)', w:'Nghe episodes với Robert Greene, Tara Brach, Naval Ravikant — applied wisdom từ practitioners'},
+      {n:'On Being — Krista Tippett', w:'Depth conversations về meaning, human nature, spirituality — balances analytical với experiential'},
+    ],
+    reads:[
+      {n:'Robert Greene blog và interviews', w:'Behind-the-scenes của his research methodology — how he reads historical figures'},
+      {n:'Maria Popova — The Marginalian', w:'Deep reading của literature, philosophy, psychology — synthesizes wisdom across traditions'},
+      {n:'Brain Pickings archive (historical)', w:'Same as above — years of synthesis về human nature through art và philosophy'},
+    ],
+    certs:[
+      {n:'ICF Coaching Foundation (ACTP)', p:'6 tháng', w:'Coaching certification buộc bạn develop real listening, questioning, và presence skills — không thể fake'},
+      {n:'NLP Practitioner', p:'2–3 tháng', w:'Controversial nhưng practical: language patterns, anchoring, reframing — tools for real influence'},
+      {n:'Therapy hoặc Psychoanalysis (personal)', p:'Ongoing', w:'Không phải certification — nhưng là single highest-ROI practice. Bạn không thể understand others\' depths mà không explore own'},
+    ],
+  },
+  {
+    id:'s2', phase:'Operator', range:'Tháng 12–24', lvl:'Đạt Level 6+',
+    accent:'#C4875E', adim:'rgba(196,135,94,0.10)', abdr:'rgba(196,135,94,0.28)',
+    icon:'◕',
+    threshold:'Bạn đạt Level 6 khi: Bạn được sought out để mediate conflicts, advise on people decisions, hoặc lead trong high-stakes interpersonal situations. Bạn có documented track record của successful influence — không phải luck. Bạn đã personally experienced và integrated một significant failure trong domain này — và grew from it. Bạn có thể articulate personal framework của mình, không chỉ recite frameworks của người khác. Bạn understand limits của influence — biết khi nào không nên influence.',
+    wisdom:'Level 6 là nơi technique meets character. Người ở mức này có khả năng influence rất lớn — và đó là nơi ethical foundation phải robust. Robert Greene quan sát rằng những người powerful nhất trong history thường không phải là người biết most tricks — mà là người có clearest sense of purpose và deepest self-knowledge. Influence không có character dẫn đến hollow victories và enemies you cannot see.',
+    wcards:[
+      {t:'The seduction of power', b:'Khi bạn realize rằng bạn có thể move people — có một temptation để test limits của power này. Người không vượt qua temptation này trở thành manipulators; người vượt qua trở thành leaders. The test: bạn đang serving others\' interests hay chỉ testing own power?'},
+      {t:'Specialization tạo depth', b:'Top level human nature practitioners thường có 1 domain sâu: therapy, negotiation, leadership, writing, sales, diplomacy. Domain này là laboratory cho refinement. Breadth comes after — not before — depth.'},
+      {t:'Teach để master', b:'Nếu bạn không thể dạy framework của mình cho người khác theo cách họ apply được, bạn chưa master nó. Teaching buộc precision. Consulting, coaching, hoặc mentoring là không thể tránh ở level này.'},
+      {t:'Lá số trong phase này', b:'MC Bọ Cạp — power, depth, transformation là themes của sự nghiệp bạn. Level này là nơi Scorpionic energy express đúng nhất: bạn có thể đi vào shadow của người khác mà không bị lost trong đó. Đây là rare skill.'},
+    ],
+    miles:[
+      {w:'M13', t:'Chọn 1 specialization domain: therapy/coaching, negotiation, leadership, writing/rhetoric, hoặc sales/marketing'},
+      {w:'M14', t:'Đọc xong Mastery (Greene) + Behave (Sapolsky) — biology meets psychology meets history: complete picture của human behavior'},
+      {w:'M15', t:'Begin formal practice trong chosen domain: coaching clients, negotiation projects, leadership role, hoặc writing về human nature'},
+      {w:'M17', t:'Develop và articulate own personal framework — không chỉ synthesize Greene + Cialdini + Kahneman, mà add original observation'},
+      {w:'M18', t:'Document 3 case studies từ experience: situation, analysis, intervention, outcome, lesson learned'},
+      {w:'M19', t:'Teach: dạy một series về human nature cho audience cụ thể — workshop, course, hoặc content series'},
+      {w:'M21', t:'Có 1 documented failure trong domain này — analyze honestly theo framework của mình và extract lessons'},
+      {w:'M24', t:'Articulate: "When should I NOT try to influence someone?" — wisdom về limits là marker của Level 6'},
+    ],
+    skills:[
+      {t:'Deep Psychological Reading', i:['Psychobiography: analyze historical và public figures theo psychological framework','Group dynamics: identify unconscious group processes (Bion\'s basic assumptions)','Trauma và attachment: understand how early patterns drive adult behavior','Organizational psychology: how institutions embody và perpetuate human patterns']},
+      {t:'High-Stakes Influence', i:['Crisis negotiation: influence under extreme pressure với incomplete information','Leadership presence: the physical, vocal, và energetic components của authority','Organizational change: influence large groups và systems, không chỉ individuals','Strategic communication: craft messages để move different stakeholders simultaneously']},
+      {t:'Personal Framework Development', i:['Synthesize across schools: psychology, philosophy, history, neuroscience, literature','Identify original observations không covered trong existing frameworks','Build internal consistency: framework có thể explain contradictions và edge cases','Test framework through application: where does it predict well, where does it fail?']},
+      {t:'Domain Mastery', i:['Your chosen domain: depth beyond any textbook','Track record: documented outcomes với honest accounting of failures','Peer recognition: practitioners trong domain seek your input','Original contribution: insight hoặc technique not previously articulated'],
+      },
+    ],
+    books:[
+      {t:'Mastery', a:'Robert Greene', p:'P0', pc:'#E07A4F', w:'The complete picture of deep skill development — và how masters of human nature developed their gifts'},
+      {t:'Behave', a:'Robert Sapolsky', p:'P0', pc:'#E07A4F', w:'Biology của human behavior — neuroscience, hormones, evolution. Deepest mechanistic account available'},
+      {t:'The True Believer', a:'Eric Hoffer', p:'P1', pc:'#C9A84C', w:'Mass movements psychology — how ordinary people become true believers. Essential cho understanding group influence'},
+      {t:'Crowds and Power', a:'Elias Canetti', p:'P1', pc:'#C9A84C', w:'Nobel Prize winner\'s analysis của how crowds form và how power operates within them'},
+      {t:'Anna Karenina', a:'Leo Tolstoy', p:'Fiction', pc:'#5BA3A0', w:'Tolstoy\'s understanding của self-deception và desire is unmatched in psychology literature'},
+    ],
+    pods:[
+      {n:'Masters of Scale — Reid Hoffman', w:'Influence trong organizational context — how leaders build conviction and move people at scale'},
+      {n:'Finding Mastery — Michael Gervais', w:'Performance psychology và human potential — conversations with elite performers about mindset'},
+      {n:'Dare to Lead — Brené Brown', w:'Vulnerability, courage, và authentic leadership — counterbalance to power-focused frameworks'},
+    ],
+    reads:[
+      {n:'Venkatesh Rao — Ribbonfarm', w:'Deep analysis của human nature in organizational và social contexts — original thinker'},
+      {n:'Works of Nassim Taleb (essays)', w:'Human irrationality, skin in the game, và antifragility — challenging mainstream psychology views'},
+      {n:'Edge.org — Annual Questions', w:'Scientists và thinkers answering big questions về human nature — state of the field'},
+    ],
+    certs:[
+      {n:'ICF PCC (Professional Certified Coach)', p:'1–2 năm', w:'Professional coaching credential — requires documented hours, peer review, và demonstrable skill'},
+      {n:'Psychology Master\'s (Clinical hoặc Org)', p:'2 năm part-time', w:'Nếu muốn therapy/consulting path — depth, credential, và supervised practice'},
+      {n:'Strategic Communication Program (Georgetown, Northwestern)', p:'6–12 tháng', w:'Formal rhetoric và persuasion training — nếu specializing trong leadership/public influence'},
+    ],
+  },
+  {
+    id:'s3', phase:'Architect', range:'Tháng 24+', lvl:'Hành trình đến Level 9',
+    accent:'#8878C3', adim:'rgba(136,120,195,0.10)', abdr:'rgba(136,120,195,0.28)',
+    icon:'●',
+    threshold:'Bạn tiếp cận Level 9 khi: Bạn có published framework hoặc work được referenced bởi practitioners trong field. Người tìm đến bạn cho advice về situations mà họ không biết cách handle — và bạn có một perspective họ không thể tìm được ở nơi khác. Bạn đã làm thay đổi cuộc sống của người khác theo cách profound — và có accountability cho điều đó. Bạn hiểu cả light lẫn dark của human nature — và hold both với compassion thay vì judgement.',
+    wisdom:'Robert Greene mất 5 năm viết 48 Laws of Power và bị nhiều nơi reject vì nó "quá dark." Carl Jung mất decades để develop analytical psychology từ personal breakdown. Viktor Frankl viết Man\'s Search for Meaning sau khi survive Holocaust. Người ở Level 9 trong domain này thường đã đi qua một reckoning cá nhân sâu sắc — họ không chỉ study human nature từ xa. Wisdom về human nature không đến từ observation alone — nó đến từ having been moved by life, broken by it, và rebuilt.',
+    wcards:[
+      {t:'The integration of shadow', b:'Jung: "One does not become enlightened by imagining figures of light, but by making the darkness conscious." Level 9 practitioners trong domain này đã confronted own capacity for darkness, not just others\'. Đây là sự khác biệt giữa observer và participant.'},
+      {t:'Influence at scale có different ethics', b:'Influencing 1 người vs 1000 người vs 1 triệu người là ethically different thứ — không phải chỉ về scale mà về consent, transparency, và accountability. Người ở level 9 đã worked through these questions explicitly.'},
+      {t:'The paradox of mastery', b:'Người truly master human nature thường trở nên less likely to use influence aggressively — không phải vì họ cannot, mà vì họ understand the cost to all parties. Restraint là marker của mastery. Power exercised less is often power held longer.'},
+      {t:'Lá số của bạn ở đây', b:'Sun ở Cung 12 — ẩn dật, depth, và invisible influence là themes của bạn. Những người có Sun Cung 12 ở mức cao nhất thường là eminences grises — người behind the scenes mà influence là real nhưng không visible. Đây không phải là limitation, đây là power.'},
+    ],
+    miles:[
+      {w:'Y2-3', t:'Publish significant work: book, major curriculum, framework được adopted bởi practitioners, hoặc body of writing được cited'},
+      {w:'Y2-3', t:'Build institution hoặc practice: coaching practice, consulting firm, educational program, hoặc community của practitioners'},
+      {w:'Y3', t:'Có documented case studies của transformative influence — changed outcomes trong careers, organizations, hoặc lives — với permission'},
+      {w:'Y3', t:'Personal integration milestone: therapy, retreat, hoặc reckoning đủ sâu để integrate own shadow — không phải comfortable, necessary'},
+      {w:'Y3-4', t:'Speak hoặc teach ở platforms mà practitioners learn: conferences, universities, major podcasts trong psychology/leadership space'},
+      {w:'Y4+', t:'Framework hoặc approach của bạn được used bởi người khác — cited, taught, hoặc applied — mà không cần bạn present'},
+    ],
+    skills:[
+      {t:'Synthesis Across Traditions', i:['East meets West: Buddhist psychology, Stoicism, Confucian social ethics + modern psychology','Developmental psychology: Kegan\'s stages of adult development — where people ARE vs where you want to bring them','Integral theory (Ken Wilber): multiple frameworks held simultaneously without collapsing them','Philosophy of mind: consciousness, free will, và moral responsibility — foundation questions']},
+      {t:'Transformative Influence', i:['Facilitate genuine transformation, không chỉ behavior change — change at identity level','Group transformation: how communities shift collectively','Organizational culture change: the long game of institutional influence','Healing influence: work với trauma, stuck patterns, collective wounds'],
+      },
+      {t:'Original Contribution', i:['Identify gap trong existing frameworks và fill it với original insight','Synthesize across disciplines theo cách không có precedent','Create frameworks that practitioners find generative — new things become visible','Write hoặc teach theo cách changes how people perceive, not just what they know']},
+      {t:'Wisdom Integration', i:['Hold complexity without collapsing to simplicity','Know when NOT to intervene — restraint as skill','Distinguish situation requiring influence from situation requiring acceptance','Serve others\' growth, không serve own need to be influential']},
+    ],
+    books:[
+      {t:'The Collected Works of C.G. Jung', a:'Carl Jung', p:'Primary', pc:'#E07A4F', w:'Không đọc hết — nhưng đọc: Psychological Types, Two Essays on Analytical Psychology, Memories Dreams Reflections'},
+      {t:'The Evolving Self', a:'Robert Kegan', p:'Primary', pc:'#E07A4F', w:'Adult development stages — people operate from different meaning-making systems. Changes how you calibrate influence'},
+      {t:'Power and Innocence', a:'Rollo May', p:'P1', pc:'#C9A84C', w:'Existential psychology của power — what it means to be powerful responsibly'},
+      {t:'The Brothers Karamazov', a:'Fyodor Dostoevsky', p:'Fiction', pc:'#5BA3A0', w:'Ultimate novel về human nature: faith, doubt, love, evil, redemption. Ivan\'s Grand Inquisitor chapter is required reading'},
+      {t:'Man\'s Search for Meaning', a:'Viktor Frankl', p:'Wisdom', pc:'#8878C3', w:'Human capacity for meaning even in extremity — the foundation of why influence must serve purpose, not just power'},
+    ],
+    pods:[
+      {n:'Being Well — Rick Hanson & Forrest Hanson', w:'Neuropsychology meets wisdom traditions — integration of science và contemplative knowledge'},
+      {n:'Philosophize This! — Stephen West', w:'History of philosophy as map của human nature questions — Plato through Foucault'},
+      {n:'Jung to Live By — Evans Lansing Smith', w:'Jungian psychology applied — for depth integration of psychological framework'},
+    ],
+    reads:[
+      {n:'Works of Thomas Merton (essays)', w:'Contemplative wisdom về human nature, power, và authentic self — balances intellectual với experiential'},
+      {n:'Simone Weil — selected essays', w:'One of the deepest thinkers về power, attention, và human dignity — rare combination of rigor và wisdom'},
+      {n:'Journal of Analytical Psychology', w:'For Jungian depth — if you\'ve gone this far in the analytical tradition'},
+    ],
+    certs:[
+      {n:'Jungian Analysis hoặc Analytical Psychology training', p:'3–5 năm', w:'Nếu đây là core path — intensive personal analysis combined với theoretical training'},
+      {n:'PhD trong Psychology, Philosophy, hoặc related', p:'4–6 năm', w:'Nếu muốn academic authority — credential that opens deepest rooms'},
+      {n:'Contemplative Practice Certification (MBSR, IFS, Somatic)', p:'1–2 năm', w:'Embodied practice completes the intellectual framework — cannot be replaced by reading'},
+    ],
+  }
+];
+
+let checked = {}, aS = 0, aT = 'milestones', exP = null;
+
+function load() { try { const s=localStorage.getItem(LK); if(s) checked=JSON.parse(s); } catch{} }
+function save() { try { localStorage.setItem(LK, JSON.stringify(checked)); } catch{} }
+function tp() { let d=0,t=0; STAGES.forEach(s=>{t+=s.miles.length;s.miles.forEach((_,i)=>{if(checked[s.id+'_'+i])d++;});}); return{d,t}; }
+function sp(s) { const t=s.miles.length,d=s.miles.filter((_,i)=>checked[s.id+'_'+i]).length; return{d,t,p:Math.round((d/t)*100)}; }
+
+function renderTL() {
+  document.getElementById('tl-in').innerHTML = STAGES.map((s,i)=>{
+    const a=i===aS;
+    const dots=s.miles.map((_,mi)=>`<span class="dot" style="${checked[s.id+'_'+mi]?'background:'+s.accent:''}"></span>`).join('');
+    return `<button class="stab" onclick="setS(${i})" style="border-bottom-color:${a?s.accent:'transparent'}">
+      <div class="stab-t" style="color:${a?s.accent:'var(--tm)'}">${s.range}</div>
+      <div class="stab-n" style="color:${a?'var(--text)':'var(--ts)'};font-weight:${a?500:400}">${s.phase}</div>
+      <div class="stab-d">${dots}</div>
+    </button>`;
+  }).join('');
+}
+
+function renderH() {
+  const p=tp();
+  document.getElementById('tlbl').textContent=p.d+'/'+p.t;
+  const f=document.getElementById('tfill'); f.style.width=Math.round((p.d/p.t)*100)+'%'; f.style.background=STAGES[aS].accent;
+}
+
+function renderSH() {
+  const s=STAGES[aS],p=sp(s);
+  const ico=document.getElementById('sico'); ico.textContent=s.icon; ico.style.color=s.accent;
+  const rng=document.getElementById('srng'); rng.textContent=s.range; rng.style.color=s.accent;
+  document.getElementById('snm').textContent=s.phase;
+  document.getElementById('ssb').textContent=s.lvl;
+  const box=document.getElementById('spb'); box.style.background=s.adim; box.style.border='1px solid '+s.abdr;
+  document.getElementById('spct').style.cssText='font-family:var(--mono);font-size:32px;font-weight:500;line-height:1;color:'+s.accent;
+  document.getElementById('spct').textContent=p.p+'%';
+  document.getElementById('scnt').textContent=p.d+'/'+p.t+' done';
+  document.getElementById('sfill').style.cssText='height:100%;border-radius:1px;width:'+p.p+'%;background:'+s.accent+';transition:width 0.4s';
+}
+
+function renderIT() {
+  const s=STAGES[aS];
+  const tabs=aS===0?['milestones','pareto','skills','resources','wisdom']:['milestones','skills','resources','wisdom'];
+  const lbl={milestones:'Milestones',pareto:'Pareto 20%',skills:'Skills',resources:'Resources',wisdom:'Wisdom'};
+  document.getElementById('itabs').innerHTML=tabs.map(t=>
+    `<button class="itab${aT===t?' on':''}" onclick="setT('${t}')"
+      style="color:${aT===t?s.accent:'var(--ts)'};border-bottom-color:${aT===t?s.accent:'transparent'}">${lbl[t]}</button>`
+  ).join('');
+}
+
+function renderP() {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById('panel-'+aT).classList.add('on');
+  const s=STAGES[aS];
+  if(aT==='milestones') rMiles(s);
+  if(aT==='pareto'&&aS===0) rPareto(s);
+  if(aT==='skills') rSkills(s);
+  if(aT==='resources') rRes(s);
+  if(aT==='wisdom') rWisdom(s);
+}
+
+function rMiles(s) {
+  const el=document.getElementById('panel-milestones');
+  el.innerHTML=s.miles.map((m,i)=>{
+    const done=!!checked[s.id+'_'+i];
+    return `<div class="mrow${done?' done':''}" onclick="tog('${s.id}',${i})" style="${done?'border-color:'+s.abdr+';background:'+s.adim:''}">
+      <div class="cb" style="${done?'background:'+s.accent+';border-color:'+s.accent:''}">
+        <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#09080C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <span class="mwk" style="color:${done?s.accent:'var(--tm)'}">${m.w}</span><span class="mtxt">${m.t}</span>
+      </div>
+    </div>`;
+  }).join('')+
+  `<div class="cpb" style="border:1px solid ${s.abdr};background:${s.adim}">
+    <div class="cpl" style="color:${s.accent}">Checkpoint — Dấu hiệu thực sự đạt mức này</div>
+    <div class="cpx">${s.threshold}</div>
+  </div>`;
+}
+
+function rPareto(s) {
+  const cards=PARETO.map(pc=>{
+    const ex=exP===pc.id;
+    return `<div class="pc${ex?' ex':''}" id="pc-${pc.id}">
+      <div class="ph" onclick="togP('${pc.id}')">
+        <span class="pn" style="color:${s.accent}">${pc.num}</span>
+        <div class="pm"><div class="pt">${pc.title}</div><div class="pu">${pc.unlock}</div></div>
+        <span class="ptm">${pc.time}</span>
+        <svg class="pch" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5L7 9L11 5" stroke="var(--ts)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="pb" style="border-top-color:${s.abdr}">
+        <div class="pbx">${pc.body}</div>
+        <div class="prl">Resources cụ thể</div>
+        ${pc.resources.map(r=>`<div class="pri"><span class="pra" style="color:${s.accent}">▸</span><span class="prt">${r}</span></div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('panel-pareto').innerHTML=
+    `<div class="pi"><div class="pil">5 lenses thay đổi perception — không phải information, mà là cách nhìn</div>
+    <div class="pit">Đây là 20% dẫn đến 80% khả năng đọc và influence người khác. Không phải knowledge để accumulate — mà là new perception để develop. Khi 5 frameworks này internalized, bạn không thể unsee chúng trong mọi tương tác.</div></div>${cards}`;
+}
+
+function rSkills(s) {
+  document.getElementById('panel-skills').innerHTML=
+    `<div id="sg">${s.skills.map(sk=>`
+      <div class="sc">
+        <div class="stl" style="color:${s.accent}">${sk.t}</div>
+        ${sk.i.map(it=>`<div class="si"><span class="sa" style="color:${s.accent}">▸</span><span class="sx">${it}</span></div>`).join('')}
+      </div>`).join('')}</div>`;
+}
+
+function rRes(s) {
+  const bks=s.books.map(b=>`
+    <div class="rb">
+      <div class="rbar" style="background:${b.pc}"></div>
+      <div class="rbi">
+        <div class="rtr"><span class="rtt">${b.t}</span><span class="rta">— ${b.a}</span><span class="rpri" style="color:${b.pc}">${b.p}</span></div>
+        <div class="rwy">${b.w}</div>
+      </div>
+    </div>`).join('');
+  const pods=s.pods.map(p=>`<div class="rc"><div class="rcn">${p.n}</div><div class="rcw">${p.w}</div></div>`).join('');
+  const reads=s.reads.map(r=>`<div class="rc"><div class="rcn">${r.n}</div><div class="rcw">${r.w}</div></div>`).join('');
+  const certs=s.certs.map(c=>`
+    <div class="rct">
+      <div class="rcb" style="color:${s.accent};background:${s.adim};border:1px solid ${s.abdr}">${c.p}</div>
+      <div><div class="rctn">${c.n}</div><div class="rctw">${c.w}</div></div>
+    </div>`).join('');
+  document.getElementById('panel-resources').innerHTML=
+    `<div class="rs"><div class="rsl">Sách</div>${bks}</div>
+    <div class="r2"><div><div class="rsl">Podcast</div>${pods}</div><div><div class="rsl">Reading & Essays</div>${reads}</div></div>
+    <div class="rs"><div class="rsl">Certifications & Practice</div>${certs}</div>`;
+}
+
+function rWisdom(s) {
+  const cards=s.wcards.map(w=>`
+    <div class="wc"><div class="wcl" style="color:${s.accent}">${w.t}</div><div class="wcx">${w.b}</div></div>`).join('');
+  document.getElementById('panel-wisdom').innerHTML=
+    `<div class="wm" style="border:1px solid ${s.abdr};background:${s.adim}">
+      <div class="wl" style="color:${s.accent}">Core Wisdom — ${s.phase}</div>
+      <div class="wt">${s.wisdom}</div>
+    </div><div class="wg">${cards}</div>`;
+}
+
+function renderFtr() {
+  const p=tp(); document.getElementById('fl').textContent='Progress tự động lưu · '+p.d+'/'+p.t+' milestones hoàn thành';
+}
+
+function render() { renderH();renderTL();renderSH();renderIT();renderP();renderFtr(); }
+function setS(i) { aS=i;aT='milestones';exP=null;render(); }
+function setT(t) { aT=t;render(); }
+function tog(id,i) { const k=id+'_'+i; checked[k]=!checked[k]; save(); render(); }
+function togP(id) { exP=exP===id?null:id; renderP(); }
+
+load(); render();
+</script>
+</body>
+</html>
