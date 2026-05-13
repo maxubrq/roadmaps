@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flutter → Top 1% Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0e0f;
+  --bg2: #161618;
+  --bg3: #1e1e21;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8e4dc;
+  --muted: #6b6860;
+  --muted2: #9a958c;
+  --mono: 'DM Mono', monospace;
+  --serif: 'Fraunces', serif;
+  --accent: #c8b560;
+  --phase-color: #c8b560;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--mono);font-size:14px;line-height:1.7;min-height:100vh}
+
+/* ── scrollbar ── */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* ── layout ── */
+.shell{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+
+/* ── sidebar ── */
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:0;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+.sidebar-logo{padding:28px 24px 20px;border-bottom:1px solid var(--border)}
+.sidebar-logo .wordmark{font-family:var(--serif);font-size:17px;font-weight:300;color:var(--text);letter-spacing:.02em;line-height:1.3}
+.sidebar-logo .wordmark em{font-style:italic;color:var(--accent)}
+.sidebar-logo .sub{font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:.05em}
+
+.overall-progress{padding:16px 24px;border-bottom:1px solid var(--border)}
+.op-label{font-size:11px;color:var(--muted);letter-spacing:.08em;margin-bottom:8px}
+.op-count{font-size:22px;font-weight:500;font-family:var(--serif);color:var(--text);margin-bottom:8px}
+.op-count span{font-size:13px;font-weight:300;color:var(--muted2)}
+.progress-track{height:3px;background:var(--border2);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .5s ease;width:0%}
+
+.phase-nav{padding:16px 0;flex:1}
+.phase-nav-label{font-size:10px;letter-spacing:.1em;color:var(--muted);padding:0 24px;margin-bottom:8px}
+.phase-link{display:flex;align-items:center;gap:10px;padding:9px 24px;cursor:pointer;transition:background .15s;border:none;background:transparent;width:100%;text-align:left;color:var(--muted2);font-family:var(--mono);font-size:12px;border-left:2px solid transparent}
+.phase-link:hover{background:var(--bg3);color:var(--text)}
+.phase-link.active{background:var(--bg3);color:var(--text);border-left-color:var(--phase-color)}
+.phase-link .ph-score{font-size:11px;margin-left:auto;font-weight:500}
+.phase-link .ph-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;background:var(--border2)}
+.phase-link.active .ph-dot{background:var(--phase-color)}
+.phase-mini-bar{height:2px;background:var(--border);border-radius:1px;overflow:hidden;margin:4px 24px 0;width:calc(100% - 48px)}
+.phase-mini-fill{height:100%;background:var(--phase-color);border-radius:1px;transition:width .4s;width:0%}
+
+.sidebar-footer{padding:20px 24px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)}
+
+/* ── main ── */
+.main{padding:0}
+.phase-section{display:none;padding:48px 56px;max-width:880px}
+.phase-section.visible{display:block}
+
+.phase-header{margin-bottom:40px}
+.phase-eyebrow{font-size:11px;letter-spacing:.1em;color:var(--muted);margin-bottom:10px}
+.phase-eyebrow span{color:var(--phase-color);font-weight:500}
+.phase-title{font-family:var(--serif);font-size:36px;font-weight:300;line-height:1.25;color:var(--text);margin-bottom:14px}
+.phase-title em{font-style:italic;color:var(--phase-color)}
+.phase-desc{font-size:13px;color:var(--muted2);line-height:1.7;max-width:600px}
+
+.score-display{display:flex;align-items:center;gap:16px;margin:20px 0}
+.score-num{font-family:var(--serif);font-size:48px;font-weight:300;color:var(--phase-color);line-height:1}
+.score-10{font-size:20px;color:var(--muted);font-weight:300}
+.score-bar-wrap{flex:1;height:4px;background:var(--border2);border-radius:2px;overflow:hidden}
+.score-bar-fill{height:100%;background:var(--phase-color);border-radius:2px;transition:width .8s ease}
+
+/* ── principle ── */
+.principle{border:1px solid var(--border2);background:var(--bg2);border-radius:8px;padding:18px 22px;margin:28px 0;position:relative;overflow:hidden}
+.principle::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--phase-color)}
+.principle-label{font-size:10px;letter-spacing:.1em;color:var(--phase-color);margin-bottom:6px}
+.principle-text{font-size:13px;color:var(--muted2);line-height:1.75;font-style:italic}
+
+/* ── section headings ── */
+.s-heading{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;color:var(--muted);margin:36px 0 14px;text-transform:uppercase}
+.s-heading::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── topic cards ── */
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:8px}
+.topic-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;transition:border-color .15s}
+.topic-card:hover{border-color:var(--border2)}
+.topic-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px}
+.topic-body{font-size:12px;color:var(--muted2);line-height:1.6}
+
+/* ── resources ── */
+.resource-list{display:flex;flex-direction:column;gap:6px}
+.resource-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;font-size:12px;transition:border-color .15s}
+.resource-item:hover{border-color:var(--border2)}
+.r-type{font-size:10px;font-weight:500;padding:2px 8px;border-radius:100px;letter-spacing:.04em;min-width:50px;text-align:center}
+.r-name{flex:1;color:var(--text)}
+.r-link{font-size:11px;color:var(--muted);font-style:italic}
+
+/* ── checkboxes: exercises & milestones ── */
+.check-list{display:flex;flex-direction:column;gap:8px}
+.check-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;user-select:none}
+.check-item:hover{border-color:var(--border2)}
+.check-item.done{border-color:var(--phase-color);background:color-mix(in srgb,var(--phase-color) 5%,var(--bg2))}
+.check-item.done .ci-text{color:var(--muted)}
+.check-item.done .ci-title{text-decoration:line-through;color:var(--muted)}
+.check-box{width:18px;height:18px;border:1.5px solid var(--border2);border-radius:4px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .2s;background:transparent}
+.check-item.done .check-box{background:var(--phase-color);border-color:var(--phase-color)}
+.check-icon{width:10px;height:10px;opacity:0;transition:opacity .15s}
+.check-icon::before{content:'';display:block;width:5px;height:8px;border-right:1.5px solid var(--bg);border-bottom:1.5px solid var(--bg);transform:rotate(45deg) translate(-1px,-2px)}
+.check-item.done .check-icon{opacity:1}
+.ci-text{flex:1}
+.ci-title{font-size:13px;font-weight:500;color:var(--text);display:block;margin-bottom:2px;transition:all .15s}
+.ci-desc{font-size:12px;color:var(--muted2);line-height:1.6}
+.ci-tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:100px;background:var(--bg3);color:var(--muted);border:1px solid var(--border);margin-bottom:4px;letter-spacing:.03em}
+
+/* ── mobile toggle ── */
+.mobile-bar{display:none;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.mobile-logo{font-family:var(--serif);font-size:15px;font-weight:300;color:var(--text)}
+.mobile-logo em{font-style:italic;color:var(--accent)}
+.mobile-toggle{background:transparent;border:1px solid var(--border2);color:var(--text);padding:6px 12px;border-radius:4px;font-family:var(--mono);font-size:11px;cursor:pointer}
+.mobile-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99}
+.mobile-overlay.open{display:block}
+.mobile-sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;background:var(--bg2);border-right:1px solid var(--border);z-index:100;overflow-y:auto;transform:translateX(-100%);transition:transform .2s}
+.mobile-sidebar.open{transform:translateX(0)}
+
+@media(max-width:800px){
+  .shell{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .mobile-bar{display:flex}
+  .main{padding:0}
+  .phase-section{padding:28px 24px}
+  .phase-title{font-size:26px}
+  .score-num{font-size:36px}
+  .topic-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- mobile bar -->
+<div class="mobile-bar">
+  <div class="mobile-logo">Flutter <em>→</em> Top 1%</div>
+  <button class="mobile-toggle" onclick="toggleMobile()">☰ Phases</button>
+</div>
+<div class="mobile-overlay" id="mOverlay" onclick="toggleMobile()"></div>
+<div class="mobile-sidebar" id="mSidebar"></div>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="wordmark">Flutter <em>→</em><br>Top 1% Roadmap</div>
+      <div class="sub">SOFTWARE ENGINEERING</div>
+    </div>
+    <div class="overall-progress">
+      <div class="op-label">TIẾN ĐỘ TỔNG</div>
+      <div class="op-count" id="op-count">0 <span>/ 0 tasks</span></div>
+      <div class="progress-track"><div class="progress-fill" id="op-fill"></div></div>
+    </div>
+    <div class="phase-nav">
+      <div class="phase-nav-label">GIAI ĐOẠN</div>
+      <div id="sidebar-links"></div>
+    </div>
+    <div class="sidebar-footer">Checkbox tự động lưu<br>trong trình duyệt</div>
+  </aside>
+
+  <main class="main" id="main"></main>
+</div>
+
+<script>
+const PHASES = [
+  {
+    id: 'p0',
+    slug: 'month-1',
+    label: 'Tháng 1',
+    sublabel: '80/20 Foundation',
+    score: '1-2',
+    scoreWidth: '15%',
+    color: '#c8b560',
+    eyebrow: 'GIAI ĐOẠN 01 · Tháng 1',
+    title: 'Nắm 20% trọng yếu,\nunlock <em>80% Flutter</em>',
+    desc: 'Nguyên lý Pareto áp dụng triệt để. Không học tất cả — học cái quan trọng nhất. Sau tháng này mình có thể xây bất kỳ UI nào và hiểu flow dữ liệu cơ bản.',
+    principle: 'Mọi thứ trong Flutter đều là Widget. Hiểu Widget lifecycle + StatefulWidget + InheritedWidget là hiểu 50% toàn bộ framework. Học ít, hiểu sâu, lặp lại nhiều.',
+    topics: [
+      { name: 'Dart core', body: 'Null safety, async/await, Streams, Generics, Extensions. Không cần master — cần đọc được Flutter source.' },
+      { name: 'Widget tree', body: 'Stateless vs Stateful, BuildContext, Keys, Widget lifecycle. Đây là nền tảng của mọi thứ.' },
+      { name: 'State cơ bản', body: 'setState, InheritedWidget, Provider (ChangeNotifier). Hiểu tại sao trước khi học how.' },
+      { name: 'Navigation', body: 'Navigator 2.0 căn bản, GoRouter setup, passing data. Đủ dùng cho 80% app thực tế.' },
+      { name: 'HTTP & JSON', body: 'http package, dio basics, json_serializable, fromJson/toJson pattern.' },
+      { name: 'Layout system', body: 'Row, Column, Stack, Flex, Expanded, Constraints. Hiểu constraint propagation là chìa khóa.' },
+    ],
+    resources: [
+      { type: 'DOC', typeStyle: 'background:#1a2a1a;color:#7ec87e', name: 'Flutter official docs — Get started + Cookbook', link: 'flutter.dev/docs' },
+      { type: 'VIDEO', typeStyle: 'background:#1a1a2a;color:#7e7ec8', name: 'Flutter & Dart – The Complete Guide (Academind)', link: 'udemy.com' },
+      { type: 'BOOK', typeStyle: 'background:#2a1a1a;color:#c87e7e', name: 'Flutter in Action — Eric Windmill', link: 'manning.com' },
+      { type: 'REPO', typeStyle: 'background:#2a2018;color:#c8a87e', name: 'flutter/samples — official examples', link: 'github.com/flutter/samples' },
+    ],
+    exercises: [
+      { tag: 'UI', title: 'Clone Spotify mini-player', desc: 'Chỉ dùng StatefulWidget + CustomPainter. Không dùng package nào ngoài http.' },
+      { tag: 'STATE', title: 'Todo app không dùng package state', desc: 'Quản lý state thuần với setState + lifting state up. Hiểu pain point trước khi dùng solution.' },
+      { tag: 'API', title: 'GitHub user search', desc: 'Gọi API, parse JSON, hiển thị list, handle loading/error states đúng cách.' },
+      { tag: 'HABIT', title: 'Viết 30 widget từ đầu', desc: 'Mỗi ngày 1 widget nhỏ. Không copy-paste, tự gõ và đọc lỗi.' },
+    ],
+    milestones: [
+      { title: 'Đọc và hiểu Flutter source code cơ bản', desc: 'Không bị mất khi ctrl+click vào Widget bất kỳ' },
+      { title: 'Build được app hoàn chỉnh từ 0', desc: 'Không cần lookup từng dòng code' },
+      { title: 'Giải thích được tại sao Widget rebuild', desc: 'Không chỉ biết là nó rebuild, hiểu được cơ chế' },
+      { title: 'Commit mỗi ngày trên GitHub', desc: 'Portfolio bắt đầu hình thành — streak xanh quan trọng' },
+    ]
+  },
+  {
+    id: 'p1',
+    slug: 'month-3',
+    label: 'Tháng 3',
+    sublabel: 'Level 3/10',
+    score: '3',
+    scoreWidth: '30%',
+    color: '#e07a5f',
+    eyebrow: 'GIAI ĐOẠN 02 · Tháng 3',
+    title: 'Foundation vững —\nbuild được <em>app production</em>',
+    desc: 'Chuyển đổi từ "làm theo tutorial" sang "tự thiết kế solution". Cuối giai đoạn này có 1 app thực sự trên store.',
+    principle: 'Tốc độ học tăng theo cấp số nhân khi mình build thứ gì đó thực sự. Mỗi vấn đề gặp trong production quan trọng hơn 10 tutorial. Ship code, đọc lỗi, fix, repeat.',
+    topics: [
+      { name: 'State management deep', body: 'Riverpod hoặc Bloc — chọn 1 và master hoàn toàn. Hiểu pattern, không chỉ syntax.' },
+      { name: 'Testing cơ bản', body: 'Unit test, Widget test, mock dependencies. TDD mindset từ sớm tạo ra software engineer.' },
+      { name: 'Clean Architecture', body: 'Presentation → Domain → Data layers. Repository pattern. DI với get_it.' },
+      { name: 'Local persistence', body: 'Hive, SharedPreferences, SQLite với drift. Biết khi nào dùng cái gì.' },
+      { name: 'Custom UI & Animation', body: 'CustomPainter, CustomClipper, AnimationController, Tween. Không phụ thuộc package.' },
+      { name: 'Git workflow', body: 'Feature branches, conventional commits, PR reviews (tự review code của mình).' },
+    ],
+    resources: [
+      { type: 'DOC', typeStyle: 'background:#1a2a1a;color:#7ec87e', name: 'Riverpod docs — đọc toàn bộ', link: 'riverpod.dev' },
+      { type: 'VIDEO', typeStyle: 'background:#1a1a2a;color:#7e7ec8', name: 'Reso Coder — Flutter TDD Clean Architecture series', link: 'youtube.com/resocoder' },
+      { type: 'BOOK', typeStyle: 'background:#2a1a1a;color:#c87e7e', name: 'Clean Architecture — Robert C. Martin (ch.1-5, 22+)', link: '' },
+      { type: 'REPO', typeStyle: 'background:#2a2018;color:#c8a87e', name: 'felangel/bloc examples', link: 'github.com/felangel/bloc' },
+      { type: 'BLOG', typeStyle: 'background:#1a2226;color:#7eb8c8', name: 'Very Good Ventures blog — engineering best practices', link: 'verygood.ventures/blog' },
+    ],
+    exercises: [
+      { tag: 'PROJECT', title: 'E-commerce app đầy đủ', desc: 'Auth, product list, cart, checkout flow. Clean arch. Riverpod. Unit tests ≥ 70% coverage.' },
+      { tag: 'REALTIME', title: 'Real-time chat với Firebase', desc: 'Stream data, optimistic updates, offline support. Học cách handle edge cases.' },
+      { tag: 'UI', title: 'Clone 1 màn hình phức tạp từ Dribbble', desc: 'Pixel-perfect. Chỉ dùng CustomPainter + animations. Không dùng package UI.' },
+      { tag: 'DEPLOY', title: 'Submit lên Play Store / App Store', desc: 'Setup signing, flavors, build pipeline. Pain này cần trải qua đúng lúc.' },
+    ],
+    milestones: [
+      { title: '1 app trên store với ≥ 50 downloads thực', desc: 'Không phải downloads của bạn bè — người lạ dùng' },
+      { title: 'Viết được test cho mọi business logic', desc: 'Không cần hỏi cách mock hay setup' },
+      { title: 'Giải thích Clean Architecture cho người khác', desc: 'Bao gồm các trade-off, không chỉ lý thuyết' },
+      { title: 'Code review PR của người khác có giá trị', desc: 'Feedback constructive, không chỉ nitpick syntax' },
+    ]
+  },
+  {
+    id: 'p2',
+    slug: 'month-6',
+    label: 'Tháng 6',
+    sublabel: 'Level 5-6/10',
+    score: '5-6',
+    scoreWidth: '55%',
+    color: '#81b29a',
+    eyebrow: 'GIAI ĐOẠN 03 · Tháng 6',
+    title: 'Production-ready —\n<em>Senior mindset</em> bắt đầu',
+    desc: 'Từ "code chạy được" sang "code đúng". Performance, scalability, maintainability. Đây là lúc khoảng cách với 80% developer bắt đầu mở ra.',
+    principle: 'Top developer không giỏi hơn ở syntax — giỏi hơn ở mental model. Họ thấy system, không thấy code. Giai đoạn này rèn mental model về performance và architecture trade-offs.',
+    topics: [
+      { name: 'Performance deep', body: 'Flutter DevTools profiling, jank detection, const widgets, RepaintBoundary, lazy loading, image optimization.' },
+      { name: 'Platform channels', body: 'MethodChannel, EventChannel. Viết native code iOS (Swift) + Android (Kotlin). Không sợ native nữa.' },
+      { name: 'Security & Auth', body: 'JWT, token refresh, certificate pinning, secure storage, biometric auth pattern.' },
+      { name: 'CI/CD pipeline', body: 'GitHub Actions hoặc Codemagic. Automated testing, code signing, distribution.' },
+      { name: 'Internationalization', body: 'flutter_localizations, ARB files, RTL support, locale-aware formatting.' },
+      { name: 'Analytics & Monitoring', body: 'Firebase Analytics, Crashlytics, custom events, funnel analysis. Data-driven decisions.' },
+    ],
+    resources: [
+      { type: 'DOC', typeStyle: 'background:#1a2a1a;color:#7ec87e', name: 'Flutter performance best practices — official', link: 'flutter.dev/docs/perf' },
+      { type: 'VIDEO', typeStyle: 'background:#1a1a2a;color:#7e7ec8', name: 'Flutter Vikings / Flutter Forward talks — YouTube', link: 'youtube.com' },
+      { type: 'BOOK', typeStyle: 'background:#2a1a1a;color:#c87e7e', name: 'Designing Data-Intensive Applications — Kleppmann', link: '' },
+      { type: 'REPO', typeStyle: 'background:#2a2018;color:#c8a87e', name: 'VGV very_good_cli — study the template', link: 'github.com/VeryGoodOpenSource' },
+      { type: 'BLOG', typeStyle: 'background:#1a2226;color:#7eb8c8', name: 'Flutter Community Medium — advanced articles', link: 'medium.com/flutter' },
+    ],
+    exercises: [
+      { tag: 'PERF', title: 'Performance audit app cũ', desc: 'Profile app tháng 3, tìm jank, optimize. Document trước/sau bằng số liệu DevTools.' },
+      { tag: 'PLUGIN', title: 'Viết 1 Flutter plugin', desc: 'Expose native camera API, accelerometer, hoặc Bluetooth. Publish lên pub.dev.' },
+      { tag: 'ARCH', title: 'Build offline-first app', desc: 'Sync engine, conflict resolution, optimistic updates. Đây là problem thực sự khó.' },
+      { tag: 'DEVOPS', title: 'Setup CI/CD hoàn chỉnh', desc: 'Push code → test → build → deploy TestFlight/Internal testing tự động.' },
+    ],
+    milestones: [
+      { title: 'Identify performance bottleneck trong < 30 phút', desc: 'Dùng DevTools thành thạo, không đoán mò' },
+      { title: '1 package publish trên pub.dev với ≥ 20 pub points', desc: 'Người khác thực sự dùng package của mình' },
+      { title: 'App scale được đến 10,000 users không cần rewrite', desc: 'Architecture decisions đúng từ đầu' },
+      { title: 'Được assigned làm tech lead cho 1 feature', desc: 'Team trust mình ở technical decisions' },
+    ]
+  },
+  {
+    id: 'p3',
+    slug: 'month-18',
+    label: 'Tháng 18',
+    sublabel: 'Level 7-8/10',
+    score: '7-8',
+    scoreWidth: '75%',
+    color: '#a8c5da',
+    eyebrow: 'GIAI ĐOẠN 04 · Tháng 6-18',
+    title: 'Senior Flutter Engineer —\n<em>System thinker</em>',
+    desc: 'Đây là khoảng cách thật sự giữa good và great. Không còn hỏi "làm thế nào" — bắt đầu hỏi "tại sao" và "có đánh đổi gì". Giai đoạn dài nhất vì cần mileage thực sự.',
+    principle: 'Wisdom = Experience × Reflection. Code nhiều không đủ — phải reflect sau mỗi project: điều gì làm tốt, điều gì nên khác đi, quyết định nào regret và tại sao.',
+    topics: [
+      { name: 'Advanced architecture', body: 'Micro-frontends, module federation, monorepo với Melos. Design for scale từ ngày 1.' },
+      { name: 'Flutter internals', body: 'RenderObject tree, Element tree vs Widget tree. Đọc Flutter source. Custom RenderObject cho perf-critical UI.' },
+      { name: 'Desktop & Web', body: 'Flutter Web optimization, PWA, responsive design system. Desktop-specific UX patterns.' },
+      { name: 'Leadership skills', body: 'Technical design docs, ADRs, mentoring juniors, code review culture.' },
+      { name: 'Quality culture', body: 'Golden tests, integration tests với Patrol, E2E với Firebase Test Lab.' },
+      { name: 'OSS contribution', body: 'Contribute vào Flutter framework hoặc major packages. PR merged = proof of expertise.' },
+    ],
+    resources: [
+      { type: 'BOOK', typeStyle: 'background:#2a1a1a;color:#c87e7e', name: 'A Philosophy of Software Design — Ousterhout', link: '' },
+      { type: 'BOOK', typeStyle: 'background:#2a1a1a;color:#c87e7e', name: "The Staff Engineer's Path — Tanya Reilly", link: '' },
+      { type: 'REPO', typeStyle: 'background:#2a2018;color:#c8a87e', name: 'Flutter engine source — github.com/flutter/engine', link: 'github.com/flutter/engine' },
+      { type: 'VIDEO', typeStyle: 'background:#1a1a2a;color:#7e7ec8', name: 'Flutter Engage / I/O talks — internals deep dives', link: 'youtube.com' },
+      { type: 'BLOG', typeStyle: 'background:#1a2226;color:#7eb8c8', name: 'Remi Rousselet, Felix Angelov blogs — framework authors', link: '' },
+      { type: 'DOC', typeStyle: 'background:#1a2a1a;color:#7ec87e', name: 'Melos docs — monorepo management', link: 'melos.invertase.dev' },
+    ],
+    exercises: [
+      { tag: 'LEAD', title: 'Lead một project từ A-Z', desc: 'Architecture decision, team coordination, code review, deployment. Document mọi decision và tại sao.' },
+      { tag: 'WRITING', title: 'Viết ADR cho 3 quyết định kiến trúc', desc: 'Architecture Decision Record — practice articulating trade-offs bằng văn bản.' },
+      { tag: 'MENTOR', title: 'Mentor 1 junior developer', desc: 'Dạy người khác là test tốt nhất cho sự hiểu biết. Schedule weekly 1:1, review code của họ.' },
+      { tag: 'OSS', title: 'Contribute vào Flutter repo', desc: 'Fix 1 bug, improve docs, hoặc improve 1 package. Tham gia GitHub discussions.' },
+      { tag: 'TOOL', title: 'Xây 1 internal tool dùng cho team', desc: 'Solve real pain point. Design API cho người khác dùng — empathy-driven engineering.' },
+    ],
+    milestones: [
+      { title: 'Được đồng nghiệp hỏi ý kiến về architecture', desc: 'Không phải syntax — là decisions quan trọng' },
+      { title: 'Ít nhất 1 OSS contribution được merge', desc: 'Vào Flutter hoặc package có ≥ 1k likes' },
+      { title: 'Có thể onboard junior dev productive trong tuần đầu', desc: 'Tức là mình đã document & structure tốt' },
+      { title: 'Portfolio có ≥ 3 app production với real metrics', desc: 'Users, reviews, crash rate, performance data' },
+      { title: 'Nói chuyện tại 1 meetup hoặc viết technical article được cite', desc: 'Community bắt đầu biết tên mình' },
+    ]
+  },
+  {
+    id: 'p4',
+    slug: 'top-1',
+    label: 'Top 1%',
+    sublabel: 'Level 10/10',
+    score: '10',
+    scoreWidth: '100%',
+    color: '#b5a1e0',
+    eyebrow: 'ĐÍCH ĐẾN · 10 / 10',
+    title: 'The Flutter Engineer\nat <em>10 / 10</em>',
+    desc: 'Top 1% không phải là đích đến — là phong cách làm việc. Người ở level này được nhận ra qua cách họ suy nghĩ về problem, không phải qua số năm kinh nghiệm.',
+    principle: 'Top 1% = Deep expertise + Breadth awareness + Communication + Taste. Taste quan trọng nhất — biết phân biệt solution tốt và solution đúng, biết khi nào overengineer là hại.',
+    topics: [
+      { name: 'Flutter framework contributor', body: 'Hiểu Flutter engine ở C++ level. Có thể optimize rendering pipeline. PR được merge vào flutter/flutter.' },
+      { name: 'Thought leadership', body: 'Conference speaker (DroidCon, Flutter Vikings), technical blog được community follow, podcast guest.' },
+      { name: 'Cross-domain fluency', body: 'iOS/Android native expertise. Backend đủ để thiết kế API cùng team. UX principles đủ để push back designer.' },
+      { name: 'Community builder', body: 'Flutter meetup organizer, mentoring network, team culture builder. Multiply others.' },
+      { name: 'Technology vision', body: 'Biết Flutter roadmap, follow Dart SDK evolution, predict ecosystem shifts. Advise tổ chức về technology bets.' },
+    ],
+    resources: [
+      { type: 'BOOK', typeStyle: 'background:#2a1a1a;color:#c87e7e', name: 'Software Engineering at Google — Winters et al.', link: '' },
+      { type: 'BOOK', typeStyle: 'background:#2a1a1a;color:#c87e7e', name: 'An Elegant Puzzle — Will Larson', link: '' },
+      { type: 'REPO', typeStyle: 'background:#2a2018;color:#c8a87e', name: 'flutter/flutter issues — contribute, triage, review', link: 'github.com/flutter/flutter' },
+      { type: 'BLOG', typeStyle: 'background:#1a2226;color:#7eb8c8', name: 'Flutter Discord, r/FlutterDev — give, don\'t just take', link: '' },
+      { type: 'VIDEO', typeStyle: 'background:#1a1a2a;color:#7e7ec8', name: 'Strange Loop, GOTO conf — engineering thinking', link: '' },
+    ],
+    exercises: [
+      { tag: 'OSS', title: 'Build và maintain 1 popular package', desc: '≥ 500 likes trên pub.dev. Respond to issues. Write migration guides. Build community around it.' },
+      { tag: 'SPEAK', title: 'Deliver 1 conference talk', desc: 'Submit CFP cho Flutter Vikings, DroidCon, hoặc local conf. Present content bạn thực sự đã build.' },
+      { tag: 'LEGACY', title: 'Audit và rewrite legacy Flutter app', desc: 'Take someone\'s 3-year-old codebase và modernize. Document every decision.' },
+      { tag: 'CULTURE', title: 'Design Flutter architecture guidelines cho tổ chức', desc: 'Internal handbook, linting rules, CI templates. Codify knowledge để scale.' },
+    ],
+    milestones: [
+      { title: 'Được offer Principal / Staff Engineer roles', desc: 'Không phải Senior — Staff hoặc Principal' },
+      { title: 'Community biết tên bạn', desc: 'GitHub profile, pub.dev packages, talks — outside your company' },
+      { title: 'Junior developers cite bạn khi học Flutter', desc: 'Blog posts, packages, hoặc talks của bạn được reference' },
+      { title: 'Có thể explain bất kỳ Flutter decision nào từ first principles', desc: 'Không phải "vì docs nói vậy"' },
+      { title: 'Contribution vào Flutter framework chính thức', desc: 'PR merged vào flutter/flutter hoặc flutter/engine' },
+    ]
+  }
+];
+
+// ── state ──
+function getSaved() {
+  try { return JSON.parse(localStorage.getItem('flutter-roadmap-v1') || '{}'); } catch { return {}; }
+}
+function saveState(state) {
+  try { localStorage.setItem('flutter-roadmap-v1', JSON.stringify(state)); } catch {}
+}
+
+let saved = getSaved();
+let currentPhase = 0;
+
+// ── count total checkboxes ──
+function totalItems() {
+  return PHASES.reduce((s,p)=>s+p.exercises.length+p.milestones.length,0);
+}
+function checkedItems() {
+  return Object.values(saved).filter(Boolean).length;
+}
+
+// ── update overall progress ──
+function updateOverall() {
+  const total = totalItems(), checked = checkedItems();
+  const pct = total ? Math.round(checked/total*100) : 0;
+  document.getElementById('op-count').innerHTML = `${checked} <span>/ ${total} tasks</span>`;
+  document.getElementById('op-fill').style.width = pct+'%';
+}
+
+// ── update per-phase mini bars ──
+function updateMiniBars() {
+  PHASES.forEach((p,i) => {
+    const keys = [...p.exercises.map((_,j)=>`${p.id}-ex-${j}`), ...p.milestones.map((_,j)=>`${p.id}-ms-${j}`)];
+    const done = keys.filter(k=>saved[k]).length;
+    const pct = keys.length ? done/keys.length*100 : 0;
+    const bar = document.getElementById(`mini-bar-${i}`);
+    if(bar) bar.style.width = pct+'%';
+  });
+}
+
+// ── toggle checkbox ──
+function toggle(key) {
+  saved[key] = !saved[key];
+  saveState(saved);
+  const el = document.querySelector(`[data-key="${key}"]`);
+  if(el) el.classList.toggle('done', !!saved[key]);
+  updateOverall();
+  updateMiniBars();
+}
+
+// ── render sidebar links ──
+function renderSidebar(container) {
+  container.innerHTML = PHASES.map((p,i)=>`
+    <button class="phase-link${i===currentPhase?' active':''}" onclick="showPhase(${i})" style="${i===currentPhase?'--phase-color:'+p.color:''}">
+      <span class="ph-dot"></span>
+      <span>${p.label}<br><span style="font-size:10px;opacity:.6">${p.sublabel}</span></span>
+      <span class="ph-score" style="color:${p.color}">${p.score}</span>
+    </button>
+    <div class="phase-mini-bar"><div class="phase-mini-fill" id="mini-bar-${i}" style="background:${p.color}"></div></div>
+  `).join('');
+}
+
+// ── render all phase sections ──
+function renderMain() {
+  const main = document.getElementById('main');
+  main.innerHTML = PHASES.map((p,i) => `
+    <section class="phase-section${i===currentPhase?' visible':''}" id="section-${i}" style="--phase-color:${p.color}">
+      <div class="phase-header">
+        <div class="phase-eyebrow"><span>${p.eyebrow}</span></div>
+        <h1 class="phase-title">${p.title.replace(/\n/g,'<br>')}</h1>
+        <p class="phase-desc">${p.desc}</p>
+      </div>
+
+      <div class="score-display">
+        <div class="score-num">${p.score}<span class="score-10"> /10</span></div>
+        <div class="score-bar-wrap"><div class="score-bar-fill" style="width:${p.scoreWidth}"></div></div>
+      </div>
+
+      <div class="principle">
+        <div class="principle-label">NGUYÊN TẮC CỐT LÕI</div>
+        <div class="principle-text">${p.principle}</div>
+      </div>
+
+      <div class="s-heading">Core topics</div>
+      <div class="topic-grid">
+        ${p.topics.map(t=>`
+          <div class="topic-card">
+            <div class="topic-name">${t.name}</div>
+            <div class="topic-body">${t.body}</div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="s-heading">Tài nguyên</div>
+      <div class="resource-list">
+        ${p.resources.map(r=>`
+          <div class="resource-item">
+            <span class="r-type" style="${r.typeStyle}">${r.type}</span>
+            <span class="r-name">${r.name}</span>
+            <span class="r-link">${r.link}</span>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="s-heading">Bài tập & thực hành</div>
+      <div class="check-list">
+        ${p.exercises.map((e,j) => {
+          const key=`${p.id}-ex-${j}`, done=!!saved[key];
+          return `<div class="check-item${done?' done':''}" data-key="${key}" onclick="toggle('${key}')">
+            <div class="check-box"><div class="check-icon"></div></div>
+            <div class="ci-text">
+              <span class="ci-tag">${e.tag}</span>
+              <span class="ci-title">${e.title}</span>
+              <span class="ci-desc">${e.desc}</span>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+
+      <div class="s-heading">Milestones — không thể lùi</div>
+      <div class="check-list">
+        ${p.milestones.map((m,j) => {
+          const key=`${p.id}-ms-${j}`, done=!!saved[key];
+          return `<div class="check-item${done?' done':''}" data-key="${key}" onclick="toggle('${key}')">
+            <div class="check-box"><div class="check-icon"></div></div>
+            <div class="ci-text">
+              <span class="ci-title">${m.title}</span>
+              <span class="ci-desc">${m.desc}</span>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </section>
+  `).join('');
+}
+
+// ── switch phase ──
+function showPhase(idx) {
+  currentPhase = idx;
+  document.querySelectorAll('.phase-section').forEach((s,i)=>s.classList.toggle('visible',i===idx));
+  document.querySelectorAll('.phase-link').forEach((b,i)=>{
+    b.classList.toggle('active',i===idx);
+    b.style = i===idx ? '--phase-color:'+PHASES[idx].color : '';
+  });
+  // mobile: close sidebar
+  document.getElementById('mSidebar').classList.remove('open');
+  document.getElementById('mOverlay').classList.remove('open');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── mobile ──
+function toggleMobile() {
+  document.getElementById('mSidebar').classList.toggle('open');
+  document.getElementById('mOverlay').classList.toggle('open');
+}
+
+// ── init ──
+function init() {
+  renderSidebar(document.getElementById('sidebar-links'));
+  renderMain();
+  // clone sidebar to mobile sidebar
+  document.getElementById('mSidebar').innerHTML = document.getElementById('sidebar').innerHTML;
+  document.getElementById('mSidebar').querySelector('#sidebar-links').innerHTML = document.getElementById('sidebar-links').innerHTML;
+  updateOverall();
+  updateMiniBars();
+}
+
+init();
+</script>
+</body>
+</html>

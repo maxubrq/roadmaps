@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rust → Top 1% SE · Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #0C0D0F;
+  --bg2:      #111316;
+  --bg3:      #171A1E;
+  --rust:     #CE422B;
+  --rust-dim: #7A2819;
+  --rust-glow:rgba(206,66,43,.12);
+  --gold:     #E8A949;
+  --teal:     #3FBCB0;
+  --text:     #EDE8DF;
+  --muted:    #6B6E76;
+  --border:   #20242A;
+  --border2:  #2C3038;
+  --green:    #4CAF79;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Syne', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0;
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  padding: 80px 48px 60px;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -60px; right: -80px;
+  width: 480px; height: 480px;
+  background: radial-gradient(circle, var(--rust-glow) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--rust);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 28px; height: 1px;
+  background: var(--rust);
+}
+.hero-title {
+  font-size: clamp(42px, 6vw, 72px);
+  font-weight: 800;
+  line-height: .95;
+  letter-spacing: -.03em;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+.hero-title span { color: var(--rust); }
+.hero-desc {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 480px;
+  line-height: 1.7;
+  font-family: var(--mono);
+  font-weight: 300;
+  margin-bottom: 40px;
+}
+
+/* Score pills */
+.score-row {
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+.score-pill {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 18px;
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  background: var(--bg2);
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  text-decoration: none;
+}
+.score-pill:hover { border-color: var(--rust); background: var(--bg3); }
+.score-pill.active { border-color: var(--rust); background: var(--rust-glow); }
+.pill-time {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: .1em;
+}
+.pill-score {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -.02em;
+}
+.pill-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── LAYOUT ── */
+.container {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: calc(100vh - 280px);
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  border-right: 1px solid var(--border);
+  padding: 32px 0;
+  position: sticky;
+  top: 0; height: 100vh;
+  overflow-y: auto;
+}
+.sidebar-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 0 24px;
+  margin-bottom: 12px;
+}
+.nav-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 24px;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: all .18s;
+  text-decoration: none;
+}
+.nav-item:hover { background: var(--bg2); }
+.nav-item.active {
+  border-left-color: var(--rust);
+  background: var(--rust-glow);
+}
+.nav-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--rust);
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+.nav-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+}
+.nav-sub {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.nav-divider { height: 1px; background: var(--border); margin: 12px 24px; }
+
+/* ── MAIN CONTENT ── */
+.main { padding: 48px; overflow-y: auto; }
+
+.phase { display: none; }
+.phase.active {
+  display: block;
+  animation: fadeUp .3s ease;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Phase header */
+.phase-header {
+  margin-bottom: 40px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+.phase-meta {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 16px;
+}
+.phase-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 3px;
+  border: 1px solid var(--rust-dim);
+  color: var(--rust);
+  background: var(--rust-glow);
+}
+.phase-progress {
+  display: flex; gap: 4px; align-items: center;
+}
+.prog-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--border2);
+  transition: background .3s;
+}
+.prog-dot.on { background: var(--rust); }
+.phase-title {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -.03em;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+.phase-subtitle {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 600px;
+}
+
+/* Transformation banner */
+.transform-banner {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--rust);
+  border-radius: 0 6px 6px 0;
+  padding: 18px 20px;
+  margin-bottom: 40px;
+}
+.transform-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--rust);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.transform-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.65;
+}
+
+/* Section */
+.section { margin-bottom: 40px; }
+.section-title {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-title::after {
+  content: '';
+  flex: 1; height: 1px;
+  background: var(--border);
+}
+
+/* Concept grid */
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+.concept {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 16px;
+  transition: border-color .18s;
+}
+.concept:hover { border-color: var(--border2); }
+.concept-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.concept-desc {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: .06em;
+  flex-shrink: 0;
+}
+.badge-crit  { background: rgba(206,66,43,.15); color: var(--rust); border: 1px solid var(--rust-dim); }
+.badge-high  { background: rgba(232,169,73,.12); color: var(--gold); border: 1px solid rgba(232,169,73,.3); }
+
+/* Weekly plan */
+.week-list { display: flex; flex-direction: column; gap: 8px; }
+.week-item {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 16px;
+  align-items: start;
+  padding: 14px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.week-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--rust);
+  font-weight: 500;
+  padding-top: 2px;
+}
+.week-content {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.week-content strong { color: var(--text); font-weight: 600; }
+
+/* Resources */
+.resource-list { display: flex; flex-direction: column; gap: 8px; }
+.resource {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 14px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  transition: border-color .18s;
+}
+.resource:hover { border-color: var(--border2); }
+.resource-icon {
+  width: 32px; height: 32px;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-weight: 700;
+}
+.ri-book  { background: rgba(206,66,43,.15); color: var(--rust); }
+.ri-code  { background: rgba(63,188,176,.12); color: var(--teal); }
+.ri-vid   { background: rgba(232,169,73,.12); color: var(--gold); }
+.ri-gh    { background: var(--bg3); color: var(--muted); }
+.resource-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.resource-desc {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+.resource-must {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--rust);
+  letter-spacing: .06em;
+}
+
+/* Projects */
+.project-list { display: flex; flex-direction: column; gap: 10px; }
+.project {
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg2);
+  position: relative;
+  overflow: hidden;
+}
+.project::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--border2);
+}
+.project.hard::before  { background: var(--gold); }
+.project.expert::before { background: var(--rust); }
+.project-difficulty {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.project.hard .project-difficulty  { color: var(--gold); }
+.project.expert .project-difficulty { color: var(--rust); }
+.project-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.project-desc {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+/* Milestone box */
+.milestone-box {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  padding: 20px;
+}
+.milestone-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+.check-list { display: flex; flex-direction: column; gap: 8px; }
+.check-item {
+  display: flex; gap: 10px; align-items: flex-start;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.check-icon {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  border: 1px solid var(--green);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.check-icon::after {
+  content: '';
+  width: 6px; height: 4px;
+  border-left: 1.5px solid var(--green);
+  border-bottom: 1.5px solid var(--green);
+  transform: rotate(-45deg) translateY(-1px);
+  display: block;
+}
+
+/* Community list */
+.community-list { display: flex; flex-direction: column; gap: 6px; }
+.community-item {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 10px 14px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.comm-num {
+  font-size: 10px;
+  color: var(--rust);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Summit cards */
+.summit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+.summit-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 18px;
+  transition: border-color .2s, background .2s;
+}
+.summit-card:hover {
+  border-color: var(--rust-dim);
+  background: var(--bg3);
+}
+.summit-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.summit-card-desc {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Truth box */
+.truth-box {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  padding: 24px 28px;
+  position: relative;
+}
+.truth-box::before {
+  content: '"';
+  position: absolute;
+  top: 10px; left: 20px;
+  font-size: 64px;
+  color: var(--rust);
+  opacity: .2;
+  font-weight: 800;
+  line-height: 1;
+}
+.truth-text {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.8;
+  font-style: italic;
+}
+
+/* Principles */
+.principle-list { display: flex; flex-direction: column; gap: 8px; }
+.principle {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 16px;
+  padding: 14px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.principle-key {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--rust);
+  padding-top: 2px;
+}
+.principle-val {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.principle-val strong { color: var(--text); font-weight: 600; }
+
+/* Footer */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+.footer-brand { color: var(--rust); font-weight: 500; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container { grid-template-columns: 1fr; }
+  .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); padding: 16px 0; }
+  .nav-item { padding: 10px 20px; }
+  .main { padding: 28px 20px; }
+  .hero { padding: 48px 20px 36px; }
+  .score-row { gap: 8px; }
+  .score-pill { padding: 8px 14px; }
+  footer { padding: 20px; flex-direction: column; gap: 8px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow">Transformation Roadmap · 18 tháng</div>
+  <h1 class="hero-title">Rust →<br><span>Top 1%</span> SE</h1>
+  <p class="hero-desc">Mỗi bước là transformation không thể đảo ngược.<br>Chỉ tiến, không lùi. Chỉ tốt hơn, không tệ hơn.</p>
+  <div class="score-row">
+    <div class="score-pill active" onclick="switchPhase(0)" id="pill-0">
+      <div><div class="pill-time">THÁNG 1</div><div class="pill-score">20%</div><div class="pill-label">Pareto core</div></div>
+    </div>
+    <div class="score-pill" onclick="switchPhase(1)" id="pill-1">
+      <div><div class="pill-time">THÁNG 3</div><div class="pill-score">3/10</div><div class="pill-label">Foundation</div></div>
+    </div>
+    <div class="score-pill" onclick="switchPhase(2)" id="pill-2">
+      <div><div class="pill-time">THÁNG 6</div><div class="pill-score">5–6/10</div><div class="pill-label">Production</div></div>
+    </div>
+    <div class="score-pill" onclick="switchPhase(3)" id="pill-3">
+      <div><div class="pill-time">THÁNG 18</div><div class="pill-score">7–8/10</div><div class="pill-label">Expert</div></div>
+    </div>
+    <div class="score-pill" onclick="switchPhase(4)" id="pill-4">
+      <div><div class="pill-time">BEYOND</div><div class="pill-score">10/10</div><div class="pill-label">Summit</div></div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-label">Phases</div>
+    <a class="nav-item active" onclick="switchPhase(0)" id="nav-0" href="#">
+      <div class="nav-num">01</div>
+      <div><div class="nav-title">Pareto Core</div><div class="nav-sub">Tháng 1 · 20%</div></div>
+    </a>
+    <a class="nav-item" onclick="switchPhase(1)" id="nav-1" href="#">
+      <div class="nav-num">02</div>
+      <div><div class="nav-title">Foundation</div><div class="nav-sub">Tháng 2–3 · 3/10</div></div>
+    </a>
+    <a class="nav-item" onclick="switchPhase(2)" id="nav-2" href="#">
+      <div class="nav-num">03</div>
+      <div><div class="nav-title">Production</div><div class="nav-sub">Tháng 4–6 · 5–6/10</div></div>
+    </a>
+    <a class="nav-item" onclick="switchPhase(3)" id="nav-3" href="#">
+      <div class="nav-num">04</div>
+      <div><div class="nav-title">Expert</div><div class="nav-sub">Tháng 7–18 · 7–8/10</div></div>
+    </a>
+    <div class="nav-divider"></div>
+    <a class="nav-item" onclick="switchPhase(4)" id="nav-4" href="#">
+      <div class="nav-num" style="color:var(--gold)">★</div>
+      <div><div class="nav-title" style="color:var(--gold)">The Summit</div><div class="nav-sub">10 / 10</div></div>
+    </a>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ════ PHASE 1 ════ -->
+    <div class="phase active" id="phase-0">
+      <div class="phase-header">
+        <div class="phase-meta">
+          <span class="phase-tag">Phase 01 · Tháng 1</span>
+          <div class="phase-progress">
+            <div class="prog-dot on"></div><div class="prog-dot on"></div>
+            <div class="prog-dot"></div><div class="prog-dot"></div><div class="prog-dot"></div>
+            <div class="prog-dot"></div><div class="prog-dot"></div><div class="prog-dot"></div>
+            <div class="prog-dot"></div><div class="prog-dot"></div>
+          </div>
+          <span style="font-family:var(--mono);font-size:12px;color:var(--muted)">2/10</span>
+        </div>
+        <h2 class="phase-title">20% trọng yếu<br>— Pareto Core</h2>
+        <p class="phase-subtitle">Nắm vững mental model cốt lõi. Sau giai đoạn này, não bạn đã "rewired" để suy nghĩ theo Rust — borrow checker không còn là kẻ thù mà là đồng đội.</p>
+      </div>
+
+      <div class="transform-banner">
+        <div class="transform-label">Transformation</div>
+        <div class="transform-text">Từ "tôi viết code và hi vọng nó đúng" → <strong style="color:var(--text)">"Compiler là đồng đội. Tôi hiểu tại sao mỗi dòng được chấp nhận hoặc từ chối."</strong></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">20% tạo ra 80% kết quả</div>
+        <div class="concept-grid">
+          <div class="concept">
+            <div class="concept-name">Ownership system <span class="badge badge-crit">CRITICAL</span></div>
+            <div class="concept-desc">Move semantics, copy vs move, RAII. Đây là linh hồn của Rust — phải internalize, không chỉ memorize.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Borrowing & References <span class="badge badge-crit">CRITICAL</span></div>
+            <div class="concept-desc">Shared (&T) vs exclusive (&mut T). Chỉ 1 &mut tại một thời điểm. Borrow checker rules trong đầu, không phải trên paper.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Enums & Pattern Matching <span class="badge badge-crit">CRITICAL</span></div>
+            <div class="concept-desc">Option&lt;T&gt;, Result&lt;T,E&gt;, match exhaustiveness. Đây là error handling của Rust — elegant và type-safe.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Traits cơ bản <span class="badge badge-high">HIGH</span></div>
+            <div class="concept-desc">impl Trait for Type. Display, Debug, Clone, Iterator. Trait là ngôn ngữ bên trong ngôn ngữ.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Iterators & Closures <span class="badge badge-high">HIGH</span></div>
+            <div class="concept-desc">map, filter, collect, fold. Lazy evaluation. Zero-cost abstraction — không chậm hơn for loop.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Structs & Methods</div>
+            <div class="concept-desc">impl blocks, associated functions (::new), self/&self/&mut self — phân biệt rõ ràng từng loại.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">String types</div>
+            <div class="concept-desc">String vs &str. Tại sao có 2 loại? UTF-8, slices. Cực kỳ hay gây confuse lúc đầu — master luôn ở đây.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Cargo workflow</div>
+            <div class="concept-desc">cargo new, build, test, clippy, fmt. Crates.io ecosystem. Đây là superpower của Rust developer.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Lịch học theo tuần</div>
+        <div class="week-list">
+          <div class="week-item">
+            <div class="week-label">W1</div>
+            <div class="week-content"><strong>Ownership &amp; Borrowing.</strong> Đọc The Book Ch.1–6. Làm Rustlings sections ownership, variables, primitives. Mục tiêu: giải thích được borrow checker cho người khác.</div>
+          </div>
+          <div class="week-item">
+            <div class="week-label">W2</div>
+            <div class="week-content"><strong>Enums, Pattern Matching, Error Handling.</strong> The Book Ch.6, 9. Rustlings enums, error_handling. Viết chương trình đọc file với Result propagation đầy đủ, không dùng unwrap().</div>
+          </div>
+          <div class="week-item">
+            <div class="week-label">W3</div>
+            <div class="week-content"><strong>Traits &amp; Generics cơ bản.</strong> The Book Ch.10, 13. Rustlings traits, generics, iterators. Implement Display, From, Into cho custom types của mình.</div>
+          </div>
+          <div class="week-item">
+            <div class="week-label">W4</div>
+            <div class="week-content"><strong>Mini project tổng hợp.</strong> Build CLI todo-list: đọc/ghi JSON, error handling hoàn chỉnh, iterators, custom structs. Không dùng tutorial — tự design architecture.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Tài nguyên</div>
+        <div class="resource-list">
+          <div class="resource">
+            <div class="resource-icon ri-book">B</div>
+            <div>
+              <div class="resource-name">The Rust Programming Language (The Book)</div>
+              <div class="resource-desc">doc.rust-lang.org/book — Đọc Ch.1–13. Chuẩn nhất, free online. Đừng skip bất kỳ chương nào.</div>
+              <div class="resource-must">▸ PHẢI ĐỌC</div>
+            </div>
+          </div>
+          <div class="resource">
+            <div class="resource-icon ri-code">&gt;_</div>
+            <div>
+              <div class="resource-name">Rustlings</div>
+              <div class="resource-desc">github.com/rust-lang/rustlings — 90+ bài tập nhỏ, fix compiler errors trực tiếp. Làm song song với The Book hàng ngày.</div>
+              <div class="resource-must">▸ PHẢI LÀM HẾT</div>
+            </div>
+          </div>
+          <div class="resource">
+            <div class="resource-icon ri-code">EX</div>
+            <div>
+              <div class="resource-name">Rust by Example</div>
+              <div class="resource-desc">doc.rust-lang.org/rust-by-example — Dùng làm reference khi cần ví dụ nhanh cho syntax cụ thể.</div>
+            </div>
+          </div>
+          <div class="resource">
+            <div class="resource-icon ri-vid">▶</div>
+            <div>
+              <div class="resource-name">Jon Gjengset — Crust of Rust</div>
+              <div class="resource-desc">youtube.com/@jonhoo — Xem để thấy cách một Rust expert think real-time. Dùng để inspire, không thay The Book.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Milestone kiểm tra cuối tháng 1</div>
+        <div class="milestone-box">
+          <div class="milestone-title">Bạn phải làm được tất cả những điều này:</div>
+          <div class="check-list">
+            <div class="check-item"><div class="check-icon"></div>Giải thích ownership, borrowing, lifetimes cho người mới mà không nhìn note</div>
+            <div class="check-item"><div class="check-icon"></div>Viết CLI app đọc/ghi file, xử lý error với Result, dùng iterators — không có unwrap()</div>
+            <div class="check-item"><div class="check-icon"></div>Hoàn thành toàn bộ Rustlings kể cả các sections khó nhất</div>
+            <div class="check-item"><div class="check-icon"></div>Đọc compiler error message và hiểu tại sao — không chỉ "làm cho nó compile được"</div>
+            <div class="check-item"><div class="check-icon"></div>Chạy clippy và sửa tất cả warnings một cách có ý thức, giải thích được lý do mỗi warning</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ PHASE 2 ════ -->
+    <div class="phase" id="phase-1">
+      <div class="phase-header">
+        <div class="phase-meta">
+          <span class="phase-tag">Phase 02 · Tháng 2–3</span>
+          <div class="phase-progress">
+            <div class="prog-dot on"></div><div class="prog-dot on"></div><div class="prog-dot on"></div>
+            <div class="prog-dot"></div><div class="prog-dot"></div>
+            <div class="prog-dot"></div><div class="prog-dot"></div><div class="prog-dot"></div>
+            <div class="prog-dot"></div><div class="prog-dot"></div>
+          </div>
+          <span style="font-family:var(--mono);font-size:12px;color:var(--muted)">3/10</span>
+        </div>
+        <h2 class="phase-title">Solid Foundation<br>— Idiomatic Rust</h2>
+        <p class="phase-subtitle">Rust không còn làm bạn bất ngờ. Bạn viết idiomatic code và bắt đầu có opinions về design. Compiler errors không gây panic nữa.</p>
+      </div>
+
+      <div class="transform-banner">
+        <div class="transform-label">Transformation</div>
+        <div class="transform-text">Từ "viết Rust theo kiểu C++/Python" → <strong style="color:var(--text)">"Tư duy theo idiom Rust: trait-based design, type-driven correctness, zero-cost là mặc định."</strong></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Concepts cần master</div>
+        <div class="concept-grid">
+          <div class="concept">
+            <div class="concept-name">Trait objects & dyn <span class="badge badge-crit">CRITICAL</span></div>
+            <div class="concept-desc">dyn Trait vs impl Trait. Dynamic dispatch khi nào dùng. Object safety rules. Vtable overhead.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Lifetimes nâng cao <span class="badge badge-crit">CRITICAL</span></div>
+            <div class="concept-desc">Lifetime annotations trong structs và functions. Lifetime elision rules. 'static và tại sao nó không "tốt hơn".</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Smart Pointers <span class="badge badge-high">HIGH</span></div>
+            <div class="concept-desc">Box&lt;T&gt;, Rc&lt;T&gt;, RefCell&lt;T&gt;, Cell&lt;T&gt;. Interior mutability pattern. Khi nào dùng cái nào và tại sao.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Error handling patterns <span class="badge badge-high">HIGH</span></div>
+            <div class="concept-desc">thiserror cho library errors, anyhow cho application errors. Custom error types đẹp và informative.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Generics nâng cao</div>
+            <div class="concept-desc">Multiple trait bounds, where clauses, associated types. Monomorphization và code size trade-offs.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Modules & Visibility</div>
+            <div class="concept-desc">pub, pub(crate), pub(super). Workspace structure. Re-exports. API design fundamentals từ đây.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Testing</div>
+            <div class="concept-desc">Unit tests, integration tests, doc tests. Test organization. Không test = chưa ship được.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">macro_rules! cơ bản</div>
+            <div class="concept-desc">Declarative macros. Repetition patterns. Khi nào macro vs function. Macro hygiene basics.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Projects thực hành</div>
+        <div class="project-list">
+          <div class="project hard">
+            <div class="project-difficulty">Medium</div>
+            <div class="project-title">Custom Iterator + Trait hierarchy</div>
+            <div class="project-desc">Implement một data structure (linked list, trie, hoặc priority queue) với đầy đủ Iterator, IntoIterator, FromIterator. Viết generic API đẹp, test coverage tốt.</div>
+          </div>
+          <div class="project hard">
+            <div class="project-difficulty">Medium</div>
+            <div class="project-title">Mini HTTP client từ đầu</div>
+            <div class="project-desc">Dùng std::net::TcpStream, parse HTTP response thủ công, error handling hoàn chỉnh với thiserror. Không dùng reqwest — học bằng cách build.</div>
+          </div>
+          <div class="project expert">
+            <div class="project-difficulty">Hard</div>
+            <div class="project-title">Config parser library — API design exercise</div>
+            <div class="project-desc">Parse TOML/JSON config file, expose clean public API với proper error types, docstrings, viết doc tests. Publish lên crates.io dù chỉ là 0.1.0. Đây là bài học API design.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Tài nguyên</div>
+        <div class="resource-list">
+          <div class="resource">
+            <div class="resource-icon ri-book">B</div>
+            <div>
+              <div class="resource-name">The Book Ch.14–20 + Rust Reference</div>
+              <div class="resource-desc">Đặc biệt Ch.15 (smart pointers), 17 (OOP patterns trong Rust), 19 (advanced features như macros, unsafe preview).</div>
+              <div class="resource-must">▸ PHẢI ĐỌC</div>
+            </div>
+          </div>
+          <div class="resource">
+            <div class="resource-icon ri-book">RA</div>
+            <div>
+              <div class="resource-name">Rust in Action — Tim McNamara</div>
+              <div class="resource-desc">Manning Press. Tiếp cận qua systems programming. Rất tốt cho intuition về low-level behavior của Rust code.</div>
+            </div>
+          </div>
+          <div class="resource">
+            <div class="resource-icon ri-code">EX</div>
+            <div>
+              <div class="resource-name">Exercism.io — Rust track</div>
+              <div class="resource-desc">70+ bài tập với community mentorship. Học cách code được review bởi Rustaceans kinh nghiệm — invaluable feedback.</div>
+              <div class="resource-must">▸ RẤT QUAN TRỌNG</div>
+            </div>
+          </div>
+          <div class="resource">
+            <div class="resource-icon ri-vid">▶</div>
+            <div>
+              <div class="resource-name">Crust of Rust series — Jon Gjengset</div>
+              <div class="resource-desc">Implement Vec, HashMap, channels từ đầu. Học cách Rust experts design khi không có tutorial. Không skip episode nào.</div>
+              <div class="resource-must">▸ PHẢI XEM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Milestone kiểm tra cuối tháng 3</div>
+        <div class="milestone-box">
+          <div class="milestone-title">Bạn phải làm được tất cả những điều này:</div>
+          <div class="check-list">
+            <div class="check-item"><div class="check-icon"></div>Implement LinkedList generic với đầy đủ Iterator trait — không nhìn tutorial</div>
+            <div class="check-item"><div class="check-icon"></div>Thiết kế public API của một library và giải thích được trade-offs trong từng quyết định</div>
+            <div class="check-item"><div class="check-icon"></div>Code review code Rust của người khác và đưa ra idiomatic feedback chất lượng</div>
+            <div class="check-item"><div class="check-icon"></div>Publish ít nhất một crate lên crates.io — dù đơn giản đến đâu</div>
+            <div class="check-item"><div class="check-icon"></div>Chọn đúng giữa Box, Rc, Arc, RefCell trong các tình huống khác nhau mà không cần lookup</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ PHASE 3 ════ -->
+    <div class="phase" id="phase-2">
+      <div class="phase-header">
+        <div class="phase-meta">
+          <span class="phase-tag">Phase 03 · Tháng 4–6</span>
+          <div class="phase-progress">
+            <div class="prog-dot on"></div><div class="prog-dot on"></div><div class="prog-dot on"></div>
+            <div class="prog-dot on"></div><div class="prog-dot on"></div><div class="prog-dot on"></div>
+            <div class="prog-dot"></div><div class="prog-dot"></div>
+            <div class="prog-dot"></div><div class="prog-dot"></div>
+          </div>
+          <span style="font-family:var(--mono);font-size:12px;color:var(--muted)">6/10</span>
+        </div>
+        <h2 class="phase-title">Production-Ready<br>— Ship Real Systems</h2>
+        <p class="phase-subtitle">Bạn xây được systems thật. Async, concurrency, performance bắt đầu click. Đủ để làm việc professional trong một Rust codebase.</p>
+      </div>
+
+      <div class="transform-banner">
+        <div class="transform-label">Transformation</div>
+        <div class="transform-text">Từ "biết Rust lý thuyết" → <strong style="color:var(--text)">"Ship được production code: async services, CLI tools, xử lý real-world complexity, profile được performance với data."</strong></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Concepts cần master</div>
+        <div class="concept-grid">
+          <div class="concept">
+            <div class="concept-name">Async / await + Tokio <span class="badge badge-crit">CRITICAL</span></div>
+            <div class="concept-desc">Future trait internals. async fn, .await, tokio::spawn. Multi-threaded runtime. Biết khi nào KHÔNG dùng async.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Concurrency primitives <span class="badge badge-crit">CRITICAL</span></div>
+            <div class="concept-desc">Arc&lt;Mutex&lt;T&gt;&gt;, RwLock, channels (mpsc, broadcast, oneshot). Deadlock avoidance. Lock-free basics.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Axum / web ecosystem <span class="badge badge-high">HIGH</span></div>
+            <div class="concept-desc">Router, extractors, middleware, state sharing. Tower ecosystem. Serde cho JSON. tracing cho logging.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Performance profiling <span class="badge badge-high">HIGH</span></div>
+            <div class="concept-desc">criterion.rs benchmarks. cargo flamegraph. perf. Biết khi nào optimize, khi nào đang premature.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">clap — CLI framework</div>
+            <div class="concept-desc">Derive API, subcommands, argument validation. Build CLI tools đạt professional-grade usability.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Database: sqlx</div>
+            <div class="concept-desc">Async, compile-time verified queries. Migrations với sqlx-migrate. Connection pooling. PostgreSQL focus.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Serde ecosystem nâng cao</div>
+            <div class="concept-desc">Custom serializers, flatten, skip_if, remote derives. Multiple format support (JSON, TOML, binary).</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Testing nâng cao</div>
+            <div class="concept-desc">Integration tests với real DB, mockall cho mocking, proptest cho property-based testing.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Flagship projects</div>
+        <div class="project-list">
+          <div class="project expert">
+            <div class="project-difficulty">Hard</div>
+            <div class="project-title">REST API server — production-grade</div>
+            <div class="project-desc">Axum + sqlx + PostgreSQL. JWT authentication, middleware chain, structured error handling, tracing/logging, Docker containerization. Deploy thật sự lên cloud. Không phải tutorial clone — design architecture của bạn.</div>
+          </div>
+          <div class="project expert">
+            <div class="project-difficulty">Hard</div>
+            <div class="project-title">CLI tool hữu ích thật sự</div>
+            <div class="project-desc">Chọn một vấn đề bạn gặp hàng ngày và solve bằng Rust CLI. Publish lên GitHub với README đẹp, release binaries. Người khác phải muốn dùng — đây là chỉ số thật.</div>
+          </div>
+          <div class="project expert">
+            <div class="project-difficulty">Very Hard</div>
+            <div class="project-title">Async worker queue</div>
+            <div class="project-desc">Mini job queue: producers gửi jobs, multiple async workers xử lý concurrent, retry logic với exponential backoff, dead letter queue, Prometheus metrics. Serde + Tokio + channels thuần.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Tài nguyên</div>
+        <div class="resource-list">
+          <div class="resource">
+            <div class="resource-icon ri-book">Z2P</div>
+            <div>
+              <div class="resource-name">Zero to Production in Rust — Luca Palmieri</div>
+              <div class="resource-desc">zero2prod.com — Build email newsletter service từ đầu. Best book cho production Rust web. Mọi chapter đều applicable ngay lập tức.</div>
+              <div class="resource-must">▸ PHẢI ĐỌC</div>
+            </div>
+          </div>
+          <div class="resource">
+            <div class="resource-icon ri-book">AS</div>
+            <div>
+              <div class="resource-name">Asynchronous Programming in Rust</div>
+              <div class="resource-desc">rust-lang.github.io/async-book — Official async book. Hiểu Future trait internals. Miễn phí. Đặc biệt phần Waker/Context.</div>
+              <div class="resource-must">▸ PHẢI ĐỌC</div>
+            </div>
+          </div>
+          <div class="resource">
+            <div class="resource-icon ri-code">TK</div>
+            <div>
+              <div class="resource-name">Tokio tutorial + official docs</div>
+              <div class="resource-desc">tokio.rs/tokio/tutorial — Đọc kỹ phần select!, join!, spawn_blocking. Hiểu tại sao mỗi primitive tồn tại.</div>
+              <div class="resource-must">▸ PHẢI ĐỌC</div>
+            </div>
+          </div>
+          <div class="resource">
+            <div class="resource-icon ri-vid">▶</div>
+            <div>
+              <div class="resource-name">Jon Gjengset — async internals streams</div>
+              <div class="resource-desc">Live coding streams implement async executor từ đầu. Sau khi xem, bạn sẽ không sợ async nữa.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Milestone kiểm tra cuối tháng 6</div>
+        <div class="milestone-box">
+          <div class="milestone-title">Bạn phải làm được tất cả những điều này:</div>
+          <div class="check-list">
+            <div class="check-item"><div class="check-icon"></div>Deploy một Rust web service thật lên production — không phải localhost demo</div>
+            <div class="check-item"><div class="check-icon"></div>Profile và optimize một bottleneck thực tế với criterion benchmarks — data-driven, không guess</div>
+            <div class="check-item"><div class="check-icon"></div>Giải thích async executor và Waker hoạt động như thế nào mà không cần lookup</div>
+            <div class="check-item"><div class="check-icon"></div>Có ít nhất 1 open-source Rust project với stars thật trên GitHub</div>
+            <div class="check-item"><div class="check-icon"></div>Contribute PR được merge vào một crate của người khác — dù là bug fix nhỏ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ PHASE 4 ════ -->
+    <div class="phase" id="phase-3">
+      <div class="phase-header">
+        <div class="phase-meta">
+          <span class="phase-tag">Phase 04 · Tháng 7–18</span>
+          <div class="phase-progress">
+            <div class="prog-dot on"></div><div class="prog-dot on"></div><div class="prog-dot on"></div>
+            <div class="prog-dot on"></div><div class="prog-dot on"></div><div class="prog-dot on"></div>
+            <div class="prog-dot on"></div><div class="prog-dot on"></div>
+            <div class="prog-dot"></div><div class="prog-dot"></div>
+          </div>
+          <span style="font-family:var(--mono);font-size:12px;color:var(--muted)">8/10</span>
+        </div>
+        <h2 class="phase-title">Expert Level<br>— Extend the Language</h2>
+        <p class="phase-subtitle">Unsafe Rust, proc macros, advanced async, systems programming. Bạn bắt đầu design language-level solutions và người khác hỏi ý kiến bạn.</p>
+      </div>
+
+      <div class="transform-banner">
+        <div class="transform-label">Transformation</div>
+        <div class="transform-text">Từ "dùng Rust để build apps" → <strong style="color:var(--text)">"Extend Rust: viết proc macros người khác dùng, work với unsafe safely, contribute vào ecosystem, mentor người khác một cách tự nhiên."</strong></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Deep dive concepts</div>
+        <div class="concept-grid">
+          <div class="concept">
+            <div class="concept-name">Unsafe Rust <span class="badge badge-crit">CRITICAL</span></div>
+            <div class="concept-desc">Raw pointers, unsafe blocks, invariants. Send/Sync manual implementation. Khi nào unsafe justified. FFI với C/C++.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Proc macros <span class="badge badge-crit">CRITICAL</span></div>
+            <div class="concept-desc">Derive macros, attribute macros, function-like macros. syn + quote crates. TokenStream manipulation từng bước.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Advanced lifetimes <span class="badge badge-high">HIGH</span></div>
+            <div class="concept-desc">Variance (covariant, contravariant, invariant). Higher-ranked trait bounds (HRTB). for&lt;'a&gt; syntax và khi nào cần.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Custom async primitives <span class="badge badge-high">HIGH</span></div>
+            <div class="concept-desc">Implement simple executor từ đầu. Waker, Context, Poll. Hiểu Tokio internals đủ để debug production issues.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Memory layout & SIMD</div>
+            <div class="concept-desc">repr(C), repr(packed), alignment. Cache-friendly data structures. std::simd basics cho hot paths.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Embedded Rust</div>
+            <div class="concept-desc">no_std environment, embedded-hal, cross-compilation. Blink LED trên real hardware — forces deep understanding.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">Compiler internals</div>
+            <div class="concept-desc">Rust compilation pipeline: parsing → HIR → MIR → codegen. cargo-expand để debug macros. Custom clippy lints.</div>
+          </div>
+          <div class="concept">
+            <div class="concept-name">WebAssembly</div>
+            <div class="concept-desc">wasm-bindgen, wasm-pack. Rust → WASM cho browser. Performance characteristics và limitations.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Flagship projects (18 tháng)</div>
+        <div class="project-list">
+          <div class="project expert">
+            <div class="project-difficulty">Expert</div>
+            <div class="project-title">Proc macro library được người khác thật sự dùng</div>
+            <div class="project-desc">Viết một derive macro non-trivial — Builder pattern với validation, State machine enforcement, hoặc custom serialization. Publish crates.io, support real users, iterate theo feedback. Đây là bước quan trọng nhất của phase này.</div>
+          </div>
+          <div class="project expert">
+            <div class="project-difficulty">Expert</div>
+            <div class="project-title">Significant contribution vào crate nổi tiếng</div>
+            <div class="project-desc">Contribute PR không phải bug fix — thêm feature hoặc cải thiện performance đo được vào tokio, serde, axum, clap, hoặc tương đương. Quy trình review với core maintainers là invaluable learning.</div>
+          </div>
+          <div class="project expert">
+            <div class="project-difficulty">Expert</div>
+            <div class="project-title">Systems project: mini DB hoặc mini async runtime</div>
+            <div class="project-desc">Mini key-value store với WAL và ACID properties, hoặc async executor từ đầu. Unsafe Rust, manual memory management, lock-free data structures. Không cần production-ready — cần deep understanding.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Tài nguyên giai đoạn này</div>
+        <div class="resource-list">
+          <div class="resource">
+            <div class="resource-icon ri-book">NOM</div>
+            <div>
+              <div class="resource-name">The Rustonomicon</div>
+              <div class="resource-desc">doc.rust-lang.org/nomicon — Official unsafe Rust guide. Dense nhưng không thể bỏ qua. Free online. Đọc chậm và kỹ từng phần.</div>
+              <div class="resource-must">▸ PHẢI ĐỌC</div>
+            </div>
+          </div>
+          <div class="resource">
+            <div class="resource-icon ri-book">R4R</div>
+            <div>
+              <div class="resource-name">Rust for Rustaceans — Jon Gjengset</div>
+              <div class="resource-desc">No Starch Press. Deep dives từng chapter: lifetimes, types, unsafe, async, macros. Sách tốt nhất cho level này — bar none.</div>
+              <div class="resource-must">▸ PHẢI ĐỌC</div>
+            </div>
+          </div>
+          <div class="resource">
+            <div class="resource-icon ri-gh">GH</div>
+            <div>
+              <div class="resource-name">Proc Macro Workshop — David Tolnay</div>
+              <div class="resource-desc">github.com/dtolnay/proc-macro-workshop — 5 projects học proc macros từng bước. Tác giả là core Rust contributor (syn, serde, anyhow).</div>
+              <div class="resource-must">▸ PHẢI LÀM</div>
+            </div>
+          </div>
+          <div class="resource">
+            <div class="resource-icon ri-code">SRC</div>
+            <div>
+              <div class="resource-name">Đọc source code: tokio, serde, syn, clap</div>
+              <div class="resource-desc">Không có tài nguyên nào tốt hơn đọc code của masters. Học cách họ design public APIs, handle edge cases, write documentation.</div>
+              <div class="resource-must">▸ KHÔNG THỂ THIẾU</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Community engagement — bắt buộc</div>
+        <div class="community-list">
+          <div class="community-item"><div class="comm-num">01</div>Tham gia users.rust-lang.org — trả lời ít nhất 1 câu hỏi mỗi tuần. Teaching solidifies your own understanding.</div>
+          <div class="community-item"><div class="comm-num">02</div>Theo dõi This Week in Rust newsletter — không bỏ số nào. Biết ecosystem đang đi về đâu.</div>
+          <div class="community-item"><div class="comm-num">03</div>Attend Rust meetup / RustConf (online hoặc in-person) — network với community thật sự.</div>
+          <div class="community-item"><div class="comm-num">04</div>Viết blog post hoặc give talk về một Rust topic — không quan trọng audience size. Writing forces clarity.</div>
+          <div class="community-item"><div class="comm-num">05</div>Mentor ít nhất 1 người mới học Rust — explaining consolidates your own knowledge mạnh nhất.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ PHASE 5 ════ -->
+    <div class="phase" id="phase-4">
+      <div class="phase-header">
+        <div class="phase-meta">
+          <span class="phase-tag" style="border-color:rgba(232,169,73,.4);color:var(--gold);background:rgba(232,169,73,.08)">Beyond 18 tháng</span>
+          <div class="phase-progress">
+            <div class="prog-dot on" style="background:var(--gold)"></div>
+            <div class="prog-dot on" style="background:var(--gold)"></div>
+            <div class="prog-dot on" style="background:var(--gold)"></div>
+            <div class="prog-dot on" style="background:var(--gold)"></div>
+            <div class="prog-dot on" style="background:var(--gold)"></div>
+            <div class="prog-dot on" style="background:var(--gold)"></div>
+            <div class="prog-dot on" style="background:var(--gold)"></div>
+            <div class="prog-dot on" style="background:var(--gold)"></div>
+            <div class="prog-dot on" style="background:var(--gold)"></div>
+            <div class="prog-dot on" style="background:var(--gold)"></div>
+          </div>
+          <span style="font-family:var(--mono);font-size:12px;color:var(--gold)">10/10</span>
+        </div>
+        <h2 class="phase-title" style="color:var(--gold)">The Summit<br>— Shape the Language</h2>
+        <p class="phase-subtitle">Không có lộ trình cụ thể nào đưa bạn tới đây. Đây là kết quả của một lifestyle, không phải một course. Bạn không tìm đến summit — summit tìm đến bạn.</p>
+      </div>
+
+      <div class="transform-banner" style="border-left-color:var(--gold)">
+        <div class="transform-label" style="color:var(--gold)">Định nghĩa 10/10</div>
+        <div class="transform-text">Bạn không chỉ viết Rust — bạn shape Rust. Người khác học Rust từ code của bạn, từ crates của bạn, từ bài viết của bạn. <strong style="color:var(--text)">Compiler là công cụ, bạn là người hiểu giới hạn và khả năng của công cụ đó sâu hơn 99% người dùng nó.</strong></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Dấu hiệu nhận biết 10/10</div>
+        <div class="summit-grid">
+          <div class="summit-card">
+            <div class="summit-card-title">Published crates được adopt</div>
+            <div class="summit-card-desc">Crates của bạn có users thật, được referenced trong các project khác, bạn maintain và evolve chúng long-term.</div>
+          </div>
+          <div class="summit-card">
+            <div class="summit-card-title">Compiler contributions</div>
+            <div class="summit-card-desc">Hiểu đủ internals để contribute vào rustc, clippy, hoặc core language tooling. PRs được merge.</div>
+          </div>
+          <div class="summit-card">
+            <div class="summit-card-title">API design mastery</div>
+            <div class="summit-card-desc">Người khác nói code của bạn "feels like Rust." Ergonomic, type-safe, hard to misuse by design.</div>
+          </div>
+          <div class="summit-card">
+            <div class="summit-card-title">Teaching & writing</div>
+            <div class="summit-card-desc">Blog, talks, courses về Rust. Giải thích advanced topics đơn giản và chính xác. Người tìm đến bạn để học.</div>
+          </div>
+          <div class="summit-card">
+            <div class="summit-card-title">Unsafe expertise</div>
+            <div class="summit-card-desc">Biết khi nào unsafe cần thiết, viết sound unsafe code, verify correctness của người khác. Rustonomicon là comfortable reading.</div>
+          </div>
+          <div class="summit-card">
+            <div class="summit-card-title">Performance từ first principles</div>
+            <div class="summit-card-desc">Predict performance từ assembly output. SIMD-aware design. Allocator-conscious APIs. Cache-efficient data structures.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Nguyên tắc transformation không thể đảo ngược</div>
+        <div class="principle-list">
+          <div class="principle">
+            <div class="principle-key">Daily practice</div>
+            <div class="principle-val">Viết Rust mỗi ngày, dù chỉ 30 phút. <strong>Không có ngày nào "off" kéo dài quá 2 ngày.</strong> Consistency beats intensity mọi lúc mọi nơi.</div>
+          </div>
+          <div class="principle">
+            <div class="principle-key">Read real code</div>
+            <div class="principle-val">Mỗi tuần đọc ít nhất 500 lines Rust production code của người khác. <strong>Không phải tutorial — codebase thật.</strong> tokio, serde, axum.</div>
+          </div>
+          <div class="principle">
+            <div class="principle-key">Ship things</div>
+            <div class="principle-val">Mỗi tháng phải có ít nhất một "thing" shipped: crate, blog post, PR merged, talk given. <strong>Không ship = không grow.</strong> Đây là rule cứng.</div>
+          </div>
+          <div class="principle">
+            <div class="principle-key">Teach others</div>
+            <div class="principle-val">Khi bạn có thể giải thích một concept cho người mới, bạn mới thật sự hiểu nó. <strong>Teach early and often,</strong> không đợi "đủ giỏi".</div>
+          </div>
+          <div class="principle">
+            <div class="principle-key">Stay curious</div>
+            <div class="principle-val">Theo dõi Rust RFCs, đọc pre-RFC discussions. <strong>Hiểu tại sao language evolves</strong> như nó đang làm — không chỉ học syntax mới.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Một sự thật quan trọng</div>
+        <div class="truth-box">
+          <div class="truth-text">
+            "Top 1% không phải là một điểm đến, đó là một direction. Jon Gjengset, David Tolnay, Alice Ryhl — những người ở đỉnh Rust ecosystem — vẫn học mỗi ngày. Điều phân biệt họ không phải là họ biết nhiều hơn, mà là họ comfortable với việc không biết và có hệ thống để figure it out nhanh hơn người khác. Bắt đầu ngay hôm nay, không đợi ready."
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  <div>Rust → Top 1% SE · Roadmap 18 tháng</div>
+  <div class="footer-brand">chỉ tiến · không lùi · chỉ tốt hơn</div>
+</footer>
+
+<script>
+function switchPhase(idx) {
+  const phases = document.querySelectorAll('.phase');
+  const navItems = document.querySelectorAll('.nav-item');
+  const pills = document.querySelectorAll('.score-pill');
+
+  phases.forEach((p, i) => p.classList.toggle('active', i === idx));
+  navItems.forEach((n, i) => n.classList.toggle('active', i === idx));
+  pills.forEach((p, i) => p.classList.toggle('active', i === idx));
+
+  document.querySelector('.main').scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Keyboard nav
+document.addEventListener('keydown', e => {
+  const active = [...document.querySelectorAll('.phase')].findIndex(p => p.classList.contains('active'));
+  if (e.key === 'ArrowRight' && active < 4) switchPhase(active + 1);
+  if (e.key === 'ArrowLeft'  && active > 0) switchPhase(active - 1);
+});
+</script>
+</body>
+</html>
